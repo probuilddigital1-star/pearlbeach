@@ -1,0 +1,203 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { Icon } from 'astro-icon/components';
+
+// Get Google Maps API key from environment
+const mapsApiKey = import.meta.env.PUBLIC_GOOGLE_MAPS_API_KEY || 'YOUR_API_KEY_HERE';
+---
+
+<BaseLayout
+  title="Location | Lake Erie Waterfront in Saybrook Township Ohio"
+  description="Pearl Beach Cottages is located on the pristine shores of Lake Erie in Saybrook Township, Ashtabula County, Ohio. Minutes from Ohio wine country, Geneva-on-the-Lake, covered bridges, and natural attractions. 1 hour from Cleveland."
+  keywords="Ashtabula Ohio location, Lake Erie waterfront, Ohio wine country, Geneva-on-the-Lake, Ashtabula vacation, Northeast Ohio attractions, Lake Erie location, Ashtabula covered bridges"
+>
+  <Breadcrumbs items={[]} currentPage="Location" />
+  <!-- Hero Section -->
+  <section class="relative h-96 bg-deep-ocean">
+    <div class="absolute inset-0">
+      <img
+        src="/images/hero/location-hero.jpg"
+        alt="Lake Erie Location"
+        class="w-full h-full object-cover opacity-40"
+      />
+    </div>
+    <div class="relative h-full flex items-center justify-center text-center px-4">
+      <div>
+        <h1 class="text-5xl md:text-6xl font-serif font-bold text-white mb-4 text-shadow">
+          Our Location
+        </h1>
+        <p class="text-xl text-white/90">
+          Discover the beauty of Lake Erie in Saybrook Township, Ohio
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Location Overview -->
+  <section class="section-padding bg-white">
+    <div class="container-custom max-w-4xl">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl font-serif font-bold text-deep-ocean mb-4">
+          Prime Lake Erie Waterfront Location
+        </h2>
+        <p class="text-lg text-gray-600 leading-relaxed">
+          <strong>Pearl Beach Cottages</strong> are situated directly on the shores of <strong>Lake Erie in Saybrook Township, Ashtabula County, Ohio</strong> -
+          one of the most scenic areas along the Great Lakes. Our prime <strong>waterfront vacation rental location</strong> offers
+          stunning sunsets, private beach access, and easy access to <strong>Northeast Ohio attractions</strong> including
+          <strong>Ohio wine country</strong> and <strong>Geneva-on-the-Lake</strong>.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-8 mb-12">
+        <div class="bg-coastal-fog p-6">
+          <h3 class="text-xl font-serif font-bold text-deep-ocean mb-3">Address</h3>
+          <p class="text-gray-700">
+            Saybrook Township, OH 44004<br/>
+            Lake Erie Waterfront
+          </p>
+        </div>
+
+        <div class="bg-coastal-fog p-6">
+          <h3 class="text-xl font-serif font-bold text-deep-ocean mb-3">Coordinates</h3>
+          <p class="text-gray-700">
+            Latitude: 41.9° N<br/>
+            Longitude: 80.8° W
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Map Section -->
+  <section class="section-padding-sm bg-coastal-fog">
+    <div class="container-custom">
+      <h2 class="text-3xl font-serif font-bold text-deep-ocean mb-8 text-center">
+        Find Us on the Map
+      </h2>
+      <div class="map-container">
+        <iframe
+          width="100%"
+          height="450"
+          style="border:0;"
+          loading="lazy"
+          allowfullscreen
+          referrerpolicy="no-referrer-when-downgrade"
+          src={`https://www.google.com/maps/embed/v1/place?key=${mapsApiKey}&q=Ashtabula+OH+44004&zoom=12&maptype=roadmap`}
+          title="Interactive map of Pearl Beach Cottages area in Ashtabula, Ohio showing nearby attractions"
+        ></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- Nearby Attractions -->
+  <section class="section-padding bg-white">
+    <div class="container-custom">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl font-serif font-bold text-deep-ocean mb-4">
+          Nearby Attractions
+        </h2>
+        <p class="text-lg text-gray-600">
+          Explore the best of Northeast Ohio from your lakefront retreat
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <!-- Wineries -->
+        <div class="text-center">
+          <div class="w-16 h-16 flex items-center justify-center mx-auto mb-4 rounded-lg" style="background: rgba(212, 175, 122, 0.1);">
+            <Icon name="ph:wine-duotone" class="w-8 h-8 text-golden-hour" />
+          </div>
+          <h3 class="text-xl font-serif font-semibold text-deep-ocean mb-2">Ohio Wine Country</h3>
+          <p class="text-gray-600 mb-3">Explore 30+ award-winning wineries in the Grand River Valley</p>
+          <ul class="text-sm text-gray-600 space-y-1">
+            <li>Grand River Valley wineries - 10 min</li>
+            <li>Covered Bridge Wine Trail</li>
+            <li>Wine tastings & vineyard tours</li>
+          </ul>
+        </div>
+
+        <!-- Beaches & Parks -->
+        <div class="text-center">
+          <div class="w-16 h-16 flex items-center justify-center mx-auto mb-4 rounded-lg" style="background: rgba(212, 175, 122, 0.1);">
+            <Icon name="ph:tree-duotone" class="w-8 h-8 text-golden-hour" />
+          </div>
+          <h3 class="text-xl font-serif font-semibold text-deep-ocean mb-2">Natural Beauty</h3>
+          <p class="text-gray-600 mb-3">Pristine beaches and scenic parks along Lake Erie</p>
+          <ul class="text-sm text-gray-600 space-y-1">
+            <li>Walnut Beach - 3 min</li>
+            <li>Geneva State Park - 15 min</li>
+            <li>Covered Bridge Trail - 10 min</li>
+          </ul>
+        </div>
+
+        <!-- Dining & Shopping -->
+        <div class="text-center">
+          <div class="w-16 h-16 flex items-center justify-center mx-auto mb-4 rounded-lg" style="background: rgba(212, 175, 122, 0.1);">
+            <Icon name="ph:storefront-duotone" class="w-8 h-8 text-golden-hour" />
+          </div>
+          <h3 class="text-xl font-serif font-semibold text-deep-ocean mb-2">Local Charm</h3>
+          <p class="text-gray-600 mb-3">Restaurants, shops, and historic downtown areas</p>
+          <ul class="text-sm text-gray-600 space-y-1">
+            <li>Downtown Ashtabula - 10 min</li>
+            <li>Harbor District - 8 min</li>
+            <li>Geneva-on-the-Lake - 15 min</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Distance Info -->
+  <section class="section-padding bg-coastal-fog">
+    <div class="container-custom max-w-4xl">
+      <h2 class="text-3xl font-serif font-bold text-deep-ocean mb-8 text-center">
+        Getting Here
+      </h2>
+
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="bg-white p-6 shadow-sm">
+          <h3 class="font-semibold text-lg text-deep-ocean mb-4">By Car</h3>
+          <ul class="space-y-2 text-gray-700">
+            <li><strong>Cleveland, OH:</strong> 1 hour (60 miles)</li>
+            <li><strong>Erie, PA:</strong> 1.5 hours (75 miles)</li>
+            <li><strong>Pittsburgh, PA:</strong> 2 hours (120 miles)</li>
+            <li><strong>Buffalo, NY:</strong> 2.5 hours (150 miles)</li>
+          </ul>
+        </div>
+
+        <div class="bg-white p-6 shadow-sm">
+          <h3 class="font-semibold text-lg text-deep-ocean mb-4">Airports</h3>
+          <ul class="space-y-2 text-gray-700">
+            <li><strong>Cleveland Hopkins (CLE):</strong> 1 hour</li>
+            <li><strong>Erie International (ERI):</strong> 1.5 hours</li>
+            <li><strong>Pittsburgh (PIT):</strong> 2.5 hours</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="mt-8 bg-white p-6 shadow-sm">
+        <h3 class="font-semibold text-lg text-deep-ocean mb-3">Directions</h3>
+        <p class="text-gray-700">
+          From Cleveland: Take I-90 East to Exit 223 (OH-11 North). Follow OH-11 to Ashtabula.
+          Detailed directions will be provided upon booking confirmation.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section-padding bg-deep-ocean text-white">
+    <div class="container-custom text-center">
+      <h2 class="text-4xl font-serif font-bold mb-4">
+        Ready to Experience Lake Erie?
+      </h2>
+      <p class="text-xl mb-8 opacity-90">
+        Book your stay at our beautiful lakefront cottages
+      </p>
+      <a href="/cottages" class="btn-primary">
+        View Our Cottages
+      </a>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,38 @@
+---
+/**
+ * Cottage Highlights Component
+ * Renders the "Why Choose" section with Phosphor duotone icons
+ */
+import { Icon } from 'astro-icon/components';
+
+interface Highlight {
+  icon: string;
+  title: string;
+  description: string;
+}
+
+interface Props {
+  highlights: Highlight[];
+  cottageName: string;
+}
+
+const { highlights, cottageName } = Astro.props;
+---
+
+{highlights && highlights.length > 0 && (
+  <div class="mb-12">
+    <h2 class="text-3xl font-serif font-bold text-deep-ocean mb-6">
+      Why Choose {cottageName}?
+    </h2>
+    <ul class="space-y-3">
+      {highlights.map((highlight) => (
+        <li class="flex items-start">
+          <Icon name={highlight.icon} class="w-6 h-6 text-golden-hour mr-3 flex-shrink-0 mt-0.5" />
+          <span class="text-gray-700">
+            <strong>{highlight.title}</strong> - {highlight.description}
+          </span>
+        </li>
+      ))}
+    </ul>
+  </div>
+)}

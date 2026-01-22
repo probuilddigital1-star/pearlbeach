@@ -1,0 +1,126 @@
+---
+/**
+ * OrganicCurve Component
+ * Creates natural, shoreline-inspired curved section breaks
+ * More dramatic than wave dividers, used sparingly for key transitions
+ */
+
+interface Props {
+  /** Curve style: 'shoreline', 'horizon', 'gentle' */
+  style?: 'shoreline' | 'horizon' | 'gentle';
+  /** Flip vertically */
+  flip?: boolean;
+  /** Fill color (use CSS variable or hex) */
+  fillColor?: string;
+  /** Additional CSS class */
+  class?: string;
+}
+
+const {
+  style = 'shoreline',
+  flip = false,
+  fillColor = 'var(--linen)',
+  class: className = ''
+} = Astro.props;
+
+// Different curve paths for variety
+const curvePaths = {
+  shoreline: 'M0,0 L0,40 Q180,80 400,35 T800,50 T1200,30 T1440,60 L1440,0 Z',
+  horizon: 'M0,0 L0,50 C240,20 480,70 720,40 S1200,60 1440,45 L1440,0 Z',
+  gentle: 'M0,0 L0,30 Q360,60 720,35 Q1080,10 1440,40 L1440,0 Z'
+};
+---
+
+<div
+  class:list={['organic-curve', `curve-${style}`, { 'curve-flipped': flip }, className]}
+  aria-hidden="true"
+>
+  <svg
+    viewBox="0 0 1440 80"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    preserveAspectRatio="none"
+  >
+    <path
+      d={curvePaths[style]}
+      fill={fillColor}
+    />
+  </svg>
+</div>
+
+<style>
+  .organic-curve {
+    width: 100%;
+    height: 40px;
+    overflow: hidden;
+    line-height: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .organic-curve svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .curve-flipped {
+    transform: scaleY(-1);
+  }
+
+  /* Curve style variations */
+  .curve-shoreline {
+    height: 50px;
+  }
+
+  .curve-horizon {
+    height: 45px;
+  }
+
+  .curve-gentle {
+    height: 35px;
+  }
+
+  @media (min-width: 768px) {
+    .organic-curve {
+      height: 60px;
+    }
+
+    .curve-shoreline {
+      height: 70px;
+    }
+
+    .curve-horizon {
+      height: 65px;
+    }
+
+    .curve-gentle {
+      height: 50px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .organic-curve {
+      height: 80px;
+    }
+
+    .curve-shoreline {
+      height: 90px;
+    }
+
+    .curve-horizon {
+      height: 85px;
+    }
+
+    .curve-gentle {
+      height: 70px;
+    }
+  }
+
+  /* Fallback for older browsers without SVG support */
+  @supports not (clip-path: url(#clip)) {
+    .organic-curve {
+      display: none;
+    }
+  }
+</style>

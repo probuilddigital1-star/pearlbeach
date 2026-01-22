@@ -1,0 +1,384 @@
+---
+import '../styles/global.css';
+import SkipLink from '../components/SkipLink.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  keywords?: string;
+  ogImage?: string;
+  ogType?: string;
+  noindex?: boolean;
+  canonicalURL?: string;
+}
+
+const {
+  title = 'Pearl Beach Cottages - Lake Erie Vacation Rentals in Saybrook Township, Ohio',
+  description = 'Discover your perfect Lake Erie getaway. Two stunning lakefront vacation rental cottages with breathtaking views, modern amenities, and private beach access in Saybrook Township, Ashtabula County, Ohio. Minutes from Ohio wine country.',
+  keywords = 'Lake Erie vacation rentals, Ashtabula cottages, Ohio lakefront rentals, Lake Erie beach house, vacation homes Ashtabula OH, wine country vacation Ohio, Geneva-on-the-Lake rentals, Ohio vacation rentals, lakefront cottages Lake Erie',
+  ogImage = '/images/hero/lake-erie-sunset.jpg',
+  ogType = 'website',
+  noindex = false,
+  canonicalURL
+} = Astro.props;
+
+const fullTitle = title === 'Pearl Beach Cottages - Lake Erie Vacation Rentals in Saybrook Township, Ohio'
+  ? title
+  : `${title} | Pearl Beach Cottages`;
+
+// Ensure title is within optimal length (50-60 characters)
+const optimizedTitle = fullTitle.length > 60 ? fullTitle.substring(0, 57) + '...' : fullTitle;
+
+// Ensure description is within optimal length (150-160 characters)
+const optimizedDescription = description.length > 160 ? description.substring(0, 157) + '...' : description;
+
+// Canonical URL - use provided or current URL
+const canonical = canonicalURL || new URL(Astro.url.pathname, Astro.site).toString();
+
+// Full OG image URL
+const fullOgImage = new URL(ogImage, Astro.site).toString();
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Primary Meta Tags -->
+    <title>{optimizedTitle}</title>
+    <meta name="title" content={optimizedTitle} />
+    <meta name="description" content={optimizedDescription} />
+    <meta name="keywords" content={keywords} />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href={canonical} />
+
+    <!-- Robots Meta -->
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    {!noindex && <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />}
+
+    <!-- Language and Geo Tags -->
+    <meta name="language" content="English" />
+    <meta name="geo.region" content="US-OH" />
+    <meta name="geo.placename" content="Saybrook Township" />
+    <meta name="geo.position" content="41.9;-80.8" />
+    <meta name="ICBM" content="41.9, -80.8" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={optimizedTitle} />
+    <meta property="og:description" content={optimizedDescription} />
+    <meta property="og:image" content={fullOgImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="Pearl Beach Cottages" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={canonical} />
+    <meta name="twitter:title" content={optimizedTitle} />
+    <meta name="twitter:description" content={optimizedDescription} />
+    <meta name="twitter:image" content={fullOgImage} />
+    <meta name="twitter:image:alt" content="Pearl Beach Cottages - Lake Erie Vacation Rentals" />
+
+    <!-- Additional SEO Meta Tags -->
+    <meta name="author" content="Pearl Beach Cottages" />
+    <meta name="rating" content="General" />
+    <meta name="revisit-after" content="7 days" />
+
+    <!-- Theme Color - Forest Sage -->
+    <meta name="theme-color" content="#5D7566" />
+    <meta name="msapplication-TileColor" content="#5D7566" />
+
+    <!-- Optimized Font Loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Preload critical fonts - Lora (warm serif) + Source Sans 3 (friendly sans) -->
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Source+Sans+3:wght@400;500;600&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Source+Sans+3:wght@400;500;600&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Source+Sans+3:wght@400;500;600&display=swap"
+      />
+    </noscript>
+
+    <!-- DNS Prefetch for external resources -->
+    <link rel="dns-prefetch" href="https://www.google.com" />
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+
+    <!-- n8n Chat Widget CSS -->
+    <link rel="stylesheet" href="/vendor/n8n-chat/style.css" />
+  </head>
+  <body class="flex flex-col min-h-screen">
+    <SkipLink />
+    <Header />
+    <main id="main-content" class="flex-grow">
+      <slot />
+    </main>
+    <Footer />
+
+    <!-- Fade-in animation observer -->
+    <script>
+      import '../scripts/fadeObserver';
+    </script>
+
+    <!-- Parallax effect for hero (desktop only) -->
+    <script>
+      import '../scripts/parallax';
+    </script>
+
+    <!-- Pearl Beach Cottages AI Concierge Chatbot -->
+    <style is:global>
+      /* n8n Chat Widget Theme - Using official CSS variables (double dashes) */
+      :root {
+        /* Primary color - Honey Oak (for chat launcher button) */
+        --chat--color--primary: #C4956A !important;
+        --chat--color--primary-shade-50: #A67B4F !important;
+        --chat--color--primary--shade-100: #8A6340 !important;
+
+        /* Secondary color - Forest Sage (for send button) */
+        --chat--color--secondary: #5D7566 !important;
+        --chat--color-secondary-shade-50: #4A5F53 !important;
+
+        /* Toggle/Launcher button */
+        --chat--toggle--background: #C4956A !important;
+        --chat--toggle--hover--background: #A67B4F !important;
+        --chat--toggle--active--background: #8A6340 !important;
+        --chat--toggle--color: #FFFFFF !important;
+
+        /* Button backgrounds */
+        --chat--button--background--primary: #C4956A !important;
+        --chat--button--background--secondary: #5D7566 !important;
+
+        /* Supporting colors */
+        --chat--color-white: #FFFFFF !important;
+        --chat--color-light: #FBF8F4 !important;
+        --chat--color-dark: #3D4F47 !important;
+        --chat--color-disabled: #B5A99A !important;
+
+        /* Header colors */
+        --chat--header--background: #5D7566 !important;
+        --chat--header--color: #FFFFFF !important;
+
+        /* Message colors */
+        --chat--message--bot--background: #FFFFFF !important;
+        --chat--message--bot--color: #3D4F47 !important;
+        --chat--message--user--background: #C4956A !important;
+        --chat--message--user--color: #FFFFFF !important;
+
+        /* Input area */
+        --chat--input--background: #F5F0E8 !important;
+        --chat--input--border: 1px solid #EDE8E0 !important;
+
+        /* Spacing and sizing */
+        --chat--border-radius: 16px !important;
+        --chat--window--width: 400px !important;
+        --chat--window--height: 600px !important;
+
+        /* PBC custom colors for fallback */
+        --pbc-honey-oak: #C4956A;
+        --pbc-honey-oak-dark: #A67B4F;
+        --pbc-forest-sage: #5D7566;
+        --pbc-pine-dark: #3D4F47;
+        --pbc-warm-cream: #FBF8F4;
+        --pbc-seashell: #F5F0E8;
+        --pbc-linen: #EDE8E0;
+        --pbc-driftwood: #B5A99A;
+      }
+      /* Chat toggle/launcher button - honey oak theme */
+      .chat-window-toggle,
+      #n8n-chat .chat-window-toggle {
+        background-color: transparent !important;
+        background-image: linear-gradient(135deg, #C4956A 0%, #A67B4F 100%) !important;
+        box-shadow: 0 4px 20px rgba(196, 149, 106, 0.35) !important;
+      }
+      .chat-window-toggle:hover,
+      #n8n-chat .chat-window-toggle:hover {
+        background-color: transparent !important;
+        background-image: linear-gradient(135deg, #A67B4F 0%, #8A6340 100%) !important;
+        transform: scale(1.05) !important;
+      }
+
+      /* Chat header - forest sage theme */
+      .chat-header,
+      #n8n-chat .chat-header {
+        background: linear-gradient(135deg, #5D7566 0%, #3D4F47 100%) !important;
+      }
+
+      /* User messages - honey oak */
+      .chat-message-from-user,
+      #n8n-chat .chat-message-from-user {
+        background: linear-gradient(135deg, #C4956A 0%, #A67B4F 100%) !important;
+        background-color: transparent !important;
+        color: white !important;
+      }
+
+      /* Bot messages */
+      .chat-message-from-bot,
+      #n8n-chat .chat-message-from-bot {
+        background: white !important;
+        color: #3D4F47 !important;
+        border: 1px solid #EDE8E0 !important;
+      }
+
+      /* Chat body/messages area */
+      .chat-body,
+      #n8n-chat .chat-body {
+        background: #FBF8F4 !important;
+      }
+
+      /* Primary button (Get Started) */
+      .chat-button-primary,
+      #n8n-chat .chat-button-primary {
+        background: linear-gradient(135deg, #C4956A 0%, #A67B4F 100%) !important;
+        color: white !important;
+      }
+      .chat-button-primary:hover,
+      #n8n-chat .chat-button-primary:hover {
+        background: linear-gradient(135deg, #A67B4F 0%, #8A6340 100%) !important;
+      }
+
+      /* Chat input area */
+      .chat-input,
+      #n8n-chat .chat-input,
+      #n8n-chat textarea,
+      #n8n-chat input[type="text"] {
+        background: #F5F0E8 !important;
+        border: 1px solid #EDE8E0 !important;
+        border-radius: 24px !important;
+      }
+      .chat-input:focus,
+      #n8n-chat .chat-input:focus,
+      #n8n-chat textarea:focus {
+        border-color: #C4956A !important;
+        box-shadow: 0 0 0 3px rgba(196, 149, 106, 0.15) !important;
+      }
+
+      /* Send button */
+      .chat-input-send-button,
+      #n8n-chat .chat-input-send-button {
+        background: #C4956A !important;
+        color: white !important;
+      }
+      .chat-input-send-button:hover,
+      #n8n-chat .chat-input-send-button:hover {
+        background: #A67B4F !important;
+      }
+    </style>
+    <script type="module">
+      import { createChat } from '/vendor/n8n-chat/chat.bundle.es.js';
+
+      createChat({
+        webhookUrl: 'https://zax76.app.n8n.cloud/webhook/8efd3545-9c5d-44fb-b468-21949fa0c6d6/chat',
+        mode: 'window',
+        showWelcomeScreen: true,
+        chatInputKey: 'chatInput',
+        chatSessionKey: 'sessionId',
+        loadPreviousSession: false,
+        enableStreaming: true,
+        webhookConfig: {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        },
+        initialMessages: [
+          'Welcome to Pearl Beach Cottages! 🌊',
+          'I can help with questions about our lakeside cottages, nearby wineries, local attractions, or booking. How can I assist you?'
+        ],
+        i18n: {
+          en: {
+            title: 'Pearl Beach Cottages',
+            subtitle: 'Your Lakeside Getaway Concierge',
+            inputPlaceholder: 'Ask about our cottages, wineries, or Lake Erie area...',
+            getStarted: 'Start Chatting'
+          }
+        }
+      });
+    </script>
+
+    <!-- PBC Chat Theme Styling -->
+    <script>
+      (function() {
+        function applyPBCChatTheme() {
+          // Style toggle button
+          var toggle = document.querySelector('.chat-window-toggle');
+          if (toggle && !toggle.dataset.pbcStyled) {
+            toggle.style.setProperty('background-color', 'transparent', 'important');
+            toggle.style.setProperty('background-image', 'linear-gradient(135deg, #C4956A 0%, #A67B4F 100%)', 'important');
+            toggle.style.setProperty('box-shadow', '0 4px 20px rgba(196, 149, 106, 0.35)', 'important');
+            toggle.dataset.pbcStyled = 'true';
+          }
+
+          // Style primary button (Get Started)
+          var primaryBtn = document.querySelector('.chat-button-primary');
+          if (primaryBtn && !primaryBtn.dataset.pbcStyled) {
+            primaryBtn.style.setProperty('background-color', 'transparent', 'important');
+            primaryBtn.style.setProperty('background-image', 'linear-gradient(135deg, #C4956A 0%, #A67B4F 100%)', 'important');
+            primaryBtn.dataset.pbcStyled = 'true';
+          }
+
+          // Style header
+          var header = document.querySelector('.chat-header');
+          if (header && !header.dataset.pbcStyled) {
+            header.style.setProperty('background', 'linear-gradient(135deg, #5D7566 0%, #3D4F47 100%)', 'important');
+            header.dataset.pbcStyled = 'true';
+          }
+
+          // Style user messages - honey oak
+          var userMessages = document.querySelectorAll('.chat-message-from-user');
+          userMessages.forEach(function(el) {
+            if (!el.dataset.pbcStyled) {
+              el.style.setProperty('background', 'linear-gradient(135deg, #C4956A 0%, #A67B4F 100%)', 'important');
+              el.style.setProperty('background-color', 'transparent', 'important');
+              el.style.setProperty('color', 'white', 'important');
+              el.dataset.pbcStyled = 'true';
+            }
+          });
+
+          // Style send button
+          var sendBtn = document.querySelector('.chat-input-send-button');
+          if (sendBtn && !sendBtn.dataset.pbcStyled) {
+            sendBtn.style.setProperty('background', '#C4956A', 'important');
+            sendBtn.style.setProperty('color', 'white', 'important');
+            sendBtn.dataset.pbcStyled = 'true';
+          }
+        }
+
+        // Apply theme repeatedly until successful
+        var themeInterval = setInterval(function() {
+          applyPBCChatTheme();
+          var toggle = document.querySelector('.chat-window-toggle');
+          if (toggle && toggle.dataset.pbcStyled) {
+            clearInterval(themeInterval);
+          }
+        }, 100);
+
+        // Stop after 10 seconds
+        setTimeout(function() { clearInterval(themeInterval); }, 10000);
+
+        // Watch for DOM changes to style new messages
+        var observer = new MutationObserver(function() { applyPBCChatTheme(); });
+        observer.observe(document.body, { childList: true, subtree: true });
+      })();
+    </script>
+  </body>
+</html>

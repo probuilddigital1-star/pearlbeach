@@ -1,0 +1,49 @@
+---
+/**
+ * Visually Hidden Component
+ * WCAG 2.1 Level AA - Screen Reader Support
+ *
+ * Hides content visually while keeping it accessible to screen readers.
+ * Use for additional context that's needed for assistive technology users
+ * but would be redundant visually.
+ *
+ * Usage:
+ * <VisuallyHidden>Additional context for screen readers</VisuallyHidden>
+ */
+
+interface Props {
+  as?: 'span' | 'div' | 'p';
+}
+
+const { as: Tag = 'span' } = Astro.props;
+---
+
+<Tag class="visually-hidden">
+  <slot />
+</Tag>
+
+<style>
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  /* Allow the element to be focusable when navigated to via keyboard */
+  .visually-hidden.focusable:focus {
+    position: static;
+    width: auto;
+    height: auto;
+    padding: inherit;
+    margin: inherit;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+  }
+</style>

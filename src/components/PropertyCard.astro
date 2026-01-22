@@ -1,0 +1,109 @@
+---
+/**
+ * Property Card Component
+ * Reusable card for displaying cottage/property information
+ * Used on homepage, cottages listing, and related properties sections
+ */
+
+interface Props {
+  title: string;
+  slug: string;
+  description: string;
+  heroImage: string;
+  bedrooms: number;
+  bathrooms: string | number;
+  sleeps: number;
+  basePrice?: number;
+  variant?: 'default' | 'compact' | 'featured';
+  imageHeight?: string;
+  showPrice?: boolean;
+  showStats?: boolean;
+}
+
+const {
+  title,
+  slug,
+  description,
+  heroImage,
+  bedrooms,
+  bathrooms,
+  sleeps,
+  basePrice,
+  variant = 'default',
+  imageHeight = '320px',
+  showPrice = true,
+  showStats = true,
+} = Astro.props;
+
+const cardClasses = {
+  default: 'property-card',
+  compact: 'property-card property-card-compact',
+  featured: 'property-card property-card-featured',
+};
+---
+
+<div class={cardClasses[variant]}>
+  <div class="property-image" style={`height: ${imageHeight};`}>
+    <img
+      src={heroImage}
+      alt={title}
+      class="w-full h-full object-cover"
+      loading="lazy"
+    />
+  </div>
+
+  <div class="property-content">
+    <h3 class="property-title">
+      {title}
+    </h3>
+
+    {variant !== 'compact' && (
+      <p class="property-description">
+        {description}
+      </p>
+    )}
+
+    {showStats && (
+      <div class="property-stats">
+        <span><strong>{bedrooms}</strong> Bedrooms</span>
+        <span><strong>{bathrooms}</strong> Bathrooms</span>
+        <span><strong>{sleeps}</strong> Guests</span>
+      </div>
+    )}
+
+    {showPrice && basePrice && (
+      <p class="property-price">
+        From ${basePrice} / night
+      </p>
+    )}
+
+    <a href={`/cottages/${slug}`} class="property-link">
+      View Details →
+    </a>
+  </div>
+</div>
+
+<style>
+  .property-card-compact .property-content {
+    padding: 24px;
+  }
+
+  .property-card-compact .property-title {
+    font-size: 24px;
+    margin-bottom: 8px;
+  }
+
+  .property-card-compact .property-stats {
+    gap: 16px;
+    font-size: 13px;
+  }
+
+  .property-card-featured {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  }
+
+  .property-card-featured:hover {
+    box-shadow: 0 12px 32px rgba(0,0,0,0.16);
+    transform: translateY(-4px);
+  }
+</style>

@@ -1,0 +1,244 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SEOSchema from '../components/SEOSchema.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+
+const faqs = [
+  {
+    category: "Booking & Reservations",
+    questions: [
+      {
+        question: "How do I book a cottage?",
+        answer: "You can book directly through our VRBO listings or contact us through our website. We recommend booking through VRBO for instant confirmation and access to their secure payment system."
+      },
+      {
+        question: "What is your cancellation policy?",
+        answer: "Our cancellation policy follows VRBO's standard guidelines. Free cancellation is available up to 60 days before check-in. Cancellations made between 60-30 days receive a 50% refund, and cancellations within 30 days are non-refundable. We recommend purchasing travel insurance for added protection."
+      },
+      {
+        question: "What are the check-in and check-out times?",
+        answer: "Check-in is at 4:00 PM and check-out is at 10:00 AM. Early check-in or late check-out may be available upon request, subject to availability and prior approval."
+      },
+      {
+        question: "Is there a minimum stay requirement?",
+        answer: "Yes, we have a 2-night minimum stay during off-peak season and a 3-night minimum during peak summer season and holidays. Weekly rates are available for extended stays."
+      }
+    ]
+  },
+  {
+    category: "Amenities & Property",
+    questions: [
+      {
+        question: "Are the cottages pet-friendly?",
+        answer: "We love pets! Both cottages welcome well-behaved dogs with prior approval. A pet fee of $75 per stay applies. Please contact us before booking to ensure your pet meets our guidelines."
+      },
+      {
+        question: "Is WiFi available?",
+        answer: "Yes, both cottages have high-speed WiFi included at no additional charge. Perfect for remote work or streaming your favorite shows."
+      },
+      {
+        question: "Do the cottages have air conditioning?",
+        answer: "Yes, both cottages are fully climate-controlled with central air conditioning and heating for year-round comfort."
+      },
+      {
+        question: "Are linens and towels provided?",
+        answer: "Yes, we provide all bed linens, bath towels, and beach towels. We also supply basic toiletries, paper products, and a starter supply of kitchen essentials."
+      },
+      {
+        question: "Is there parking available?",
+        answer: "Yes, each cottage has dedicated parking spaces. The Pearl Beach Lakehouse has space for 4-5 vehicles, and the Lakehurst Bungalow accommodates 3-4 vehicles."
+      }
+    ]
+  },
+  {
+    category: "Location & Access",
+    questions: [
+      {
+        question: "Do you have beach access?",
+        answer: "Yes! Both cottages are located directly on Lake Erie with private beach access. You can walk right from your cottage to the sandy beach."
+      },
+      {
+        question: "How far are you from local attractions?",
+        answer: "We're centrally located in Ohio's Wine Country. Most wineries are 5-15 minutes away. Downtown Ashtabula is 10 minutes, Geneva-on-the-Lake is 15 minutes, and Cleveland is about an hour away."
+      },
+      {
+        question: "Is there grocery shopping nearby?",
+        answer: "Yes, there's a full-service grocery store about 5 miles away, and several convenience stores within 2-3 miles. We also have local farm stands and markets during summer season."
+      }
+    ]
+  },
+  {
+    category: "Policies & Guidelines",
+    questions: [
+      {
+        question: "What is your smoking policy?",
+        answer: "All of our cottages are non-smoking. Smoking is only permitted outside, away from entrances and windows. Please dispose of cigarette butts properly."
+      },
+      {
+        question: "Can we host events or parties?",
+        answer: "Our cottages are perfect for family gatherings and small celebrations, but we do not allow large parties or events. Guest count must not exceed the maximum occupancy listed for each cottage. Please contact us to discuss your plans."
+      },
+      {
+        question: "What is your noise policy?",
+        answer: "We ask all guests to be respectful of neighbors and maintain quiet hours between 10:00 PM and 8:00 AM. We're located in a peaceful residential area and want to maintain good relationships with our neighbors."
+      },
+      {
+        question: "What happens if there's damage during my stay?",
+        answer: "Accidents happen! Please report any damage immediately. Minor wear and tear is expected and included in your rental. For significant damage beyond normal use, you'll be responsible through VRBO's damage protection program."
+      }
+    ]
+  },
+  {
+    category: "Payment & Fees",
+    questions: [
+      {
+        question: "What payment methods do you accept?",
+        answer: "When booking through VRBO, all major credit cards and payment methods accepted by VRBO are available. For direct bookings, we accept credit cards, ACH transfers, and checks (with advance notice)."
+      },
+      {
+        question: "Are there any additional fees?",
+        answer: "Our rates include all standard fees. Additional charges may apply for pets ($75), early check-in/late check-out (when available, $50), and mid-stay cleaning for extended stays. All fees will be clearly disclosed before booking."
+      },
+      {
+        question: "When is payment due?",
+        answer: "For VRBO bookings, payment follows their standard schedule. For direct bookings, a 50% deposit is due at booking confirmation, with the balance due 30 days before check-in."
+      }
+    ]
+  }
+];
+
+// Flatten all FAQs for schema
+const allFaqs = faqs.flatMap(category =>
+  category.questions.map(q => ({
+    question: q.question,
+    answer: q.answer
+  }))
+);
+---
+
+<BaseLayout
+  title="FAQ | Pearl Beach Cottages Lake Erie Vacation Rental Questions"
+  description="Frequently asked questions about Pearl Beach Cottages vacation rentals on Lake Erie. Booking, amenities, policies, pet-friendly options, check-in times, and more."
+  keywords="Pearl Beach FAQ, Lake Erie cottage questions, vacation rental FAQ, Ashtabula cottage booking, pet policy, check-in times, cancellation policy"
+>
+  <!-- FAQ Schema -->
+  <SEOSchema type="FAQPage" data={{ faqs: allFaqs }} />
+
+  <Breadcrumbs items={[]} currentPage="FAQ" />
+  <!-- Hero Section -->
+  <section class="relative h-96 bg-deep-ocean">
+    <div class="absolute inset-0">
+      <img
+        src="/images/hero/faq-hero.jpg"
+        alt="Questions about Pearl Beach Cottages"
+        class="w-full h-full object-cover opacity-40"
+      />
+    </div>
+    <div class="relative h-full flex items-center justify-center text-center px-4">
+      <div>
+        <h1 class="text-5xl md:text-6xl font-serif font-bold text-white mb-4 text-shadow">
+          Frequently Asked Questions
+        </h1>
+        <p class="text-xl text-white/90">
+          Everything you need to know about your Lake Erie getaway
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="section-padding bg-white">
+    <div class="container-custom">
+      <div class="max-w-4xl mx-auto">
+        {faqs.map((category, categoryIndex) => (
+          <div class:list={[categoryIndex !== 0 && 'mt-16']}>
+            <h2 class="text-3xl font-serif font-bold text-deep-ocean mb-8">
+              {category.category}
+            </h2>
+
+            <div class="space-y-6">
+              {category.questions.map((faq) => (
+                <div class="bg-coastal-fog p-6">
+                  <h3 class="text-xl font-semibold text-deep-ocean mb-3">
+                    {faq.question}
+                  </h3>
+                  <p class="text-gray-700 leading-relaxed">
+                    {faq.answer}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact CTA -->
+  <section class="section-padding bg-coastal-fog">
+    <div class="container-custom text-center">
+      <div class="max-w-3xl mx-auto">
+        <h2 class="text-3xl font-serif font-bold text-deep-ocean mb-4">
+          Still Have Questions?
+        </h2>
+        <p class="text-lg text-gray-600 mb-8">
+          We're here to help! Don't hesitate to reach out with any questions about your stay.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a href="/contact" class="btn-primary">
+            Contact Us
+          </a>
+          <a href="/cottages" class="btn-secondary">
+            View Our Cottages
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Links -->
+  <section class="py-12 bg-white">
+    <div class="container-custom">
+      <div class="max-w-4xl mx-auto">
+        <h2 class="text-2xl font-serif font-bold text-deep-ocean mb-6 text-center">
+          Quick Resources
+        </h2>
+        <div class="grid md:grid-cols-3 gap-6">
+          <div class="text-center p-6 bg-coastal-fog">
+            <svg class="w-12 h-12 text-golden-hour mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+            </svg>
+            <h3 class="font-semibold text-lg text-deep-ocean mb-2">Property Details</h3>
+            <p class="text-gray-600 text-sm mb-3">Learn about our cottages and amenities</p>
+            <a href="/cottages" class="text-golden-hour font-medium hover:underline">
+              View Cottages →
+            </a>
+          </div>
+
+          <div class="text-center p-6 bg-coastal-fog">
+            <svg class="w-12 h-12 text-golden-hour mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            </svg>
+            <h3 class="font-semibold text-lg text-deep-ocean mb-2">Location Info</h3>
+            <p class="text-gray-600 text-sm mb-3">Directions and nearby attractions</p>
+            <a href="/location" class="text-golden-hour font-medium hover:underline">
+              See Location →
+            </a>
+          </div>
+
+          <div class="text-center p-6 bg-coastal-fog">
+            <svg class="w-12 h-12 text-golden-hour mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
+            </svg>
+            <h3 class="font-semibold text-lg text-deep-ocean mb-2">Guest Reviews</h3>
+            <p class="text-gray-600 text-sm mb-3">See what our guests are saying</p>
+            <a href="/reviews" class="text-golden-hour font-medium hover:underline">
+              Read Reviews →
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,41 @@
+---
+/**
+ * Skip Navigation Link Component
+ * WCAG 2.1 Level AA - Bypass Blocks (2.4.1)
+ *
+ * Provides keyboard users a way to skip repetitive navigation
+ * and jump directly to main content.
+ */
+---
+
+<a href="#main-content" class="skip-link">
+  Skip to main content
+</a>
+
+<style>
+  .skip-link {
+    position: absolute;
+    left: -9999px;
+    z-index: 999;
+    padding: 1rem 1.5rem;
+    background-color: #2C4756; /* deep-ocean */
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    border-radius: 0 0 4px 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  .skip-link:focus {
+    left: 0;
+    top: 0;
+    outline: 3px solid #D4AF7A; /* golden-hour */
+    outline-offset: 2px;
+  }
+
+  .skip-link:hover,
+  .skip-link:focus {
+    background-color: #1f3540; /* darker deep-ocean */
+  }
+</style>

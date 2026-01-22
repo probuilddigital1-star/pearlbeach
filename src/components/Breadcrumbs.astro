@@ -1,0 +1,90 @@
+---
+/**
+ * Breadcrumbs Component
+ * Provides navigation breadcrumbs with Schema.org structured data
+ */
+
+import SEOSchema from './SEOSchema.astro';
+
+interface BreadcrumbItem {
+  name: string;
+  url: string;
+}
+
+interface Props {
+  items: BreadcrumbItem[];
+  currentPage?: string;
+}
+
+const { items, currentPage } = Astro.props;
+
+// Build breadcrumb trail
+const breadcrumbItems = [
+  { name: 'Home', url: 'https://pearlbeachcottages.com/' },
+  ...items
+];
+
+// Add current page if provided and not already in items
+if (currentPage && !items.some(item => item.name === currentPage)) {
+  breadcrumbItems.push({
+    name: currentPage,
+    url: Astro.url.toString()
+  });
+}
+---
+
+<!-- Schema.org Breadcrumb Markup -->
+<SEOSchema type="Breadcrumb" data={{ items: breadcrumbItems }} />
+
+<!-- Visual Breadcrumb Navigation -->
+<nav aria-label="Breadcrumb" class="breadcrumbs">
+  <div class="container-custom py-4">
+    <ol class="flex items-center space-x-2 text-sm">
+      {breadcrumbItems.map((item, index) => {
+        const isLast = index === breadcrumbItems.length - 1;
+
+        return (
+          <li class="flex items-center">
+            {index > 0 && (
+              <svg
+                class="w-4 h-4 mx-2 text-gray-400"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                aria-hidden="true"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            )}
+
+            {isLast ? (
+              <span
+                class="text-gray-700 font-medium"
+                aria-current="page"
+              >
+                {item.name}
+              </span>
+            ) : (
+              <a
+                href={item.url}
+                class="text-golden-hour hover:text-deep-ocean transition-colors"
+              >
+                {item.name}
+              </a>
+            )}
+          </li>
+        );
+      })}
+    </ol>
+  </div>
+</nav>
+
+<style>
+  .breadcrumbs {
+    background: rgba(245, 243, 240, 0.5);
+    border-bottom: 1px solid rgba(181, 169, 154, 0.2);
+  }
+</style>

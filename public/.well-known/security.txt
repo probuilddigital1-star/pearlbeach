@@ -1,0 +1,23 @@
+# Security Policy for Pearl Beach Cottages
+# This file follows RFC 9116 (https://www.rfc-editor.org/rfc/rfc9116.html)
+
+# Contact information for security issues
+Contact: https://pearlbeachcottages.com/contact
+Contact: mailto:security@pearlbeachcottages.com
+
+# Canonical URL for this security.txt file
+Canonical: https://pearlbeachcottages.com/.well-known/security.txt
+
+# Preferred languages for communication
+Preferred-Languages: en
+
+# Expiration date (1 year from November 24, 2024)
+Expires: 2025-11-24T00:00:00.000Z
+
+# Security policy and disclosure guidelines
+Policy: https://pearlbeachcottages.com/security
+
+# Additional information
+# We take security seriously and appreciate responsible disclosure.
+# Please report any security vulnerabilities through the contact methods above.
+# We will acknowledge receipt within 48 hours and provide updates as we investigate.

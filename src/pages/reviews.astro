@@ -1,0 +1,152 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SEOSchema from '../components/SEOSchema.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { getCollection } from 'astro:content';
+
+const reviews = await getCollection('reviews');
+const cottages = await getCollection('cottages');
+
+// Group reviews by cottage
+const reviewsByCottage = reviews.reduce((acc, review) => {
+  if (!acc[review.data.cottage]) {
+    acc[review.data.cottage] = [];
+  }
+  acc[review.data.cottage].push(review);
+  return acc;
+}, {} as Record<string, typeof reviews>);
+
+// Prepare review schema data
+const reviewSchemaData = {
+  reviews: reviews.map(review => ({
+    author: review.data.author,
+    date: review.data.date,
+    body: review.body,
+    title: review.data.title
+  }))
+};
+---
+
+<BaseLayout
+  title="Guest Reviews | Pearl Beach Cottages Lake Erie Vacation Rentals"
+  description="Read authentic guest reviews from Pearl Beach Cottages visitors. See what travelers say about our Lake Erie vacation rentals in Saybrook Township, Ohio. 9.6/10 average rating."
+  keywords="Pearl Beach Cottages reviews, Lake Erie vacation rental reviews, Ashtabula cottage reviews, guest testimonials, vacation rental ratings, Lake Erie cottage feedback"
+>
+  <!-- Review Schema -->
+  <SEOSchema type="Review" data={reviewSchemaData} />
+
+  <Breadcrumbs items={[]} currentPage="Guest Reviews" />
+  <!-- Hero Section -->
+  <section class="relative h-96 bg-deep-ocean">
+    <div class="absolute inset-0">
+      <img
+        src="/images/hero/reviews-hero.jpg"
+        alt="Happy guests at Pearl Beach"
+        class="w-full h-full object-cover opacity-40"
+      />
+    </div>
+    <div class="relative h-full flex items-center justify-center text-center px-4">
+      <div>
+        <h1 class="text-5xl md:text-6xl font-serif font-bold text-white mb-4 text-shadow">
+          Guest Reviews
+        </h1>
+        <p class="text-xl text-white/90">
+          Hear from our happy guests about their Lake Erie experiences
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Overall Ratings -->
+  <section class="section-padding bg-white">
+    <div class="container-custom">
+      <div class="max-w-4xl mx-auto">
+        <div class="text-center mb-12">
+          <h2 class="text-4xl font-serif font-bold text-deep-ocean mb-4">
+            Exceptional Guest Satisfaction
+          </h2>
+          <p class="text-lg text-gray-600">
+            Don't just take our word for it - see what our guests have to say
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-8 mb-12">
+          {cottages.map((cottage) => (
+            <div class="bg-coastal-fog p-8 text-center">
+              <h3 class="text-2xl font-serif font-bold text-deep-ocean mb-4">
+                {cottage.data.shortTitle}
+              </h3>
+              <div class="text-6xl font-bold text-golden-hour mb-2">
+                {cottage.data.rating}
+              </div>
+              <div class="text-gray-600 mb-4">out of 10</div>
+              <a href={`/cottages/${cottage.slug}`} class="text-golden-hour font-medium hover:underline">
+                View Property →
+              </a>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Reviews -->
+  <section class="section-padding bg-coastal-fog">
+    <div class="container-custom">
+      <div class="max-w-5xl mx-auto">
+        {Object.entries(reviewsByCottage).map(([cottageSlug, cottageReviews]) => {
+          const cottage = cottages.find(c => c.slug === cottageSlug);
+          if (!cottage) return null;
+
+          return (
+            <div class="mb-16 last:mb-0">
+              <div class="flex items-center justify-between mb-8">
+                <h2 class="text-3xl font-serif font-bold text-deep-ocean">
+                  {cottage.data.shortTitle}
+                </h2>
+                <span class="text-golden-hour font-semibold">
+                  {cottage.data.rating}/10
+                </span>
+              </div>
+
+              <div class="space-y-6">
+                {cottageReviews.map((review) => (
+                  <div class="bg-white shadow-md p-6 md:p-8">
+                    <div class="mb-4">
+                      <h3 class="text-xl font-semibold text-deep-ocean mb-1">
+                        {review.data.title}
+                      </h3>
+                      <div class="flex items-center gap-3 text-sm text-gray-600">
+                        <span class="font-medium">{review.data.author}</span>
+                        <span>•</span>
+                        <span>{review.data.date}</span>
+                      </div>
+                    </div>
+                    <p class="text-gray-700 leading-relaxed italic">
+                      "{review.body}"
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <!-- Leave Review CTA -->
+  <section class="section-padding bg-deep-ocean text-white">
+    <div class="container-custom text-center">
+      <h2 class="text-4xl font-serif font-bold mb-4">
+        Ready to Create Your Own Memories?
+      </h2>
+      <p class="text-xl mb-8 opacity-90 max-w-2xl mx-auto">
+        Experience the same exceptional hospitality that our guests rave about
+      </p>
+      <a href="/cottages" class="btn-primary">
+        Book Your Stay
+      </a>
+    </div>
+  </section>
+</BaseLayout>

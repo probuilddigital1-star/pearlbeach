@@ -1,0 +1,239 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SEOSchema from '../components/SEOSchema.astro';
+import PropertyCard from '../components/PropertyCard.astro';
+import WaveDivider from '../components/WaveDivider.astro';
+import OrganicCurve from '../components/OrganicCurve.astro';
+import DecorativeAccents from '../components/DecorativeAccents.astro';
+import { Icon } from 'astro-icon/components';
+import { getCollection } from 'astro:content';
+
+const cottages = await getCollection('cottages');
+const reviews = await getCollection('reviews');
+const featuredReviews = reviews.slice(0, 3);
+---
+
+<BaseLayout
+  title="Pearl Beach Cottages | Lake Erie Vacation Rentals Ohio"
+  description="Premium Lake Erie vacation rentals in Saybrook Township, Ashtabula County, Ohio. Two cozy lakefront cottages with private beach access, stunning sunset views, and modern amenities. Minutes from Ohio wine country."
+  keywords="Lake Erie vacation rentals, Ashtabula cottages Ohio, lakefront rentals Lake Erie, Ohio beach house rentals, vacation homes Ashtabula, Ohio wine country vacation, Lake Erie cottages, beachfront rentals Ohio"
+>
+  <!-- LocalBusiness Schema for Homepage -->
+  <SEOSchema type="LocalBusiness" />
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-image">
+      <img
+        src="/images/hero/lake-erie-sunset.jpg"
+        alt="Beautiful Lake Erie sunset at Pearl Beach"
+        class="w-full h-full object-cover ken-burns"
+      />
+    </div>
+    <div class="gradient-overlay"></div>
+    <div class="hero-content">
+      <h1 class="hero-title hero-stagger-1">
+        Your Home<br>on the Lake
+      </h1>
+      <p class="hero-subtitle hero-stagger-2">
+        Cozy lakeside retreats where families gather, sunsets mesmerize, and memories are made. Wake up to peaceful mornings on Lake Erie.
+      </p>
+      <a href="/cottages" class="btn-primary hero-stagger-3">Find Your Cottage</a>
+    </div>
+  </section>
+
+  <!-- Organic Curve: Hero → Trust Bar (shoreline style) -->
+  <OrganicCurve style="shoreline" fillColor="white" />
+
+  <!-- Trust Bar -->
+  <section class="bg-white py-12 trust-bar">
+    <div class="container-custom">
+      <div class="flex flex-wrap justify-center items-center gap-x-16 gap-y-8 max-w-5xl mx-auto">
+
+        <!-- Happy Guests -->
+        <div class="flex flex-col items-center text-center min-w-[120px]">
+          <div class="trust-stat-value">500+</div>
+          <div class="trust-stat-label">Happy Guests</div>
+        </div>
+
+        <!-- Divider -->
+        <div class="divider-vertical"></div>
+
+        <!-- Rating -->
+        <div class="flex flex-col items-center text-center min-w-[120px]">
+          <div class="trust-stat-value">9.8<span class="text-2xl text-driftwood">/10</span></div>
+          <div class="trust-stat-label">Guest Rating</div>
+        </div>
+
+        <!-- Divider -->
+        <div class="divider-vertical"></div>
+
+        <!-- VRBO Verified -->
+        <div class="flex flex-col items-center text-center min-w-[120px]">
+          <div class="trust-stat-value text-2xl">VRBO</div>
+          <div class="trust-stat-label">Verified Partner</div>
+        </div>
+
+        <!-- Divider -->
+        <div class="divider-vertical"></div>
+
+        <!-- Prime Location -->
+        <div class="flex flex-col items-center text-center min-w-[120px]">
+          <div class="trust-stat-value">#1</div>
+          <div class="trust-stat-label">Lakefront</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Welcome Section -->
+  <section class="section-padding bg-white relative overflow-hidden">
+    <!-- Decorative pine trees accent -->
+    <DecorativeAccents type="pine-trees" position="bottom-right" color="var(--forest-sage)" opacity={0.06} />
+    <div class="container-custom relative z-10">
+      <div class="max-w-3xl mx-auto text-center fade-in-on-scroll">
+        <h2 class="text-4xl md:text-5xl font-serif text-pine-dark mb-6">
+          Welcome to Pearl Beach
+        </h2>
+        <p class="text-lg text-gray-700 leading-relaxed">
+          Tucked along the shores of <strong>Lake Erie in Saybrook Township, Ohio</strong>, our cozy <strong>lakeside cottages</strong> are the perfect escape for families, couples, and friends. Enjoy morning coffee with lake views, evening bonfires under the stars, private beach access, and the charm of nearby <strong>Ohio wine country</strong>. This is where everyday life slows down and the good times begin.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Wave Divider: Welcome → Cottages -->
+  <WaveDivider flip class="bg-linen" />
+
+  <!-- Our Cottages Section -->
+  <section class="section-padding bg-linen relative overflow-hidden">
+    <!-- Decorative cottage accent -->
+    <DecorativeAccents type="cottage" position="bottom-left" color="var(--honey-oak)" opacity={0.05} />
+    <div class="container-custom relative z-10">
+      <div class="text-center mb-12 fade-in-on-scroll">
+        <h2 class="text-4xl md:text-5xl font-serif text-pine-dark mb-4">
+          Our Cottages
+        </h2>
+        <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+          Two welcoming retreats on the lake, each with its own character and all the comforts of home
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto stagger-children">
+        {cottages.map((cottage) => (
+          <div class="fade-in-on-scroll">
+            <PropertyCard
+              title={cottage.data.shortTitle}
+              slug={cottage.slug}
+              description={cottage.data.description}
+              heroImage={cottage.data.heroImage}
+              bedrooms={cottage.data.bedrooms}
+              bathrooms={cottage.data.bathrooms}
+              sleeps={cottage.data.sleeps}
+              basePrice={cottage.data.basePrice}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Wave Divider: Cottages → Features -->
+  <WaveDivider class="bg-warm-cream" />
+
+  <!-- Features Section -->
+  <section class="section-padding bg-warm-cream relative overflow-hidden">
+    <!-- Decorative ripples accent -->
+    <DecorativeAccents type="ripples" position="bottom-right" color="var(--forest-sage)" opacity={0.05} />
+    <div class="container-custom relative z-10">
+      <div class="text-center mb-12 fade-in-on-scroll">
+        <h2 class="text-4xl md:text-5xl font-serif text-pine-dark mb-4">
+          What Makes Us Special
+        </h2>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto stagger-children">
+        <div class="text-center fade-in-on-scroll">
+          <div class="feature-icon-box mx-auto mb-4">
+            <Icon name="ph:waves-duotone" class="w-10 h-10 text-honey-oak" />
+          </div>
+          <h3 class="text-xl font-serif font-semibold text-pine-dark mb-2">Right on the Water</h3>
+          <p class="text-gray-600">Step outside and you're at the beach. Watch the sunset paint the sky every evening from your own backyard.</p>
+        </div>
+
+        <div class="text-center fade-in-on-scroll">
+          <div class="feature-icon-box mx-auto mb-4">
+            <Icon name="ph:wine-duotone" class="w-10 h-10 text-honey-oak" />
+          </div>
+          <h3 class="text-xl font-serif font-semibold text-pine-dark mb-2">Wine Country Nearby</h3>
+          <p class="text-gray-600">Over 30 wineries in the Grand River Valley are just a short drive away—perfect for a day of tasting.</p>
+        </div>
+
+        <div class="text-center fade-in-on-scroll">
+          <div class="feature-icon-box mx-auto mb-4">
+            <Icon name="ph:armchair-duotone" class="w-10 h-10 text-honey-oak" />
+          </div>
+          <h3 class="text-xl font-serif font-semibold text-pine-dark mb-2">All the Comforts</h3>
+          <p class="text-gray-600">Full kitchens, cozy living spaces, fast WiFi, and everything you need to feel right at home.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Wave Divider: Features → Reviews -->
+  <WaveDivider flip class="bg-seashell" />
+
+  <!-- Reviews Section -->
+  <section class="section-padding bg-seashell relative overflow-hidden">
+    <!-- Decorative wave accent -->
+    <DecorativeAccents type="wave" position="bottom-left" color="var(--honey-oak)" opacity={0.06} />
+    <div class="container-custom relative z-10">
+      <div class="text-center mb-12 fade-in-on-scroll">
+        <h2 class="text-4xl md:text-5xl font-serif text-pine-dark mb-4">
+          What Guests Are Saying
+        </h2>
+        <p class="text-lg text-gray-600">
+          Real stories from families who've made memories at Pearl Beach
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto stagger-children">
+        {featuredReviews.map((review) => (
+          <div class="review-card fade-in-on-scroll">
+            <p class="review-text">
+              "{review.body}"
+            </p>
+            <p class="review-author">
+              {review.data.author}
+            </p>
+          </div>
+        ))}
+      </div>
+
+      <div class="text-center mt-8 fade-in-on-scroll">
+        <a href="/reviews" class="btn-secondary">
+          Read All Reviews
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Organic Curve: Reviews → CTA (horizon style) -->
+  <OrganicCurve style="horizon" fillColor="var(--forest-sage)" />
+
+  <!-- CTA Section -->
+  <section class="bg-forest-sage text-white cta-section">
+    <div class="container-custom relative z-10 fade-in-on-scroll">
+      <h2 class="section-title">
+        Come Relax at the Lake
+      </h2>
+      <p class="section-subtitle">
+        Your perfect getaway is waiting—book your stay today
+      </p>
+      <a href="/cottages" class="btn-primary-lg">
+        Book Your Stay
+      </a>
+    </div>
+  </section>
+</BaseLayout>

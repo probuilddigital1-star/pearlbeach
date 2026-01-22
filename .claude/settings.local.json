@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(curl:*)",
+      "Bash(taskkill:*)",
+      "Bash(mkdir:*)",
+      "Bash(powershell:*)",
+      "Bash(npm run dev:*)",
+      "Bash(npx astro check:*)",
+      "Bash(npm install:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

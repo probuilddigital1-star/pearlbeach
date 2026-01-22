@@ -1,0 +1,213 @@
+---
+/**
+ * SEO Schema Component
+ * Generates JSON-LD structured data for better search engine understanding
+ * Supports: LocalBusiness, Organization, VacationRental, Review, Breadcrumb, FAQPage
+ */
+
+import {
+  SITE_CONFIG,
+  BUSINESS_INFO,
+  LOCATION,
+  IMAGES,
+  RATINGS,
+  AMENITIES,
+  SCHEMA_IDS,
+  getSiteUrl,
+  getAllVrboUrls,
+} from '../config/constants';
+
+interface Props {
+  type: 'LocalBusiness' | 'VacationRental' | 'Review' | 'Breadcrumb' | 'FAQPage';
+  data?: any;
+}
+
+const { type, data = {} } = Astro.props;
+
+// Base organization data (used across multiple schemas)
+const organization = {
+  "@type": "Organization",
+  "@id": SCHEMA_IDS.organization,
+  "name": SITE_CONFIG.name,
+  "url": getSiteUrl(),
+  "logo": {
+    "@type": "ImageObject",
+    "url": getSiteUrl(IMAGES.logo),
+    "width": IMAGES.logoWidth,
+    "height": IMAGES.logoHeight
+  },
+  "description": SITE_CONFIG.description,
+  "sameAs": getAllVrboUrls()
+};
+
+// Generate schema based on type
+let schema = {};
+
+if (type === 'LocalBusiness') {
+  schema = {
+    "@context": "https://schema.org",
+    "@type": "LodgingBusiness",
+    "@id": SCHEMA_IDS.localBusiness,
+    "name": SITE_CONFIG.name,
+    "image": [
+      getSiteUrl(IMAGES.heroDefault),
+      getSiteUrl(IMAGES.heroAlt)
+    ],
+    "description": SITE_CONFIG.description,
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": LOCATION.streetAddress,
+      "addressLocality": LOCATION.city,
+      "addressRegion": LOCATION.state,
+      "postalCode": LOCATION.postalCode,
+      "addressCountry": LOCATION.country
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": LOCATION.latitude,
+      "longitude": LOCATION.longitude
+    },
+    "url": getSiteUrl(),
+    "telephone": BUSINESS_INFO.phone,
+    "email": BUSINESS_INFO.email,
+    "priceRange": BUSINESS_INFO.priceRange,
+    "openingHoursSpecification": [
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday"
+        ],
+        "opens": "00:00",
+        "closes": "23:59"
+      }
+    ],
+    "checkInTime": BUSINESS_INFO.checkInTime24,
+    "checkOutTime": BUSINESS_INFO.checkOutTime24,
+    "amenityFeature": AMENITIES.featured.map(amenity => ({
+      "@type": "LocationFeatureSpecification",
+      "name": amenity,
+      "value": true
+    })),
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": String(RATINGS.overall),
+      "reviewCount": String(RATINGS.reviewCount),
+      "bestRating": String(RATINGS.bestRating),
+      "worstRating": String(RATINGS.worstRating)
+    },
+    "numberOfRooms": BUSINESS_INFO.numberOfProperties,
+    "knowsAbout": [
+      "Lake Erie Vacation Rentals",
+      "Ashtabula Cottages",
+      "Ohio Wine Country",
+      "Lakefront Accommodations"
+    ],
+    "areaServed": {
+      "@type": "City",
+      "name": LOCATION.city,
+      "containedIn": {
+        "@type": "State",
+        "name": LOCATION.stateFullName
+      }
+    }
+  };
+} else if (type === 'VacationRental') {
+  // Individual cottage schema
+  const cottage = data.cottage || {};
+  schema = {
+    "@context": "https://schema.org",
+    "@type": "VacationRental",
+    "name": cottage.name || "Pearl Beach Cottage",
+    "description": cottage.description || "Luxury lakefront cottage on Lake Erie",
+    "image": cottage.images || [],
+    "url": cottage.url || getSiteUrl(),
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": LOCATION.streetAddress,
+      "addressLocality": LOCATION.city,
+      "addressRegion": LOCATION.state,
+      "postalCode": LOCATION.postalCode,
+      "addressCountry": LOCATION.country
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": LOCATION.latitude,
+      "longitude": LOCATION.longitude
+    },
+    "numberOfRooms": cottage.bedrooms || 4,
+    "numberOfBathroomsTotal": cottage.bathrooms || 2,
+    "floorSize": {
+      "@type": "QuantitativeValue",
+      "value": cottage.sqft || 2000,
+      "unitCode": "FTK"
+    },
+    "occupancy": {
+      "@type": "QuantitativeValue",
+      "value": cottage.sleeps || 10
+    },
+    "amenityFeature": cottage.amenities?.map((amenity: string) => ({
+      "@type": "LocationFeatureSpecification",
+      "name": amenity,
+      "value": true
+    })) || [],
+    "aggregateRating": cottage.rating ? {
+      "@type": "AggregateRating",
+      "ratingValue": cottage.rating,
+      "bestRating": String(RATINGS.bestRating),
+      "worstRating": String(RATINGS.worstRating)
+    } : undefined,
+    "priceRange": cottage.priceRange || BUSINESS_INFO.priceRange
+  };
+} else if (type === 'Review') {
+  const reviews = data.reviews || [];
+  schema = reviews.map((review: any) => ({
+    "@context": "https://schema.org",
+    "@type": "Review",
+    "itemReviewed": {
+      "@type": "LodgingBusiness",
+      "name": SITE_CONFIG.name
+    },
+    "author": {
+      "@type": "Person",
+      "name": review.author
+    },
+    "datePublished": review.date,
+    "reviewBody": review.body,
+    "name": review.title
+  }));
+} else if (type === 'Breadcrumb') {
+  const items = data.items || [];
+  schema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": items.map((item: any, index: number) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "name": item.name,
+      "item": item.url
+    }))
+  };
+} else if (type === 'FAQPage') {
+  const faqs = data.faqs || [];
+  schema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqs.map((faq: any) => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.answer
+      }
+    }))
+  };
+}
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

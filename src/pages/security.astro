@@ -1,0 +1,194 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+
+const lastUpdated = 'November 24, 2024';
+---
+
+<BaseLayout
+  title="Security Policy | Pearl Beach Cottages"
+  description="Pearl Beach Cottages security policy and responsible disclosure guidelines. Learn how to report security vulnerabilities."
+  keywords="security policy, responsible disclosure, vulnerability reporting, Pearl Beach Cottages security"
+>
+  <Breadcrumbs items={[]} currentPage="Security Policy" />
+
+  <!-- Hero Section -->
+  <section class="py-12 bg-deep-ocean text-white">
+    <div class="container-custom">
+      <h1 class="text-4xl md:text-5xl font-serif font-bold mb-4">
+        Security Policy
+      </h1>
+      <p class="text-xl opacity-90">
+        Last updated: {lastUpdated}
+      </p>
+    </div>
+  </section>
+
+  <!-- Security Policy Content -->
+  <section class="section-padding bg-white">
+    <div class="container-narrow prose-custom">
+      <h2>Our Commitment to Security</h2>
+      <p>
+        At Pearl Beach Cottages, we take the security and privacy of our guests seriously. We are committed to maintaining a secure website and protecting our users' personal information.
+      </p>
+      <p>
+        We welcome and appreciate the efforts of security researchers and ethical hackers who help us maintain the security of our systems through responsible disclosure.
+      </p>
+
+      <h2>Scope</h2>
+      <p>This security policy applies to:</p>
+      <ul>
+        <li>pearlbeachcottages.com and all subdomains</li>
+        <li>Contact forms and data submission endpoints</li>
+        <li>Guest-facing web applications and APIs</li>
+        <li>Third-party integrations (VRBO, Google Maps)</li>
+      </ul>
+
+      <h2>Reporting a Vulnerability</h2>
+      <p>
+        If you discover a security vulnerability, we encourage you to report it to us responsibly. We commit to investigating all legitimate reports and working to resolve issues promptly.
+      </p>
+
+      <h3>How to Report</h3>
+      <ul>
+        <li><strong>Email:</strong> security@pearlbeachcottages.com</li>
+        <li><strong>Contact Form:</strong> <a href="/contact">Contact Page</a> (mark as security-related)</li>
+        <li><strong>Security.txt:</strong> <a href="/.well-known/security.txt">/.well-known/security.txt</a></li>
+      </ul>
+
+      <h3>What to Include</h3>
+      <p>When reporting a vulnerability, please include:</p>
+      <ul>
+        <li>Description of the vulnerability and potential impact</li>
+        <li>Steps to reproduce the issue</li>
+        <li>Proof of concept (if applicable)</li>
+        <li>Your contact information for follow-up questions</li>
+        <li>Any remediation suggestions you may have</li>
+      </ul>
+
+      <h2>Response Timeline</h2>
+      <p>We commit to the following response timeline:</p>
+      <ul>
+        <li><strong>Initial Response:</strong> Within 48 hours of receiving your report</li>
+        <li><strong>Status Update:</strong> Within 7 days with our assessment and action plan</li>
+        <li><strong>Resolution Target:</strong> Critical vulnerabilities within 30 days</li>
+        <li><strong>Public Disclosure:</strong> Coordinated with reporter after fix is deployed</li>
+      </ul>
+
+      <h2>Safe Harbor</h2>
+      <p>
+        We will not pursue legal action against researchers who:
+      </p>
+      <ul>
+        <li>Follow responsible disclosure practices</li>
+        <li>Avoid violating privacy or destroying/modifying data</li>
+        <li>Do not exploit vulnerabilities beyond what is necessary to demonstrate them</li>
+        <li>Do not perform actions that could harm our users or services</li>
+        <li>Give us reasonable time to address issues before public disclosure</li>
+      </ul>
+
+      <h2>Out of Scope</h2>
+      <p>The following are explicitly out of scope:</p>
+      <ul>
+        <li>Denial of Service (DoS/DDoS) attacks</li>
+        <li>Social engineering attacks on our staff or guests</li>
+        <li>Physical security testing</li>
+        <li>Third-party services (VRBO, Google Maps) - report directly to those providers</li>
+        <li>Automated vulnerability scans without prior authorization</li>
+        <li>Public disclosure without coordinating with us first</li>
+      </ul>
+
+      <h2>Implemented Security Measures</h2>
+      <p>We've implemented the following security measures to protect our website and user data:</p>
+
+      <h3>Technical Security Controls</h3>
+      <ul>
+        <li><strong>HTTPS/TLS:</strong> All traffic encrypted with TLS 1.2+</li>
+        <li><strong>Content Security Policy:</strong> Strict CSP headers to prevent XSS attacks</li>
+        <li><strong>HSTS:</strong> HTTP Strict Transport Security enforces HTTPS</li>
+        <li><strong>X-Frame-Options:</strong> Protection against clickjacking</li>
+        <li><strong>Input Validation:</strong> Server-side validation on all form inputs</li>
+        <li><strong>Rate Limiting:</strong> Protection against brute force and spam</li>
+        <li><strong>Source Map Protection:</strong> Source maps disabled in production</li>
+      </ul>
+
+      <h3>Privacy & Data Protection</h3>
+      <ul>
+        <li>No sensitive data stored client-side</li>
+        <li>Minimal data collection (only what's necessary)</li>
+        <li>GDPR-compliant data handling practices</li>
+        <li>Third-party processors vetted for security compliance</li>
+        <li>Regular security audits and updates</li>
+      </ul>
+
+      <h3>Infrastructure Security</h3>
+      <ul>
+        <li>Static site architecture reduces attack surface</li>
+        <li>CDN protection and DDoS mitigation</li>
+        <li>Automated security updates for dependencies</li>
+        <li>Regular vulnerability scanning</li>
+      </ul>
+
+      <h2>Known Issues and Limitations</h2>
+      <p>We maintain transparency about current limitations:</p>
+      <ul>
+        <li><strong>Google Maps API Key:</strong> Current API key needs to be replaced with a properly restricted key</li>
+        <li><strong>Contact Form:</strong> Email service integration pending (using mock endpoint)</li>
+      </ul>
+      <p>
+        <em>Note: These issues are tracked internally and will be resolved before production deployment.</em>
+      </p>
+
+      <h2>Security Best Practices for Guests</h2>
+      <p>We recommend our guests follow these security best practices:</p>
+      <ul>
+        <li>Use unique, strong passwords for VRBO and email accounts</li>
+        <li>Be cautious of phishing attempts impersonating Pearl Beach Cottages</li>
+        <li>Verify URLs before entering sensitive information</li>
+        <li>Keep your devices and browsers up to date</li>
+        <li>Report suspicious communications immediately</li>
+      </ul>
+
+      <h2>Incident Response</h2>
+      <p>
+        In the event of a security incident affecting guest data, we will:
+      </p>
+      <ul>
+        <li>Immediately investigate and contain the incident</li>
+        <li>Notify affected users within 72 hours</li>
+        <li>Provide clear information about what data was affected</li>
+        <li>Offer guidance on protective measures</li>
+        <li>Implement measures to prevent similar incidents</li>
+        <li>Comply with all applicable breach notification laws</li>
+      </ul>
+
+      <h2>Security Updates</h2>
+      <p>
+        This page will be updated as we implement new security measures or make changes to our policies. Check the "Last updated" date at the top of this page for the most recent version.
+      </p>
+
+      <h2>Additional Resources</h2>
+      <ul>
+        <li><a href="/privacy">Privacy Policy</a> - How we handle your personal information</li>
+        <li><a href="/terms">Terms of Service</a> - Terms and conditions for using our services</li>
+        <li><a href="/.well-known/security.txt">security.txt</a> - Machine-readable security policy</li>
+        <li><a href="/contact">Contact Us</a> - General inquiries and support</li>
+      </ul>
+
+      <h2>Acknowledgments</h2>
+      <p>
+        We appreciate the security research community's efforts in making the internet safer. While we don't currently offer a bug bounty program, we recognize and thank researchers who responsibly disclose vulnerabilities.
+      </p>
+
+      <div class="mt-12 p-6 bg-coastal-fog">
+        <h3 class="text-xl font-semibold text-deep-ocean mb-3">Questions About Security?</h3>
+        <p class="text-gray-700 mb-4">
+          If you have questions about our security practices or need to report a security concern, please don't hesitate to reach out.
+        </p>
+        <a href="/contact" class="btn-primary">
+          Contact Security Team
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

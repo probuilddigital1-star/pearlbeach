@@ -1,0 +1,16 @@
+# Pearl Beach Cottages - Robots.txt
+# Allow all search engines to index our vacation rental website
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://pearlbeachcottages.com/sitemap-index.xml
+Sitemap: https://pearlbeachcottages.com/sitemap-0.xml
+
+# Block access to API routes if any exist
+Disallow: /api/
+
+# Crawl-delay for aggressive bots (optional)
+User-agent: *
+Crawl-delay: 1

@@ -1,0 +1,194 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { getCollection } from 'astro:content';
+
+const cottages = await getCollection('cottages');
+---
+
+<BaseLayout
+  title="Lake Erie Cottages | Vacation Rentals in Saybrook Township Ohio"
+  description="Choose from two beautiful lakefront vacation rental cottages on Lake Erie in Saybrook Township, Ashtabula County, OH. Pearl Beach Lakehouse (sleeps 13) and Lakehurst Bungalow (sleeps 10). Private beach access, modern amenities."
+  keywords="Lake Erie cottages, Ashtabula vacation rentals, lakefront cottages Ohio, Pearl Beach Lakehouse, Lakehurst Bungalow, Lake Erie beach house, Ohio cottage rentals"
+>
+  <Breadcrumbs items={[]} currentPage="Cottages" />
+  <!-- Hero Section -->
+  <section class="relative h-96 bg-deep-ocean">
+    <div class="absolute inset-0">
+      <img
+        src="/images/hero/cottages-hero.jpg"
+        alt="Pearl Beach Cottages"
+        class="w-full h-full object-cover opacity-40"
+      />
+    </div>
+    <div class="relative h-full flex items-center justify-center text-center px-4">
+      <div>
+        <h1 class="text-5xl md:text-6xl font-serif font-bold text-white mb-4 text-shadow">
+          Our Cottages
+        </h1>
+        <p class="text-xl text-white/90 max-w-2xl mx-auto">
+          Two exceptional lakefront properties, each with its own unique charm
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cottages Grid -->
+  <section class="section-padding bg-white">
+    <div class="container-custom">
+      <div class="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto">
+        {cottages.map((cottage) => (
+          <div class="property-card">
+            <!-- Image -->
+            <div class="property-image" style="height: 400px;">
+              <img
+                src={cottage.data.heroImage}
+                alt={cottage.data.shortTitle}
+                class="w-full h-full object-cover"
+              />
+            </div>
+
+            <!-- Content -->
+            <div class="p-8">
+              <h2 class="text-3xl font-serif font-bold text-deep-ocean mb-3">
+                {cottage.data.shortTitle}
+              </h2>
+              <p class="text-gray-600 mb-6 leading-relaxed">
+                {cottage.data.description}
+              </p>
+
+              <!-- Stats -->
+              <div class="grid grid-cols-4 gap-4 mb-6 py-6 border-y border-gray-200">
+                <div class="text-center">
+                  <div class="font-bold text-deep-ocean text-2xl">{cottage.data.bedrooms}</div>
+                  <div class="text-gray-600 text-sm">Bedrooms</div>
+                </div>
+                <div class="text-center">
+                  <div class="font-bold text-deep-ocean text-2xl">{cottage.data.bathrooms}</div>
+                  <div class="text-gray-600 text-sm">Baths</div>
+                </div>
+                <div class="text-center">
+                  <div class="font-bold text-deep-ocean text-2xl">{cottage.data.sleeps}</div>
+                  <div class="text-gray-600 text-sm">Sleeps</div>
+                </div>
+                <div class="text-center">
+                  <div class="font-bold text-deep-ocean text-2xl">{cottage.data.sqft}</div>
+                  <div class="text-gray-600 text-sm">Sq Ft</div>
+                </div>
+              </div>
+
+              <!-- Top Amenities -->
+              <div class="mb-6">
+                <h3 class="font-semibold text-lg text-deep-ocean mb-3">Featured Amenities</h3>
+                <div class="grid grid-cols-2 gap-2">
+                  {cottage.data.amenities.slice(0, 6).map((amenity) => (
+                    <div class="flex items-center text-sm text-gray-700">
+                      <svg class="w-4 h-4 text-golden-hour mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                      </svg>
+                      <span>{amenity}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <!-- Buttons -->
+              <div class="flex flex-col gap-3">
+                <a
+                  href={`/cottages/${cottage.slug}`}
+                  class="btn-primary text-center w-full"
+                >
+                  View Full Details
+                </a>
+                <a
+                  href={cottage.data.vrboUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="btn-secondary text-center w-full"
+                >
+                  Book on VRBO →
+                </a>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Comparison Section -->
+  <section class="section-padding bg-coastal-fog">
+    <div class="container-custom">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl font-serif text-deep-ocean mb-4">
+          Compare Our Cottages
+        </h2>
+        <p class="text-lg text-gray-600">
+          Choose the perfect cottage for your group size and preferences
+        </p>
+      </div>
+
+      <div class="max-w-4xl mx-auto bg-white shadow-lg overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full" aria-label="Comparison of Pearl Beach Cottages features">
+            <caption class="sr-only">Detailed comparison of features between Pearl Beach Lakehouse and Lakehurst Bungalow</caption>
+            <thead class="bg-deep-ocean text-white">
+              <tr>
+                <th scope="col" class="px-6 py-4 text-left">Feature</th>
+                <th scope="col" class="px-6 py-4 text-center">Pearl Beach Lakehouse</th>
+                <th scope="col" class="px-6 py-4 text-center">Lakehurst Bungalow</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+              <tr>
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 text-left">Bedrooms</th>
+                <td class="px-6 py-4 text-center">5</td>
+                <td class="px-6 py-4 text-center">4</td>
+              </tr>
+              <tr class="bg-coastal-fog">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 text-left">Bathrooms</th>
+                <td class="px-6 py-4 text-center">3</td>
+                <td class="px-6 py-4 text-center">2+</td>
+              </tr>
+              <tr>
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 text-left">Sleeps</th>
+                <td class="px-6 py-4 text-center">13</td>
+                <td class="px-6 py-4 text-center">10</td>
+              </tr>
+              <tr class="bg-coastal-fog">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 text-left">Square Feet</th>
+                <td class="px-6 py-4 text-center">2,400</td>
+                <td class="px-6 py-4 text-center">1,700</td>
+              </tr>
+              <tr>
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 text-left">Guest Rating</th>
+                <td class="px-6 py-4 text-center">9.8 out of 10</td>
+                <td class="px-6 py-4 text-center">9.4 out of 10</td>
+              </tr>
+              <tr class="bg-coastal-fog">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 text-left">Best For</th>
+                <td class="px-6 py-4 text-center text-sm">Large families and groups</td>
+                <td class="px-6 py-4 text-center text-sm">Families and couples</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section-padding bg-deep-ocean text-white">
+    <div class="container-custom text-center">
+      <h2 class="text-4xl font-serif font-bold mb-4">
+        Still Have Questions?
+      </h2>
+      <p class="text-xl mb-8 opacity-90">
+        We're here to help you choose the perfect cottage for your stay
+      </p>
+      <a href="/contact" class="btn-primary">
+        Contact Us
+      </a>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,321 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+
+// Get Google Maps API key from environment
+const mapsApiKey = import.meta.env.PUBLIC_GOOGLE_MAPS_API_KEY || 'YOUR_API_KEY_HERE';
+---
+
+<BaseLayout
+  title="Contact Pearl Beach Cottages | Saybrook Township Lake Erie Rentals"
+  description="Contact Pearl Beach Cottages for booking inquiries, questions, or special requests. Plan your perfect Lake Erie vacation in Saybrook Township, Ashtabula County, Ohio. Quick response guaranteed."
+  keywords="contact Pearl Beach Cottages, Ashtabula vacation rental inquiry, Lake Erie cottage booking, vacation rental contact, Pearl Beach reservation"
+>
+  <Breadcrumbs items={[]} currentPage="Contact" />
+  <!-- Hero Section -->
+  <section class="relative h-96 bg-deep-ocean">
+    <div class="absolute inset-0">
+      <img
+        src="/images/hero/contact-hero.jpg"
+        alt="Contact Pearl Beach Cottages"
+        class="w-full h-full object-cover opacity-40"
+      />
+    </div>
+    <div class="relative h-full flex items-center justify-center text-center px-4">
+      <div>
+        <h1 class="text-5xl md:text-6xl font-serif font-bold text-white mb-4 text-shadow">
+          Get in Touch
+        </h1>
+        <p class="text-xl text-white/90">
+          We're here to help plan your perfect Lake Erie getaway
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="section-padding bg-white">
+    <div class="container-custom max-w-6xl">
+      <div class="grid md:grid-cols-2 gap-12">
+        <!-- Contact Form -->
+        <div>
+          <h2 class="text-3xl font-serif font-bold text-deep-ocean mb-6">
+            Send Us a Message
+          </h2>
+
+          <form class="space-y-6" action="/api/contact" method="POST" aria-label="Contact form">
+            <div>
+              <label for="name" class="block text-sm font-medium text-gray-700 mb-2">
+                Name <span aria-label="required">*</span>
+              </label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                required
+                aria-required="true"
+                autocomplete="name"
+                class="input"
+                placeholder="Your name"
+              />
+            </div>
+
+            <div>
+              <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+                Email <span aria-label="required">*</span>
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                aria-required="true"
+                autocomplete="email"
+                class="input"
+                placeholder="your@email.com"
+              />
+            </div>
+
+            <div>
+              <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">
+                Phone
+              </label>
+              <input
+                type="tel"
+                id="phone"
+                name="phone"
+                autocomplete="tel"
+                class="input"
+                placeholder="(555) 123-4567"
+                aria-describedby="phone-format"
+              />
+              <p id="phone-format" class="text-xs text-gray-500 mt-1 visually-hidden">
+                Optional. Format: (555) 123-4567
+              </p>
+            </div>
+
+            <div>
+              <label for="cottage" class="block text-sm font-medium text-gray-700 mb-2">
+                Property of Interest
+              </label>
+              <select
+                id="cottage"
+                name="cottage"
+                class="input"
+              >
+                <option value="">Select a cottage</option>
+                <option value="pearl-beach-lakehouse">Pearl Beach Lakehouse (5 bed, sleeps 13)</option>
+                <option value="lakehurst-bungalow">Lakehurst Bungalow (4 bed, sleeps 10)</option>
+                <option value="both">Interested in both</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="dates" class="block text-sm font-medium text-gray-700 mb-2">
+                Preferred Dates
+              </label>
+              <input
+                type="text"
+                id="dates"
+                name="dates"
+                class="input"
+                placeholder="e.g., July 15-22, 2025"
+                aria-describedby="dates-format"
+              />
+              <p id="dates-format" class="text-xs text-gray-500 mt-1">
+                Example format: July 15-22, 2025
+              </p>
+            </div>
+
+            <div>
+              <label for="message" class="block text-sm font-medium text-gray-700 mb-2">
+                Message <span aria-label="required">*</span>
+              </label>
+              <textarea
+                id="message"
+                name="message"
+                required
+                aria-required="true"
+                rows="5"
+                class="input resize-none"
+                placeholder="Tell us about your trip..."
+              ></textarea>
+            </div>
+
+            <!-- Honeypot field for spam prevention (hidden from users) -->
+            <div class="visually-hidden" aria-hidden="true">
+              <label for="website">Website (leave blank)</label>
+              <input
+                type="text"
+                id="website"
+                name="website"
+                tabindex="-1"
+                autocomplete="off"
+              />
+            </div>
+
+            <!-- Form status message -->
+            <div id="form-status" role="status" aria-live="polite" class="hidden"></div>
+
+            <button type="submit" id="submit-button" class="btn-primary w-full">
+              Send Message
+            </button>
+
+            <p class="text-sm text-gray-600" role="note">
+              <span aria-label="required">*</span> Required fields. We typically respond within 24 hours.
+            </p>
+          </form>
+
+          <script>
+            // Contact form submission handler
+            document.addEventListener('DOMContentLoaded', () => {
+              const form = document.querySelector('form[action="/api/contact"]') as HTMLFormElement;
+              const submitButton = document.getElementById('submit-button') as HTMLButtonElement;
+              const statusDiv = document.getElementById('form-status');
+
+              if (!form || !submitButton || !statusDiv) return;
+
+              form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                // Disable submit button
+                submitButton.disabled = true;
+                submitButton.textContent = 'Sending...';
+                statusDiv.className = 'hidden';
+
+                try {
+                  const formData = new FormData(form);
+                  const response = await fetch('/api/contact', {
+                    method: 'POST',
+                    body: formData,
+                  });
+
+                  const result = await response.json();
+
+                  if (result.success) {
+                    // Success
+                    statusDiv.className = 'bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded mb-4';
+                    statusDiv.textContent = result.message || 'Thank you! We\'ll get back to you soon.';
+                    form.reset();
+                  } else {
+                    // Error
+                    statusDiv.className = 'bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded mb-4';
+                    statusDiv.textContent = result.error || 'Something went wrong. Please try again.';
+                  }
+                } catch (error) {
+                  // Network error
+                  statusDiv.className = 'bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded mb-4';
+                  statusDiv.textContent = 'Network error. Please check your connection and try again.';
+                } finally {
+                  // Re-enable submit button
+                  submitButton.disabled = false;
+                  submitButton.textContent = 'Send Message';
+                  statusDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+              });
+            });
+          </script>
+        </div>
+
+        <!-- Contact Information -->
+        <div>
+          <h2 class="text-3xl font-serif font-bold text-deep-ocean mb-6">
+            Other Ways to Reach Us
+          </h2>
+
+          <div class="space-y-6 mb-8">
+            <div class="flex items-start">
+              <div class="w-12 h-12 flex items-center justify-center flex-shrink-0" style="background: rgba(212, 175, 122, 0.1);">
+                <svg class="w-6 h-6 text-golden-hour" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+              </div>
+              <div class="ml-4">
+                <h3 class="font-semibold text-lg text-deep-ocean">Location</h3>
+                <p class="text-gray-600">Saybrook Township, OH 44004<br/>Lake Erie Waterfront</p>
+              </div>
+            </div>
+
+            <div class="flex items-start">
+              <div class="w-12 h-12 flex items-center justify-center flex-shrink-0" style="background: rgba(212, 175, 122, 0.1);">
+                <svg class="w-6 h-6 text-golden-hour" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+              </div>
+              <div class="ml-4">
+                <h3 class="font-semibold text-lg text-deep-ocean">Check-in/Out</h3>
+                <p class="text-gray-600">Check-in: 4:00 PM<br/>Check-out: 10:00 AM</p>
+              </div>
+            </div>
+
+            <div class="flex items-start">
+              <div class="w-12 h-12 flex items-center justify-center flex-shrink-0" style="background: rgba(212, 175, 122, 0.1);">
+                <svg class="w-6 h-6 text-golden-hour" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+              </div>
+              <div class="ml-4">
+                <h3 class="font-semibold text-lg text-deep-ocean">Book Direct</h3>
+                <p class="text-gray-600 mb-2">View availability and book instantly on VRBO:</p>
+                <div class="space-y-1">
+                  <a href="https://www.vrbo.com/122526" target="_blank" rel="noopener noreferrer" class="text-golden-hour hover:underline block">
+                    Pearl Beach Lakehouse →
+                  </a>
+                  <a href="https://www.vrbo.com/238763" target="_blank" rel="noopener noreferrer" class="text-golden-hour hover:underline block">
+                    Lakehurst Bungalow →
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ Link -->
+          <div class="bg-coastal-fog p-6">
+            <h3 class="font-semibold text-lg text-deep-ocean mb-2">
+              Frequently Asked Questions
+            </h3>
+            <p class="text-gray-600 mb-4">
+              Find quick answers to common questions about booking, amenities, and policies.
+            </p>
+            <a href="/faq" class="text-golden-hour font-medium hover:underline">
+              View FAQs →
+            </a>
+          </div>
+
+          <!-- Map -->
+          <div class="mt-8">
+            <h3 class="font-semibold text-lg text-deep-ocean mb-4">Our Location</h3>
+            <div class="map-container-small">
+              <iframe
+                width="100%"
+                height="300"
+                style="border:0;"
+                loading="lazy"
+                allowfullscreen
+                referrerpolicy="no-referrer-when-downgrade"
+                src={`https://www.google.com/maps/embed/v1/place?key=${mapsApiKey}&q=Ashtabula+OH+44004&zoom=13&maptype=roadmap`}
+                title="Map showing Pearl Beach Cottages location in Ashtabula, Ohio"
+              ></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Response Time -->
+  <section class="py-12 bg-coastal-fog">
+    <div class="container-custom text-center">
+      <div class="max-w-3xl mx-auto">
+        <h2 class="text-2xl font-serif font-bold text-deep-ocean mb-4">
+          Quick Response Guaranteed
+        </h2>
+        <p class="text-gray-700">
+          We pride ourselves on responsive communication. Most inquiries are answered within 24 hours,
+          and we're often available for same-day responses during peak season.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

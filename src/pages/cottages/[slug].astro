@@ -1,0 +1,266 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SEOSchema from '../../components/SEOSchema.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CottageHighlights from '../../components/CottageHighlights.astro';
+import LightboxGallery from '../../components/LightboxGallery.astro';
+import { getCollection } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+
+export const getStaticPaths = (async () => {
+  const cottages = await getCollection('cottages');
+  return cottages.map((cottage) => ({
+    params: { slug: cottage.slug },
+    props: { cottage },
+  }));
+}) satisfies GetStaticPaths;
+
+const { cottage } = Astro.props;
+const { Content } = await cottage.render();
+
+// Enhanced SEO data
+const cottageKeywords = `${cottage.data.shortTitle}, Lake Erie vacation rental, Saybrook Township cottage ${cottage.data.bedrooms} bedroom, lakefront rental Ohio, ${cottage.data.sleeps} guest cottage, Lake Erie beach house, Ashtabula County`;
+const enhancedDescription = `${cottage.data.description} | ${cottage.data.bedrooms} bedrooms, ${cottage.data.bathrooms} baths, sleeps ${cottage.data.sleeps}. Lakefront vacation rental in Saybrook Township, Ohio.`;
+
+// Schema data for VacationRental
+const cottageSchemaData = {
+  cottage: {
+    name: cottage.data.shortTitle,
+    description: cottage.data.description,
+    url: `https://pearlbeachcottages.com/cottages/${cottage.slug}`,
+    images: cottage.data.images,
+    bedrooms: cottage.data.bedrooms,
+    bathrooms: cottage.data.bathrooms,
+    sqft: cottage.data.sqft,
+    sleeps: cottage.data.sleeps,
+    amenities: cottage.data.amenities,
+    rating: cottage.data.rating,
+    priceRange: "$$-$$$"
+  }
+};
+---
+
+<BaseLayout
+  title={`${cottage.data.shortTitle} | Lake Erie Vacation Rental Saybrook Township OH`}
+  description={enhancedDescription}
+  keywords={cottageKeywords}
+  ogType="product"
+  ogImage={cottage.data.heroImage}
+>
+  <!-- VacationRental Schema -->
+  <SEOSchema type="VacationRental" data={cottageSchemaData} />
+
+  <!-- Breadcrumbs -->
+  <Breadcrumbs
+    items={[
+      { name: 'Cottages', url: 'https://pearlbeachcottages.com/cottages' }
+    ]}
+    currentPage={cottage.data.shortTitle}
+  />
+  <!-- Hero Section -->
+  <section class="relative h-[70vh] min-h-[500px]">
+    <div class="absolute inset-0">
+      <img
+        src={cottage.data.heroImage}
+        alt={cottage.data.title}
+        class="w-full h-full object-cover"
+      />
+      <div class="gradient-overlay"></div>
+    </div>
+
+    <div class="relative h-full flex items-end pb-16 px-4">
+      <div class="container-custom">
+        <div class="max-w-4xl">
+          <div class="inline-block bg-white px-4 py-2 mb-4" style="border-radius: 2px;">
+            <span class="font-semibold text-honey-oak">{cottage.data.rating}/10</span>
+            <span class="text-sm text-gray-600 ml-2">Guest Rating</span>
+          </div>
+          <h1 class="text-4xl md:text-6xl font-serif font-bold text-white mb-4 text-shadow">
+            {cottage.data.shortTitle}
+          </h1>
+          <p class="text-xl text-white/90 text-shadow">
+            {cottage.data.location.city}, {cottage.data.location.state} • {cottage.data.location.region}
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Stats -->
+  <section class="bg-white border-b border-gray-200">
+    <div class="container-custom py-8">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl">
+        <div class="text-center">
+          <div class="text-3xl font-bold text-pine-dark">{cottage.data.bedrooms}</div>
+          <div class="text-gray-600 mt-1">Bedrooms</div>
+        </div>
+        <div class="text-center">
+          <div class="text-3xl font-bold text-pine-dark">{cottage.data.bathrooms}</div>
+          <div class="text-gray-600 mt-1">Bathrooms</div>
+        </div>
+        <div class="text-center">
+          <div class="text-3xl font-bold text-pine-dark">{cottage.data.sleeps}</div>
+          <div class="text-gray-600 mt-1">Guests</div>
+        </div>
+        <div class="text-center">
+          <div class="text-3xl font-bold text-pine-dark">{cottage.data.sqft}</div>
+          <div class="text-gray-600 mt-1">Square Feet</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <section class="section-padding bg-white">
+    <div class="container-custom">
+      <div class="grid lg:grid-cols-3 gap-12">
+        <!-- Main Content -->
+        <div class="lg:col-span-2">
+          <!-- Why Choose Section -->
+          {cottage.data.highlights && (
+            <CottageHighlights
+              highlights={cottage.data.highlights}
+              cottageName={cottage.data.shortTitle}
+            />
+          )}
+
+          <!-- Description -->
+          <div class="prose-custom mb-12">
+            <Content />
+          </div>
+
+          <!-- Amenities -->
+          <div class="mb-12">
+            <h2 class="text-3xl font-serif font-bold text-pine-dark mb-6">
+              Amenities
+            </h2>
+            <div class="grid sm:grid-cols-2 gap-4">
+              {cottage.data.amenities.map((amenity) => (
+                <div class="flex items-start">
+                  <svg class="w-6 h-6 text-honey-oak mr-3 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                  </svg>
+                  <span class="text-gray-700">{amenity}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <!-- Photo Gallery -->
+          <div class="mb-12">
+            <h2 class="text-3xl font-serif font-bold text-pine-dark mb-6">
+              Photo Gallery
+            </h2>
+            <LightboxGallery
+              images={cottage.data.images}
+              title={cottage.data.shortTitle}
+            />
+          </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="lg:col-span-1">
+          <div class="sticky top-24 space-y-6">
+            <!-- Booking Card -->
+            <div class="bg-white border border-gray-200 p-6" style="box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+              <h3 class="text-2xl font-serif font-bold text-pine-dark mb-4">
+                Book Your Stay
+              </h3>
+
+              {cottage.data.basePrice && (
+                <div class="mb-6">
+                  <div class="text-3xl font-bold text-honey-oak">
+                    ${cottage.data.basePrice}
+                    <span class="text-lg font-normal text-gray-600">/ night</span>
+                  </div>
+                  <p class="text-sm text-gray-500 mt-1">Base rate • See calendar for exact pricing</p>
+                </div>
+              )}
+
+              <div class="space-y-3">
+                <a
+                  href={cottage.data.vrboUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="btn-primary w-full text-center block"
+                >
+                  Check Availability on VRBO
+                </a>
+                <a
+                  href="/contact"
+                  class="btn-secondary w-full text-center block"
+                >
+                  Contact Owner
+                </a>
+              </div>
+
+              <div class="mt-6 pt-6 border-t border-gray-200">
+                <div class="flex items-center text-sm text-gray-600 mb-2">
+                  <svg class="w-5 h-5 mr-2 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                  </svg>
+                  Instant booking available
+                </div>
+                <div class="flex items-center text-sm text-gray-600">
+                  <svg class="w-5 h-5 mr-2 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                  </svg>
+                  Free cancellation available
+                </div>
+              </div>
+            </div>
+
+            <!-- Contact Card -->
+            <div class="bg-warm-cream p-6">
+              <h3 class="font-semibold text-lg text-pine-dark mb-3">
+                Have Questions?
+              </h3>
+              <p class="text-gray-600 mb-4 text-sm">
+                We're here to help! Contact us for special requests, group bookings, or any questions about your stay.
+              </p>
+              <a href="/contact" class="text-honey-oak font-medium hover:underline">
+                Contact Us →
+              </a>
+            </div>
+
+            <!-- Property Info -->
+            <div class="bg-warm-cream p-6">
+              <h3 class="font-semibold text-lg text-pine-dark mb-3">
+                Property Details
+              </h3>
+              <dl class="space-y-2 text-sm">
+                <div class="flex justify-between">
+                  <dt class="text-gray-600">Property ID:</dt>
+                  <dd class="font-medium">{cottage.data.vrboId}</dd>
+                </div>
+                <div class="flex justify-between">
+                  <dt class="text-gray-600">Check-in:</dt>
+                  <dd class="font-medium">4:00 PM</dd>
+                </div>
+                <div class="flex justify-between">
+                  <dt class="text-gray-600">Check-out:</dt>
+                  <dd class="font-medium">10:00 AM</dd>
+                </div>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Other Cottage CTA -->
+  <section class="section-padding bg-warm-cream">
+    <div class="container-custom text-center">
+      <h2 class="text-3xl font-serif font-bold text-pine-dark mb-4">
+        Explore Our Other Cottage
+      </h2>
+      <p class="text-lg text-gray-600 mb-8">
+        We have another beautiful property that might be perfect for your group
+      </p>
+      <a href="/cottages" class="btn-primary">
+        View All Cottages
+      </a>
+    </div>
+  </section>
+</BaseLayout>

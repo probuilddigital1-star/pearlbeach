@@ -1,0 +1,236 @@
+---
+/**
+ * Decorative SVG Accents
+ * Hand-drawn style lakeside decorative elements
+ * Used to add visual character and reinforce the lakeside theme
+ */
+
+interface Props {
+  /** Type of accent: 'wave', 'pine-trees', 'cottage', 'ripples' */
+  type: 'wave' | 'pine-trees' | 'cottage' | 'ripples';
+  /** Position: top-left, top-right, bottom-left, bottom-right, center */
+  position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'center';
+  /** Color override (defaults to honey-oak) */
+  color?: string;
+  /** Opacity (defaults to 0.08) */
+  opacity?: number;
+  /** Additional CSS class */
+  class?: string;
+}
+
+const {
+  type,
+  position = 'bottom-right',
+  color = 'var(--honey-oak)',
+  opacity = 0.08,
+  class: className = ''
+} = Astro.props;
+
+const positionClasses: Record<string, string> = {
+  'top-left': 'top-0 left-0',
+  'top-right': 'top-0 right-0',
+  'bottom-left': 'bottom-0 left-0',
+  'bottom-right': 'bottom-0 right-0',
+  'center': 'top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'
+};
+---
+
+<div
+  class:list={['decorative-accent', `accent-${type}`, positionClasses[position], className]}
+  aria-hidden="true"
+  style={`--accent-color: ${color}; --accent-opacity: ${opacity};`}
+>
+  {type === 'wave' && (
+    <svg viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg" class="accent-svg">
+      <path
+        d="M5 45 C20 35, 35 55, 50 45 S80 35, 95 45 S125 55, 140 45 S170 35, 185 45"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        fill="none"
+      />
+      <path
+        d="M10 55 C25 45, 40 60, 55 50 S85 45, 100 55 S130 60, 145 50 S175 45, 190 55"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        fill="none"
+      />
+    </svg>
+  )}
+
+  {type === 'pine-trees' && (
+    <svg viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg" class="accent-svg">
+      <!-- First pine tree -->
+      <path
+        d="M30 85 L30 70 M20 70 L30 55 L40 70 M15 60 L30 40 L45 60 M10 50 L30 25 L50 50"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        fill="none"
+      />
+      <!-- Second pine tree (smaller, offset) -->
+      <path
+        d="M70 85 L70 75 M63 75 L70 65 L77 75 M58 68 L70 55 L82 68 M55 60 L70 42 L85 60"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        fill="none"
+      />
+      <!-- Third pine tree (smallest, background) -->
+      <path
+        d="M100 85 L100 78 M95 78 L100 70 L105 78 M92 73 L100 62 L108 73"
+        stroke="currentColor"
+        stroke-width="1"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        fill="none"
+      />
+    </svg>
+  )}
+
+  {type === 'cottage' && (
+    <svg viewBox="0 0 140 100" fill="none" xmlns="http://www.w3.org/2000/svg" class="accent-svg">
+      <!-- Cottage body -->
+      <path
+        d="M20 60 L20 85 L120 85 L120 60"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        fill="none"
+      />
+      <!-- Roof -->
+      <path
+        d="M10 60 L70 25 L130 60"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        fill="none"
+      />
+      <!-- Door -->
+      <path
+        d="M60 85 L60 65 L80 65 L80 85"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        fill="none"
+      />
+      <!-- Windows -->
+      <rect x="30" y="65" width="15" height="12" rx="1" stroke="currentColor" stroke-width="1.5" fill="none" />
+      <rect x="95" y="65" width="15" height="12" rx="1" stroke="currentColor" stroke-width="1.5" fill="none" />
+      <!-- Chimney -->
+      <path
+        d="M100 45 L100 30 L110 30 L110 50"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        fill="none"
+      />
+      <!-- Smoke -->
+      <path
+        d="M105 28 C108 22, 102 18, 107 12"
+        stroke="currentColor"
+        stroke-width="1"
+        stroke-linecap="round"
+        fill="none"
+      />
+    </svg>
+  )}
+
+  {type === 'ripples' && (
+    <svg viewBox="0 0 150 80" fill="none" xmlns="http://www.w3.org/2000/svg" class="accent-svg">
+      <!-- Concentric ripple circles -->
+      <ellipse cx="75" cy="50" rx="20" ry="8" stroke="currentColor" stroke-width="1" fill="none" />
+      <ellipse cx="75" cy="50" rx="35" ry="14" stroke="currentColor" stroke-width="1" fill="none" />
+      <ellipse cx="75" cy="50" rx="50" ry="20" stroke="currentColor" stroke-width="1" fill="none" />
+      <ellipse cx="75" cy="50" rx="68" ry="28" stroke="currentColor" stroke-width="0.75" fill="none" />
+      <!-- Center droplet splash -->
+      <circle cx="75" cy="45" r="3" stroke="currentColor" stroke-width="1" fill="none" />
+    </svg>
+  )}
+</div>
+
+<style>
+  .decorative-accent {
+    position: absolute;
+    pointer-events: none;
+    z-index: 0;
+    color: var(--accent-color);
+    opacity: var(--accent-opacity);
+  }
+
+  .accent-svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .accent-wave {
+    width: 200px;
+    height: 60px;
+  }
+
+  .accent-pine-trees {
+    width: 120px;
+    height: 100px;
+  }
+
+  .accent-cottage {
+    width: 140px;
+    height: 100px;
+  }
+
+  .accent-ripples {
+    width: 150px;
+    height: 80px;
+  }
+
+  @media (min-width: 768px) {
+    .accent-wave {
+      width: 280px;
+      height: 85px;
+    }
+
+    .accent-pine-trees {
+      width: 160px;
+      height: 130px;
+    }
+
+    .accent-cottage {
+      width: 180px;
+      height: 130px;
+    }
+
+    .accent-ripples {
+      width: 200px;
+      height: 110px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .accent-wave {
+      width: 350px;
+      height: 100px;
+    }
+
+    .accent-pine-trees {
+      width: 200px;
+      height: 160px;
+    }
+
+    .accent-cottage {
+      width: 220px;
+      height: 160px;
+    }
+
+    .accent-ripples {
+      width: 250px;
+      height: 140px;
+    }
+  }
+</style>

@@ -1,0 +1,77 @@
+---
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="bg-pine-dark text-white" role="contentinfo">
+  <div class="container-custom py-14">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <!-- Brand -->
+      <div class="md:col-span-1">
+        <h2 class="text-2xl font-serif font-medium mb-4">Pearl Beach Cottages</h2>
+        <p style="color: rgba(255,255,255,0.75); font-size: 15px; line-height: 1.75;">
+          Your Lake Erie vacation destination. Two beautiful cottages with stunning views and modern amenities.
+        </p>
+      </div>
+
+      <!-- Quick Links -->
+      <nav aria-label="Footer quick links">
+        <h3 class="font-semibold text-lg mb-4">Quick Links</h3>
+        <ul class="space-y-2" style="color: rgba(255,255,255,0.7);">
+          <li><a href="/" class="hover:text-white transition-colors duration-200">Home</a></li>
+          <li><a href="/cottages" class="hover:text-white transition-colors duration-200">Our Cottages</a></li>
+          <li><a href="/amenities" class="hover:text-white transition-colors duration-200">Amenities</a></li>
+          <li><a href="/location" class="hover:text-white transition-colors duration-200">Location</a></li>
+        </ul>
+      </nav>
+
+      <!-- Properties -->
+      <nav aria-label="Our cottages">
+        <h3 class="font-semibold text-lg mb-4">Our Cottages</h3>
+        <ul class="space-y-2" style="color: rgba(255,255,255,0.7);">
+          <li><a href="/cottages/pearl-beach-lakehouse" class="hover:text-white transition-colors duration-200">Pearl Beach Lakehouse</a></li>
+          <li><a href="/cottages/lakehurst-bungalow" class="hover:text-white transition-colors duration-200">Lakehurst Bungalow</a></li>
+          <li><a href="/reviews" class="hover:text-white transition-colors duration-200">Guest Reviews</a></li>
+          <li><a href="/contact" class="hover:text-white transition-colors duration-200">Contact Us</a></li>
+        </ul>
+      </nav>
+
+      <!-- Contact Info -->
+      <div>
+        <h3 class="font-semibold text-lg mb-4">Get in Touch</h3>
+        <ul class="space-y-2" style="color: rgba(255,255,255,0.7);">
+          <li class="flex items-start">
+            <svg class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            </svg>
+            <span>Saybrook Township, OH</span>
+          </li>
+          <li class="flex items-start">
+            <svg class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+            </svg>
+            <a href="/contact" class="hover:text-white transition-colors duration-200">Contact Form</a>
+          </li>
+          <li class="flex items-start">
+            <svg class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span>Check-in: 4:00 PM<br/>Check-out: 10:00 AM</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Bottom Bar -->
+    <div class="mt-10 pt-8 text-center text-sm" style="border-top: 1px solid rgba(196, 149, 106, 0.2); color: rgba(255,255,255,0.65);">
+      <p>&copy; {currentYear} Pearl Beach Cottages. All rights reserved.</p>
+      <p class="mt-2">
+        <a href="/privacy" class="hover:text-honey-oak transition-colors duration-200">Privacy Policy</a>
+        <span class="mx-2" style="color: rgba(196, 149, 106, 0.4);">•</span>
+        <a href="/terms" class="hover:text-honey-oak transition-colors duration-200">Terms of Service</a>
+        <span class="mx-2" style="color: rgba(196, 149, 106, 0.4);">•</span>
+        <a href="/security" class="hover:text-honey-oak transition-colors duration-200">Security</a>
+      </p>
+    </div>
+  </div>
+</footer>
