@@ -101,7 +101,7 @@ If you discover a security vulnerability in this project, please report it respo
 
 **Status:** Requires immediate attention before production deployment
 
-The current Google Maps API key `AIzaSyBN6ceHKO7a7mOQbKyzh_wCZCeL8RWIOh8` is exposed in the repository and must be:
+The Google Maps API key must be configured via environment variables and never committed to the repository:
 
 1. **Revoked immediately** in Google Cloud Console
 2. **Replaced with a new restricted key:**
