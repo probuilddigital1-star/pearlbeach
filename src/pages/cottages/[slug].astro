@@ -19,8 +19,8 @@ const { cottage } = Astro.props;
 const { Content } = await cottage.render();
 
 // Enhanced SEO data
-const cottageKeywords = `${cottage.data.shortTitle}, Lake Erie vacation rental, Saybrook Township cottage ${cottage.data.bedrooms} bedroom, lakefront rental Ohio, ${cottage.data.sleeps} guest cottage, Lake Erie beach house, Ashtabula County`;
-const enhancedDescription = `${cottage.data.description} | ${cottage.data.bedrooms} bedrooms, ${cottage.data.bathrooms} baths, sleeps ${cottage.data.sleeps}. Lakefront vacation rental in Saybrook Township, Ohio.`;
+const cottageKeywords = `${cottage.data.shortTitle}, Lake Erie vacation rental, Saybrook Township cottage ${cottage.data.bedrooms} bedroom, lakeview rental Ohio, ${cottage.data.sleeps} guest cottage, Lake Erie beach house, Ashtabula County`;
+const enhancedDescription = `${cottage.data.description} | ${cottage.data.bedrooms} bedrooms, ${cottage.data.bathrooms} baths, sleeps ${cottage.data.sleeps}. Lakeview vacation rental in Saybrook Township, Ohio.`;
 
 // Schema data for VacationRental
 const cottageSchemaData = {
@@ -195,17 +195,11 @@ const cottageSchemaData = {
               </div>
 
               <div class="mt-6 pt-6 border-t border-gray-200">
-                <div class="flex items-center text-sm text-gray-600 mb-2">
-                  <svg class="w-5 h-5 mr-2 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                  </svg>
-                  Instant booking available
-                </div>
                 <div class="flex items-center text-sm text-gray-600">
                   <svg class="w-5 h-5 mr-2 text-green-600" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                   </svg>
-                  Free cancellation available
+                  Free cancellation up to 60 days
                 </div>
               </div>
             </div>
@@ -231,7 +225,7 @@ const cottageSchemaData = {
               <dl class="space-y-2 text-sm">
                 <div class="flex justify-between">
                   <dt class="text-gray-600">Property ID:</dt>
-                  <dd class="font-medium">{cottage.data.vrboId}</dd>
+                  <dd class="font-medium">VRBO #{cottage.data.vrboId}</dd>
                 </div>
                 <div class="flex justify-between">
                   <dt class="text-gray-600">Check-in:</dt>

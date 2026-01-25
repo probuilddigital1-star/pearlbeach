@@ -1,7 +1,7 @@
 ---
 title: "Gorgeous Sunsets at Pearl Beach Lakehouse"
 shortTitle: "Pearl Beach Lakehouse"
-description: "Experience breathtaking Lake Erie sunsets at this spacious 5-bedroom lakefront retreat. Perfect for families and large groups seeking a peaceful escape with stunning water views."
+description: "Experience breathtaking Lake Erie sunsets at this spacious 5-bedroom lakeview retreat. Perfect for families and large groups seeking a peaceful escape with stunning water views."
 vrboId: "122526"
 vrboUrl: "https://www.vrbo.com/122526"
 bedrooms: 5
@@ -10,13 +10,13 @@ sleeps: 13
 sqft: 2400
 rating: 9.8
 featured: true
-basePrice: 589
+basePrice: 435
 amenities:
-  - "Lakefront Location"
-  - "Private Beach Access"
+  - "Lakeview Location"
+  - "Shared Private Beach Access"
   - "Stunning Sunset Views"
   - "Full Kitchen"
-  - "Outdoor Patio & Grill"
+  - "Outdoor Patio & Gas Grill"
   - "Fire Pit"
   - "Smart TVs"
   - "High-Speed WiFi"
@@ -26,6 +26,7 @@ amenities:
   - "Lake Views from Multiple Rooms"
   - "Dining for 12+"
   - "Spacious Living Areas"
+  - "Green Space & Lawn Area"
 heroImage: "/images/lakehouse/pearlbeach/lakehouse-hero.jpg"
 images:
   # Living Areas
@@ -79,7 +80,7 @@ highlights:
     description: "Front-row seats to Lake Erie's famous sunsets"
   - icon: "ph:waves-duotone"
     title: "Beach Access"
-    description: "Private path to the beach"
+    description: "Shared private beach access with gravel walkway"
   - icon: "ph:users-duotone"
     title: "Family Friendly"
     description: "Perfect for multi-generational trips"
@@ -93,7 +94,7 @@ highlights:
 
 ## Welcome to Pearl Beach Lakehouse
 
-Discover your perfect Lake Erie getaway at our stunning 5-bedroom lakefront retreat. With breathtaking sunset views, direct beach access, and 2,400 square feet of comfortable living space, the Pearl Beach Lakehouse offers an unforgettable vacation experience for families and groups of up to 13 guests.
+Discover your perfect Lake Erie getaway at our stunning 5-bedroom lakeview retreat. With breathtaking sunset views, shared private beach access (exclusive to the property owner and 2 other properties), and 2,400 square feet of comfortable living space, the Pearl Beach Lakehouse offers an unforgettable vacation experience for families and groups of up to 13 guests.
 
 ### The Space
 
@@ -112,7 +113,7 @@ Our spacious lakehouse features an open-concept main floor with panoramic lake v
 - Board games and entertainment
 
 **Kitchen & Dining:**
-- Fully equipped modern kitchen
+- Fully equipped kitchen with retro decor
 - All cookware, dishes, and utensils
 - Coffee maker and essential appliances
 - Dining table seats 12+
@@ -120,15 +121,16 @@ Our spacious lakehouse features an open-concept main floor with panoramic lake v
 
 ### Outdoor Paradise
 
-Step outside to your private lakefront oasis. The expansive patio area is perfect for morning coffee, afternoon BBQs, and evening gatherings around the fire pit. Watch the spectacular Lake Erie sunsets paint the sky in brilliant colors - a nightly show you'll never forget.
+Step outside to your lakeview oasis. The expansive patio area is perfect for morning coffee, afternoon BBQs, and evening gatherings around the fire pit. Watch the spectacular Lake Erie sunsets paint the sky in brilliant colors - a nightly show you'll never forget.
 
 **Outdoor Amenities:**
-- Private beach access
-- Lakefront patio with seating
+- Shared private beach access (between property owner and 2 other properties)
+- Gravel walkway down to boardwalk with umbrellas
+- Green space and lawn area
+- Patio with seating
 - Fire pit area
 - Gas grill for BBQs
 - Lawn games
-- Direct water access
 
 ### Location & Activities
 
@@ -146,10 +148,11 @@ Located in beautiful Saybrook Township in Ashtabula County, Ohio, you're perfect
 - Check-in: 4:00 PM
 - Check-out: 10:00 AM
 - No smoking inside
-- Pets considered (please inquire)
-- Quiet hours: 10 PM - 8 AM
+- No pets allowed
+- Quiet hours: 11 PM - 8 AM
 - Maximum occupancy: 13 guests
+- Free cancellation up to 60 days
 
 ### Book Your Stay
 
-Ready to experience the magic of Pearl Beach? Book directly through our VRBO listing or contact us for special rates and availability. We look forward to hosting your Lake Erie getaway!
+Ready to experience the magic of Pearl Beach? Book directly through our VRBO listing (VRBO #122526) or contact us at jjpea1@gmail.com for special rates and availability. We look forward to hosting your Lake Erie getaway!

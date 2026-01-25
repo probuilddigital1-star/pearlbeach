@@ -10,20 +10,22 @@ sleeps: 10
 sqft: 1700
 rating: 9.4
 featured: true
-basePrice: 544
+basePrice: 410
 amenities:
   - "Stunning Lake Views"
-  - "Lakefront Location"
+  - "Lakeview Location"
   - "Modern Kitchen"
   - "Private Balcony"
   - "Outdoor Deck"
-  - "Shared Beach Access"
+  - "Shared Private Beach Access"
+  - "Gas Grill"
   - "WiFi"
   - "Smart TVs"
   - "Washer & Dryer"
   - "Air Conditioning"
-  - "Parking"
+  - "Parking to Accommodate 4 Vehicles"
   - "Fire Pit Area"
+  - "Green Space & Lawn Area"
   - "Peaceful Setting"
 heroImage: "/images/lakehouse/lakehurst/Lakehurst%20bungalow.jpg"
 images:
@@ -108,14 +110,16 @@ The Lakehurst Bungalow features a thoughtfully designed layout that maximizes th
 
 ### Outdoor Living
 
-One of the bungalow's highlights is the outdoor space. Enjoy your morning coffee or evening cocktails on the private balcony or deck while taking in the breathtaking Lake Erie views. Access the shared beach area via a charming walkway through the Pearl Beach property.
+One of the bungalow's highlights is the outdoor space. Enjoy your morning coffee or evening cocktails on the private balcony or deck while taking in the breathtaking Lake Erie views. Access the shared private beach (exclusive to the property owner and 2 other properties) via a gravel walkway down to the boardwalk with umbrellas.
 
 **Outdoor Features:**
 - Private balcony with lake views
 - Spacious outdoor deck
 - Shared fire pit area
-- Walkway to beach access
-- Beautiful property grounds
+- Gas grill for BBQs
+- Gravel walkway down to boardwalk with umbrellas
+- Green space and lawn area
+- Shared private beach access (between property owner and 2 other properties)
 - Outdoor seating
 
 ### Location & Nearby Attractions
@@ -127,7 +131,7 @@ Perfectly situated in Saybrook Township, Ashtabula County, Ohio, you're minutes 
 - Geneva State Park - 12 minutes
 - Local beaches and waterfront activities
 - Historic covered bridges
-- Charming downtown Ashtabula
+- Charming downtown historic Ashtabula Harbor
 
 ### Perfect For
 
@@ -141,17 +145,18 @@ Perfectly situated in Saybrook Township, Ashtabula County, Ohio, you're minutes 
 
 ### Guest Access
 
-Guests have full access to the bungalow and outdoor spaces. The beach walkway is shared with the Pearl Beach property, providing easy access to the waterfront. Parking is available on-site.
+Guests have full access to the bungalow and outdoor spaces. Access the beach via a gravel walkway down to the boardwalk with umbrellas. Shared private beach access is exclusive to the property owner and 2 other properties. Parking available on-site to accommodate 4 vehicles.
 
 ### House Rules
 
 - Check-in: 4:00 PM
 - Check-out: 10:00 AM
 - No smoking indoors
-- Pets may be considered (inquire first)
-- Respectful of neighbors and quiet hours
+- No pets allowed
+- Quiet hours: 11 PM - 8 AM
 - Maximum occupancy: 10 guests
+- Free cancellation up to 60 days
 
 ### Book Your Lakeside Escape
 
-The Lakehurst Bungalow is waiting to welcome you to Lake Erie's shores. Reserve your dates through VRBO or contact us directly for availability and special offers. Your peaceful lakeside retreat awaits!
+The Lakehurst Bungalow is waiting to welcome you to Lake Erie's shores. Reserve your dates through VRBO (VRBO #238763) or contact us at jjpea1@gmail.com for availability and special offers. Your peaceful lakeside retreat awaits!

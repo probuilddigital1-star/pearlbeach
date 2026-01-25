@@ -9,7 +9,7 @@ export const SITE_CONFIG = {
   name: 'Pearl Beach Cottages',
   domain: 'pearlbeachcottages.com',
   tagline: 'Lake Erie Vacation Rentals',
-  description: 'Premium lakefront vacation rentals on Lake Erie in Saybrook Township, Ashtabula County, Ohio. Experience lakeside relaxation with stunning water views, modern amenities, and access to Ohio\'s wine country.',
+  description: 'Premium lakeview vacation rentals on Lake Erie in Saybrook Township, Ashtabula County, Ohio. Experience lakeside relaxation with stunning water views, modern amenities, and access to Ohio\'s wine country.',
 } as const;
 
 // Helper to generate full URLs
@@ -22,7 +22,7 @@ export const getSiteUrl = (path: string = ''): string => {
 export const BUSINESS_INFO = {
   name: SITE_CONFIG.name,
   legalName: 'Pearl Beach Cottages LLC',
-  email: 'info@pearlbeachcottages.com',
+  email: 'jjpea1@gmail.com',
   phone: '(440) 555-0123', // Update with actual phone number
   priceRange: '$$-$$$',
   checkIn: '4:00 PM',
@@ -98,26 +98,27 @@ export const RATINGS = {
 // Amenities (for schema and display)
 export const AMENITIES = {
   featured: [
-    'Beach Access',
+    'Shared Private Beach Access',
     'WiFi',
     'Parking',
     'Kitchen',
     'Air Conditioning',
-    'Pet Friendly',
+    'Gas Grill',
   ],
   all: [
-    'Private Beach Access',
+    'Shared Private Beach Access',
     'High-Speed WiFi',
     'Free Parking',
     'Full Kitchen',
     'Central Air Conditioning',
-    'Pet Friendly',
     'Smart TV',
     'Washer/Dryer',
-    'Outdoor Grill',
+    'Gas Grill',
     'Fire Pit',
     'Lake Views',
     'Deck/Patio',
+    'Green Space & Lawn Area',
+    'Gravel Walkway to Water',
   ],
 } as const;
 
