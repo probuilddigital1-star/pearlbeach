@@ -3,11 +3,16 @@ const currentPath = Astro.url.pathname;
 ---
 
 <header id="main-header" class="bg-warm-cream sticky top-0 z-50 transition-shadow duration-300" style="box-shadow: 0 1px 12px rgba(139, 115, 85, 0.1);">
-  <nav class="container-custom py-4" aria-label="Main navigation">
+  <nav class="container-custom py-3 md:py-4" aria-label="Main navigation">
     <div class="flex items-center justify-between">
       <!-- Logo -->
-      <a href="/" class="font-serif font-semibold text-pine-dark transition-colors duration-200 hover:text-forest-sage" style="font-size: 24px; font-weight: 500; text-decoration: none;" aria-label="Pearl Beach Cottages - Home">
-        Pearl Beach Cottages
+      <a href="/" class="block transition-all duration-300 hover:opacity-85" aria-label="Pearl Beach Cottages - Home">
+        <img
+          src="/images/logo-emblem.png"
+          alt="Pearl Beach Cottages"
+          class="h-[4.5rem] sm:h-20 md:h-24 w-auto transition-transform duration-300 hover:scale-[1.02]"
+          loading="eager"
+        />
       </a>
 
       <!-- Desktop Navigation -->
@@ -116,8 +121,10 @@ const currentPath = Astro.url.pathname;
   >
     <div class="flex flex-col h-full">
       <!-- Mobile Menu Header -->
-      <div class="flex items-center justify-between p-6" style="border-bottom: 1px solid rgba(0,0,0,0.1);">
-        <span class="text-xl font-serif font-semibold text-pine-dark">Menu</span>
+      <div class="flex items-center justify-between p-5" style="border-bottom: 1px solid rgba(0,0,0,0.08);">
+        <a href="/" aria-label="Pearl Beach Cottages - Home">
+          <img src="/images/logo-emblem.png" alt="Pearl Beach Cottages" class="h-16 w-auto" />
+        </a>
         <button
           id="mobile-menu-close"
           class="p-2 text-pine-dark hover:text-forest-sage transition-colors duration-200"

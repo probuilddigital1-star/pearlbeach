@@ -4,14 +4,22 @@ const currentYear = new Date().getFullYear();
 
 <footer class="bg-pine-dark text-white" role="contentinfo">
   <div class="container-custom py-14">
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-      <!-- Brand -->
-      <div class="md:col-span-1">
-        <h2 class="text-2xl font-serif font-medium mb-4">Pearl Beach Cottages</h2>
-        <p style="color: rgba(255,255,255,0.75); font-size: 15px; line-height: 1.75;">
-          Your Lake Erie vacation destination. Two beautiful cottages with stunning views and modern amenities.
-        </p>
-      </div>
+    <!-- Centered Brand Section -->
+    <div class="text-center mb-12 pb-10" style="border-bottom: 1px solid rgba(196, 149, 106, 0.15);">
+      <a href="/" class="inline-block mb-4 transition-opacity duration-300 hover:opacity-80">
+        <img
+          src="/images/logo-emblem.png"
+          alt="Pearl Beach Cottages"
+          class="h-24 md:h-28 w-auto mx-auto brightness-0 invert"
+          loading="lazy"
+        />
+      </a>
+      <p class="max-w-md mx-auto" style="color: rgba(255,255,255,0.7); font-size: 15px; line-height: 1.75;">
+        Your Lake Erie vacation destination. Two beautiful lakeview cottages with stunning views and modern amenities.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
 
       <!-- Quick Links -->
       <nav aria-label="Footer quick links">
