@@ -90,6 +90,8 @@ highlights:
   - icon: "ph:house-duotone"
     title: "Spacious"
     description: "2,400 sq ft with room for everyone"
+conciergeSubtitle: "Your in-cottage concierge"
+conciergeGreeting: "Welcome to Pearl Beach Lakehouse! 🌅 I'm your AI concierge — ask me about wifi, local wineries, restaurants, the beach, or anything else you'd like to know during your stay."
 ---
 
 ## Welcome to Pearl Beach Lakehouse

@@ -7,7 +7,9 @@ export default defineConfig({
   site: 'https://pearlbeachcottages.com',
   integrations: [
     tailwind(),
-    sitemap(),
+    sitemap({
+      filter: (page) => !page.includes('/concierge/'),
+    }),
     icon()
   ],
   output: 'static',

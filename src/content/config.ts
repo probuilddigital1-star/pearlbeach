@@ -28,6 +28,8 @@ const cottagesCollection = defineCollection({
       title: z.string(),
       description: z.string(),
     })).optional(),
+    conciergeGreeting: z.string().optional(),
+    conciergeSubtitle: z.string().optional(),
   }),
 });
 

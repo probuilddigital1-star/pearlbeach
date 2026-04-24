@@ -1,0 +1,144 @@
+---
+import ConciergeLayout from '../../layouts/ConciergeLayout.astro';
+import LeadCaptureOverlay from '../../components/LeadCaptureOverlay.astro';
+import { getCollection } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+
+export const getStaticPaths = (async () => {
+  const cottages = await getCollection('cottages');
+  return cottages.map((cottage) => ({
+    params: { slug: cottage.slug },
+    props: { cottage },
+  }));
+}) satisfies GetStaticPaths;
+
+const { cottage } = Astro.props;
+
+const cottageName = cottage.data.shortTitle;
+const greeting =
+  cottage.data.conciergeGreeting ??
+  `Welcome to ${cottageName}! I'm your AI concierge — ask me about wifi, wineries, restaurants, or anything else.`;
+const subtitle = cottage.data.conciergeSubtitle ?? 'Your in-cottage concierge';
+
+const pageTitle = `${cottageName} Concierge | Pearl Beach Cottages`;
+---
+
+<ConciergeLayout title={pageTitle}>
+  <div class="concierge-root">
+    <header class="concierge-header">
+      <div class="concierge-header-inner">
+        <p class="concierge-brand">Pearl Beach Cottages</p>
+        <h1 class="concierge-title">{cottageName}</h1>
+        <p class="concierge-subtitle">{subtitle}</p>
+      </div>
+    </header>
+
+    <div id="n8n-chat" class="concierge-chat"></div>
+
+    <LeadCaptureOverlay cottageSlug={cottage.slug} cottageName={cottageName} />
+  </div>
+
+  <script
+    is:inline
+    define:vars={{
+      slug: cottage.slug,
+      cottageName,
+      greeting,
+      subtitle,
+    }}
+  >
+    (async () => {
+      const mod = await import('/vendor/n8n-chat/chat.bundle.es.js');
+      mod.createChat({
+        webhookUrl:
+          'https://zax76.app.n8n.cloud/webhook/8efd3545-9c5d-44fb-b468-21949fa0c6d6/chat',
+        mode: 'fullscreen',
+        target: '#n8n-chat',
+        showWelcomeScreen: false,
+        chatInputKey: 'chatInput',
+        chatSessionKey: 'sessionId',
+        loadPreviousSession: false,
+        enableStreaming: true,
+        metadata: {
+          cottage: slug,
+          source: 'concierge-qr',
+        },
+        webhookConfig: {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+        initialMessages: [greeting],
+        i18n: {
+          en: {
+            title: cottageName,
+            subtitle: subtitle,
+            footer: '',
+            getStarted: 'Start chatting',
+            inputPlaceholder: 'Ask about wifi, wineries, the beach…',
+            closeButtonTooltip: 'Close',
+          },
+        },
+      });
+    })();
+  </script>
+
+  <style>
+    .concierge-header {
+      flex: 0 0 auto;
+      background: linear-gradient(135deg, #5D7566 0%, #3D4F47 100%);
+      color: white;
+      padding: 16px 20px 14px;
+      padding-top: max(16px, env(safe-area-inset-top));
+    }
+
+    .concierge-header-inner {
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .concierge-brand {
+      font-family: 'Source Sans 3', system-ui, sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      opacity: 0.75;
+      margin: 0 0 2px;
+    }
+
+    .concierge-title {
+      font-family: 'Lora', Georgia, serif;
+      font-size: 22px;
+      font-weight: 600;
+      margin: 0;
+      letter-spacing: 0.01em;
+    }
+
+    .concierge-subtitle {
+      font-family: 'Source Sans 3', system-ui, sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      opacity: 0.85;
+      margin: 2px 0 0;
+    }
+
+    .concierge-chat {
+      flex: 1 1 auto;
+      min-height: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* n8n mounts its chat window inside this container */
+    .concierge-chat :global(.chat-window-wrapper),
+    .concierge-chat :global(.chat-window) {
+      width: 100% !important;
+      height: 100% !important;
+      max-width: none !important;
+      max-height: none !important;
+      border-radius: 0 !important;
+    }
+  </style>
+</ConciergeLayout>

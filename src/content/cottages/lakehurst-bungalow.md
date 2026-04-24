@@ -80,6 +80,8 @@ highlights:
   - icon: "ph:sun-horizon-duotone"
     title: "Peaceful Setting"
     description: "Relaxing lakeside atmosphere"
+conciergeSubtitle: "Your in-cottage concierge"
+conciergeGreeting: "Welcome to Lakehurst Bungalow! 🌊 I'm your AI concierge — ask me about wifi, local wineries, restaurants, the beach, or anything else to make your stay great."
 ---
 
 ## Welcome to Lakehurst Bungalow

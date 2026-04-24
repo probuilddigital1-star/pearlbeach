@@ -11,6 +11,9 @@ Sitemap: https://pearlbeachcottages.com/sitemap-0.xml
 # Block access to API routes if any exist
 Disallow: /api/
 
+# Block per-cottage concierge pages (QR-only, not for search indexing)
+Disallow: /concierge/
+
 # Crawl-delay for aggressive bots (optional)
 User-agent: *
 Crawl-delay: 1

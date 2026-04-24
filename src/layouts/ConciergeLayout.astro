@@ -1,0 +1,148 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const {
+  title,
+  description = 'Your in-cottage AI concierge. Ask about wifi, wineries, restaurants, and the Lake Erie area.',
+} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="googlebot" content="noindex, nofollow" />
+
+    <meta name="theme-color" content="#5D7566" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Pearl Beach Concierge" />
+    <meta name="mobile-web-app-capable" content="yes" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Source+Sans+3:wght@400;500;600&display=swap"
+    />
+
+    <link rel="stylesheet" href="/vendor/n8n-chat/style.css" />
+  </head>
+  <body class="concierge-body">
+    <slot />
+
+    <style is:global>
+      :root {
+        --pbc-honey-oak: #C4956A;
+        --pbc-honey-oak-dark: #A67B4F;
+        --pbc-forest-sage: #5D7566;
+        --pbc-pine-dark: #3D4F47;
+        --pbc-warm-cream: #FBF8F4;
+        --pbc-seashell: #F5F0E8;
+        --pbc-linen: #EDE8E0;
+
+        --chat--color--primary: #C4956A !important;
+        --chat--color--primary-shade-50: #A67B4F !important;
+        --chat--color--secondary: #5D7566 !important;
+        --chat--toggle--background: #C4956A !important;
+        --chat--toggle--color: #FFFFFF !important;
+        --chat--button--background--primary: #C4956A !important;
+        --chat--button--background--secondary: #5D7566 !important;
+        --chat--color-light: #FBF8F4 !important;
+        --chat--color-dark: #3D4F47 !important;
+        --chat--header--background: #5D7566 !important;
+        --chat--header--color: #FFFFFF !important;
+        --chat--message--bot--background: #FFFFFF !important;
+        --chat--message--bot--color: #3D4F47 !important;
+        --chat--message--user--background: #C4956A !important;
+        --chat--message--user--color: #FFFFFF !important;
+        --chat--input--background: #F5F0E8 !important;
+        --chat--border-radius: 16px !important;
+      }
+
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+
+      .concierge-body {
+        background: var(--pbc-warm-cream);
+        min-height: 100dvh;
+        height: 100dvh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .concierge-root {
+        flex: 1 1 auto;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+      }
+
+      .chat-window {
+        width: 100% !important;
+        height: 100% !important;
+        max-width: none !important;
+        max-height: none !important;
+        border-radius: 0 !important;
+      }
+
+      .chat-body,
+      #n8n-chat .chat-body {
+        background: var(--pbc-warm-cream) !important;
+      }
+
+      .chat-input,
+      #n8n-chat .chat-input,
+      #n8n-chat textarea,
+      #n8n-chat input[type="text"] {
+        background: var(--pbc-seashell) !important;
+        border: 1px solid var(--pbc-linen) !important;
+        border-radius: 24px !important;
+      }
+
+      .chat-input:focus,
+      #n8n-chat .chat-input:focus,
+      #n8n-chat textarea:focus {
+        border-color: var(--pbc-honey-oak) !important;
+        box-shadow: 0 0 0 3px rgba(196, 149, 106, 0.15) !important;
+      }
+
+      .chat-message-from-user,
+      #n8n-chat .chat-message-from-user {
+        background: linear-gradient(135deg, #C4956A 0%, #A67B4F 100%) !important;
+        color: white !important;
+      }
+
+      .chat-message-from-bot,
+      #n8n-chat .chat-message-from-bot {
+        background: white !important;
+        color: var(--pbc-pine-dark) !important;
+        border: 1px solid var(--pbc-linen) !important;
+      }
+
+      .chat-input-send-button,
+      #n8n-chat .chat-input-send-button {
+        background: var(--pbc-honey-oak) !important;
+        color: white !important;
+      }
+    </style>
+  </body>
+</html>
