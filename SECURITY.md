@@ -106,7 +106,7 @@ The Google Maps API key must be configured via environment variables and never c
 1. **Revoked immediately** in Google Cloud Console
 2. **Replaced with a new restricted key:**
    - Restrict to HTTP referrer: `pearlbeachcottages.com/*`
-   - Restrict APIs to: Maps JavaScript API only
+   - Restrict APIs to: Maps Embed API only
    - Set usage quotas
    - Enable billing alerts
 
@@ -117,7 +117,7 @@ The Google Maps API key must be configured via environment variables and never c
 # 3. Delete or restrict the exposed key
 # 4. Create new API key with restrictions
 # 5. Update .env file (never commit it!)
-VITE_GOOGLE_MAPS_API_KEY=your_new_restricted_key_here
+PUBLIC_GOOGLE_MAPS_API_KEY=your_new_restricted_key_here
 ```
 
 ### Contact Form Email Service (Required - Pre-Launch)
@@ -178,4 +178,4 @@ This security policy is part of the Pearl Beach Cottages project and follows the
 
 ---
 
-Last Updated: November 24, 2024
+Last Updated: April 24, 2026

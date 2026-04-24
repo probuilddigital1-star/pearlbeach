@@ -11,8 +11,8 @@ Canonical: https://pearlbeachcottages.com/.well-known/security.txt
 # Preferred languages for communication
 Preferred-Languages: en
 
-# Expiration date (1 year from November 24, 2024)
-Expires: 2025-11-24T00:00:00.000Z
+# Expiration date (1 year from April 24, 2026)
+Expires: 2027-04-24T00:00:00.000Z
 
 # Security policy and disclosure guidelines
 Policy: https://pearlbeachcottages.com/security
