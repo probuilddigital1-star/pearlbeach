@@ -27,9 +27,20 @@ const pageTitle = `${cottageName} Concierge | Pearl Beach Cottages`;
   <div class="concierge-root">
     <header class="concierge-header">
       <div class="concierge-header-inner">
-        <p class="concierge-brand">Pearl Beach Cottages</p>
-        <h1 class="concierge-title">{cottageName}</h1>
-        <p class="concierge-subtitle">{subtitle}</p>
+        <div class="concierge-header-main">
+          <p class="concierge-brand">Pearl Beach Cottages</p>
+          <h1 class="concierge-title">{cottageName}</h1>
+          <p class="concierge-subtitle">{subtitle}</p>
+        </div>
+        <button
+          type="button"
+          class="concierge-email-link"
+          data-lead-open
+          aria-label="Email me area picks"
+        >
+          <span aria-hidden="true">✉️</span>
+          <span>Email me picks</span>
+        </button>
       </div>
     </header>
 
@@ -96,6 +107,41 @@ const pageTitle = `${cottageName} Concierge | Pearl Beach Cottages`;
     .concierge-header-inner {
       max-width: 640px;
       margin: 0 auto;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .concierge-header-main {
+      min-width: 0;
+    }
+
+    .concierge-email-link {
+      flex: 0 0 auto;
+      margin-top: 4px;
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      font-family: 'Source Sans 3', system-ui, sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 7px 12px;
+      border-radius: 999px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      line-height: 1;
+    }
+
+    .concierge-email-link:hover {
+      background: rgba(255, 255, 255, 0.22);
+    }
+
+    .concierge-email-link[hidden] {
+      display: none;
     }
 
     .concierge-brand {

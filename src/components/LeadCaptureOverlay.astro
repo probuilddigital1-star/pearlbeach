@@ -61,17 +61,6 @@ const { cottageSlug, cottageName } = Astro.props;
   </div>
 </div>
 
-<button
-  type="button"
-  id="pbc-lead-fab"
-  class="pbc-lead-fab"
-  aria-label="Join our email list"
-  hidden
->
-  <span aria-hidden="true">✉️</span>
-  <span class="pbc-lead-fab-label">Join list</span>
-</button>
-
 <script is:inline>
   (function () {
     const LEAD_WEBHOOK =
@@ -81,8 +70,7 @@ const { cottageSlug, cottageName } = Astro.props;
 
     function init() {
       const overlay = document.getElementById('pbc-lead-overlay');
-      const fab = document.getElementById('pbc-lead-fab');
-      if (!overlay || !fab) return;
+      if (!overlay) return;
 
       const cottageSlug = overlay.getAttribute('data-cottage-slug') || '';
       const form = overlay.querySelector('[data-lead-form]');
@@ -90,12 +78,14 @@ const { cottageSlug, cottageName } = Astro.props;
       const consentInput = overlay.querySelector('[data-lead-consent]');
       const statusEl = overlay.querySelector('[data-lead-status]');
       const closeButtons = overlay.querySelectorAll('[data-lead-close]');
+      const openTriggers = document.querySelectorAll('[data-lead-open]');
 
       const alreadySubmitted = () => sessionStorage.getItem(SUBMIT_KEY) === '1';
       const alreadyDismissed = () => sessionStorage.getItem(DISMISS_KEY) === '1';
 
-      function showOverlay() {
-        if (alreadySubmitted() || alreadyDismissed()) return;
+      function showOverlay(opts) {
+        const force = opts && opts.force;
+        if (!force && (alreadySubmitted() || alreadyDismissed())) return;
         overlay.hidden = false;
         requestAnimationFrame(() => overlay.classList.add('is-visible'));
       }
@@ -106,39 +96,45 @@ const { cottageSlug, cottageName } = Astro.props;
           overlay.hidden = true;
         }, 220);
         if (markDismissed) sessionStorage.setItem(DISMISS_KEY, '1');
-        if (!alreadySubmitted()) showFab();
-      }
-
-      function showFab() {
-        if (alreadySubmitted()) {
-          fab.hidden = true;
-          return;
-        }
-        fab.hidden = false;
       }
 
       closeButtons.forEach((btn) =>
         btn.addEventListener('click', () => hideOverlay(true))
       );
 
-      fab.addEventListener('click', () => {
-        fab.hidden = true;
-        sessionStorage.removeItem(DISMISS_KEY);
-        showOverlay();
+      // Header link / any [data-lead-open] element reopens the overlay
+      openTriggers.forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          if (alreadySubmitted()) {
+            // Already submitted — nothing to do
+            return;
+          }
+          sessionStorage.removeItem(DISMISS_KEY);
+          showOverlay({ force: true });
+        });
       });
 
-      // Trigger: show overlay ~5s after the first bot message appears
+      // Hide any "join list" triggers if they already submitted
+      if (alreadySubmitted()) {
+        openTriggers.forEach((btn) => {
+          btn.hidden = true;
+        });
+      }
+
+      // Trigger: show overlay ~5s after the USER sends their first message
+      // (waits for user message so the initialMessages from n8n don't trigger it)
       const chatRoot = document.getElementById('n8n-chat');
       if (!chatRoot) return;
 
       let triggered = false;
       function maybeTrigger() {
         if (triggered || alreadySubmitted() || alreadyDismissed()) return;
-        const botMessages = chatRoot.querySelectorAll('.chat-message-from-bot');
-        if (botMessages.length >= 1) {
+        const userMessages = chatRoot.querySelectorAll('.chat-message-from-user');
+        if (userMessages.length >= 1) {
           triggered = true;
           observer.disconnect();
-          setTimeout(showOverlay, 5000);
+          setTimeout(() => showOverlay(), 5000);
         }
       }
 
@@ -190,7 +186,7 @@ const { cottageSlug, cottageName } = Astro.props;
             statusEl.textContent = 'Thanks! Keep an eye on your inbox.';
             statusEl.className = 'pbc-lead-status is-success';
             setTimeout(() => hideOverlay(false), 2500);
-            fab.hidden = true;
+            openTriggers.forEach((btn) => { btn.hidden = true; });
           } catch (err) {
             statusEl.textContent = 'Sorry — something went wrong. Try again later.';
             statusEl.className = 'pbc-lead-status is-error';
@@ -202,9 +198,6 @@ const { cottageSlug, cottageName } = Astro.props;
         });
       }
 
-      if (alreadySubmitted()) {
-        fab.hidden = true;
-      }
     }
 
     if (document.readyState === 'loading') {
@@ -407,31 +400,4 @@ const { cottageSlug, cottageName } = Astro.props;
     color: #4F6B5A;
   }
 
-  .pbc-lead-fab {
-    position: fixed;
-    left: 14px;
-    bottom: calc(14px + env(safe-area-inset-bottom));
-    z-index: 90;
-    background: #5D7566;
-    color: white;
-    border: none;
-    border-radius: 999px;
-    padding: 10px 16px;
-    font-family: 'Source Sans 3', system-ui, sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    display: inline-flex;
-    gap: 8px;
-    align-items: center;
-    box-shadow: 0 4px 14px rgba(61, 79, 71, 0.22);
-    cursor: pointer;
-  }
-
-  .pbc-lead-fab:hover {
-    background: #3D4F47;
-  }
-
-  .pbc-lead-fab-label {
-    line-height: 1;
-  }
 </style>
