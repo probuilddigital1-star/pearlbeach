@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lakehurst Bungalow — Print Materials</title>
+
+  <!-- QR generator (MIT, by Kazuhiko Arase). Cached on first load. -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600&family=Source+Sans+3:wght@400;500;600;700&display=swap" />
+
+  <style>
+    :root {
+      --honey-oak:        #C4956A;
+      --honey-oak-dark:   #A67B4F;
+      --forest-sage:      #5D7566;
+      --pine-dark:        #3D4F47;
+      --warm-cream:       #FBF8F4;
+      --seashell:         #F5F0E8;
+      --linen:            #EDE8E0;
+      --driftwood:        #B5A99A;
+      --serif: 'Lora', Georgia, serif;
+      --sans:  'Source Sans 3', system-ui, sans-serif;
+    }
+
+    /* SCREEN: light backdrop + helper bar */
+    @media screen {
+      body {
+        margin: 0;
+        font-family: var(--sans);
+        background: #E8E2D8;
+        padding: 24px;
+        min-height: 100vh;
+      }
+      .helper {
+        max-width: 720px;
+        margin: 0 auto 24px;
+        background: white;
+        border: 1px solid var(--linen);
+        border-radius: 12px;
+        padding: 18px 22px;
+        font-size: 14px;
+        color: var(--pine-dark);
+      }
+      .helper h1 {
+        font-family: var(--serif);
+        font-size: 18px;
+        margin: 0 0 8px;
+      }
+      .helper code {
+        background: var(--seashell);
+        padding: 1px 6px;
+        border-radius: 4px;
+        font-size: 12px;
+      }
+      .pages {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+      }
+    }
+
+    /* PRINT: clean pages */
+    @media print {
+      body { margin: 0; background: white; }
+      .helper { display: none !important; }
+      .pages { display: block; }
+      .page  { page-break-after: always; }
+      .page:last-child { page-break-after: auto; }
+    }
+
+    /* ============ COMMON CARD STYLES ============ */
+    .page {
+      background: white;
+      box-shadow: 0 4px 16px rgba(61, 79, 71, 0.08);
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* ============ BUSINESS CARD (3.5" x 2") ============ */
+    @page bcard {
+      size: 3.5in 2in;
+      margin: 0;
+    }
+    .business-card {
+      width: 3.5in;
+      height: 2in;
+      page: bcard;
+      display: flex;
+      flex-direction: column;
+      color: white;
+      background:
+        radial-gradient(circle at 88% 18%, rgba(196,149,106,0.35), transparent 55%),
+        linear-gradient(135deg, #5D7566 0%, #3D4F47 100%);
+      padding: 0.22in 0.26in;
+      box-sizing: border-box;
+      font-family: var(--sans);
+    }
+    .bcard-row {
+      display: flex;
+      gap: 0.18in;
+      flex: 1;
+      align-items: center;
+    }
+    .bcard-text {
+      flex: 1;
+      min-width: 0;
+    }
+    .bcard-eyebrow {
+      font-size: 7pt;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.78);
+      font-weight: 600;
+      margin: 0 0 4pt;
+    }
+    .bcard-title {
+      font-family: var(--serif);
+      font-size: 15pt;
+      font-weight: 600;
+      line-height: 1.05;
+      margin: 0 0 4pt;
+      letter-spacing: 0.005em;
+    }
+    .bcard-tag {
+      font-size: 8.5pt;
+      color: rgba(255,255,255,0.85);
+      line-height: 1.32;
+      margin: 0 0 6pt;
+    }
+    .bcard-cta {
+      font-size: 8pt;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--honey-oak);
+      text-transform: uppercase;
+      margin: 0;
+    }
+    .bcard-qr {
+      width: 1.36in;
+      height: 1.36in;
+      background: white;
+      border-radius: 6pt;
+      padding: 6pt;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .bcard-qr svg, .bcard-qr canvas {
+      width: 100% !important;
+      height: 100% !important;
+      display: block;
+    }
+    .bcard-foot {
+      font-size: 6.5pt;
+      color: rgba(255,255,255,0.55);
+      letter-spacing: 0.04em;
+      text-align: center;
+      margin-top: 4pt;
+    }
+
+    /* ============ PLACARD (5" x 7") ============ */
+    @page placard {
+      size: 5in 7in;
+      margin: 0;
+    }
+    .placard {
+      width: 5in;
+      height: 7in;
+      page: placard;
+      background: var(--warm-cream);
+      color: var(--pine-dark);
+      padding: 0.42in 0.42in 0.36in;
+      box-sizing: border-box;
+      font-family: var(--sans);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .placard::before {
+      content: '';
+      position: absolute;
+      inset: 0.18in;
+      border: 1px solid rgba(181, 169, 154, 0.45);
+      border-radius: 4pt;
+      pointer-events: none;
+    }
+    .placard-eyebrow {
+      font-size: 8pt;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--honey-oak-dark);
+      font-weight: 700;
+      text-align: center;
+      margin: 6pt 0 0;
+      position: relative;
+    }
+    .placard-divider {
+      width: 36pt;
+      height: 1.5pt;
+      background: var(--honey-oak);
+      margin: 8pt auto 14pt;
+      border-radius: 2pt;
+      position: relative;
+    }
+    .placard-title {
+      font-family: var(--serif);
+      font-size: 24pt;
+      font-weight: 600;
+      text-align: center;
+      color: var(--pine-dark);
+      margin: 0;
+      line-height: 1.05;
+      letter-spacing: 0.005em;
+    }
+    .placard-sub {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 11pt;
+      text-align: center;
+      color: var(--driftwood);
+      margin: 6pt 0 22pt;
+    }
+    .placard-qr-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .placard-qr {
+      width: 2.6in;
+      height: 2.6in;
+      background: white;
+      padding: 0.18in;
+      border-radius: 8pt;
+      box-shadow: 0 6pt 18pt rgba(61,79,71,0.10);
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .placard-qr svg, .placard-qr canvas {
+      width: 100% !important;
+      height: 100% !important;
+      display: block;
+    }
+    .placard-instruct {
+      text-align: center;
+      font-family: var(--serif);
+      font-size: 13pt;
+      color: var(--pine-dark);
+      margin: 18pt 0 0;
+      line-height: 1.35;
+    }
+    .placard-instruct strong { font-weight: 600; }
+    .placard-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5pt;
+      justify-content: center;
+      margin: 14pt 0 0;
+    }
+    .placard-pill {
+      background: var(--seashell);
+      color: var(--pine-dark);
+      font-size: 8.5pt;
+      font-weight: 500;
+      padding: 4pt 10pt;
+      border-radius: 999pt;
+      border: 1px solid var(--linen);
+    }
+    .placard-foot {
+      text-align: center;
+      font-size: 7.5pt;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--driftwood);
+      margin-top: auto;
+      padding-top: 14pt;
+    }
+    .placard-url {
+      text-align: center;
+      font-size: 8.5pt;
+      color: var(--driftwood);
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      margin-top: 4pt;
+      word-break: break-all;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Helper UI (screen only — hidden when printing) -->
+  <div class="helper">
+    <h1>Lakehurst Bungalow — Print Materials</h1>
+    <p>
+      Two pages below: a 3.5"&times;2" business card, then a 5"&times;7" placard.
+      Press <strong>Ctrl+P</strong> (Cmd+P on Mac) to print. Your browser's print dialog
+      will respect the page sizes set in CSS.
+    </p>
+    <p>
+      <strong>For best results at a print shop:</strong> use "Save as PDF" in the print
+      dialog to produce a press-ready file. Card stock recommendation: 14pt+ matte for
+      cards, 100lb cover for placards (or laminate).
+    </p>
+    <p style="margin: 0; font-size: 12px; color: var(--driftwood);">
+      QR code encodes: <code id="url-readout">https://pearlbeachcottages.com/concierge/lakehurst-bungalow</code>
+    </p>
+  </div>
+
+  <div class="pages">
+
+    <!-- ===== BUSINESS CARD ===== -->
+    <div class="page business-card">
+      <div class="bcard-row">
+        <div class="bcard-text">
+          <p class="bcard-eyebrow">Pearl Beach Cottages</p>
+          <h2 class="bcard-title">Lakehurst<br/>Bungalow</h2>
+          <p class="bcard-tag">Your in-cottage AI concierge — wifi, wineries, local picks, and more.</p>
+          <p class="bcard-cta">Scan to chat &rarr;</p>
+        </div>
+        <div class="bcard-qr">
+          <div id="qr-bcard"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== PLACARD ===== -->
+    <div class="page placard">
+      <p class="placard-eyebrow">Welcome to</p>
+      <h1 class="placard-title">Lakehurst Bungalow</h1>
+      <div class="placard-divider"></div>
+      <p class="placard-sub">Your lakeside getaway, made effortless.</p>
+
+      <div class="placard-qr-wrap">
+        <div class="placard-qr">
+          <div id="qr-placard"></div>
+        </div>
+        <p class="placard-instruct">
+          <strong>Scan with your phone camera</strong><br/>
+          to chat with our AI concierge
+        </p>
+        <div class="placard-pills">
+          <span class="placard-pill">Wifi password</span>
+          <span class="placard-pill">Local wineries</span>
+          <span class="placard-pill">Restaurants</span>
+          <span class="placard-pill">Beach &amp; activities</span>
+        </div>
+      </div>
+
+      <p class="placard-foot">Pearl Beach Cottages &middot; Lake Erie</p>
+      <p class="placard-url">pearlbeachcottages.com/concierge/lakehurst-bungalow</p>
+    </div>
+
+  </div>
+
+  <script>
+    (function () {
+      var URL_TO_ENCODE = 'https://pearlbeachcottages.com/concierge/lakehurst-bungalow';
+
+      function renderQR(targetEl, sizePx) {
+        if (!targetEl) return;
+        if (typeof qrcode !== 'function') {
+          targetEl.innerHTML = '<div style="font:11px sans-serif;color:#999;text-align:center;padding:20px;">QR library failed to load. Re-open this file with internet access.</div>';
+          return;
+        }
+        // Type 0 = auto. Error correction level M.
+        var qr = qrcode(0, 'M');
+        qr.addData(URL_TO_ENCODE);
+        qr.make();
+        // 6 = cell size in px before scale; SVG will be scaled by CSS.
+        targetEl.innerHTML = qr.createSvgTag({ scalable: true, margin: 0 });
+        var svg = targetEl.querySelector('svg');
+        if (svg) {
+          svg.setAttribute('width', '100%');
+          svg.setAttribute('height', '100%');
+          svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+          svg.style.shapeRendering = 'crispEdges';
+        }
+      }
+
+      function init() {
+        renderQR(document.getElementById('qr-bcard'));
+        renderQR(document.getElementById('qr-placard'));
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
+  </script>
+</body>
+</html>
