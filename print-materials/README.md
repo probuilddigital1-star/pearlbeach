@@ -43,12 +43,7 @@ If you ever change cottage URLs, update `URL_TO_ENCODE` in **both** files.
 
 ## QR code
 
-QR codes are generated client-side by the `qrcode-generator` library (loaded from a CDN the first time you open the file, then cached). No external service is contacted at print time once the page has loaded once.
-
-If you want a fully offline copy:
-1. Open the HTML file in Chrome.
-2. **Ctrl+S** → "Webpage, complete" — saves the page bundled with all assets.
-3. The saved version will work without internet forever.
+QR codes are generated client-side by the `qrcode-generator` library (MIT, by Kazuhiko Arase), **inlined directly in the HTML**. The files are fully self-contained — no internet required, no separate asset folders. Just double-click and print.
 
 ## QR code quality check
 
