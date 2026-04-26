@@ -122,15 +122,15 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
       display: flex;
       flex-direction: column;
       color: white;
-      /* Solid fallback first, then a single linear gradient overlay.
-         Adobe Reader is finicky with stacked gradients and `transparent`
-         keyword stops — keeping it simple ensures consistent rendering. */
-      background-color: #3D4F47;
-      background-image: linear-gradient(135deg, #5D7566 0%, #3D4F47 100%);
+      /* Solid color only. No gradient. Maximum PDF renderer compatibility. */
+      background-color: #5D7566; /* Forest Sage */
+      background: #5D7566;       /* shorthand override of any earlier rule */
       padding: 0.22in 0.26in;
       box-sizing: border-box;
       font-family: var(--sans);
     }
+    .business-card * { color: white; }
+    .business-card .bcard-cta { color: #F5D9B3 !important; } /* light gold for contrast on solid sage */
     .bcard-row {
       display: flex;
       gap: 0.18in;
