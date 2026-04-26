@@ -80,6 +80,26 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
       .pages { display: block; }
       .page  { page-break-after: always; }
       .page:last-child { page-break-after: auto; }
+      /* Force every renderer (Chrome's print engine, Adobe Reader, etc.) to honor colors */
+      *,
+      *::before,
+      *::after {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+      }
+    }
+    /* Apply on screen too — some PDF generators look at non-print rules */
+    .business-card,
+    .placard,
+    .placard::before,
+    .placard-pill,
+    .placard-divider,
+    .bcard-qr,
+    .placard-qr {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+      color-adjust: exact;
     }
 
     /* ============ COMMON CARD STYLES ============ */
@@ -102,9 +122,11 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
       display: flex;
       flex-direction: column;
       color: white;
-      background:
-        radial-gradient(circle at 88% 18%, rgba(196,149,106,0.35), transparent 55%),
-        linear-gradient(135deg, #5D7566 0%, #3D4F47 100%);
+      /* Solid fallback first, then a single linear gradient overlay.
+         Adobe Reader is finicky with stacked gradients and `transparent`
+         keyword stops — keeping it simple ensures consistent rendering. */
+      background-color: #3D4F47;
+      background-image: linear-gradient(135deg, #5D7566 0%, #3D4F47 100%);
       padding: 0.22in 0.26in;
       box-sizing: border-box;
       font-family: var(--sans);
