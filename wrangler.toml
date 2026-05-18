@@ -1,0 +1,33 @@
+# Cloudflare Pages configuration for the Astro site.
+# This file declares bindings for Pages Functions (the /api endpoints in functions/).
+# When this file exists in the repo root, Pages uses it as the source of truth
+# for compatibility date + bindings, overriding the same settings in the dashboard.
+#
+# The standalone cron Worker lives at workers/ical-sync/ with its own wrangler.toml.
+# Both projects bind to the SAME KV namespace id — the Worker writes, Functions read.
+
+name = "pearl-beach-cottages"
+compatibility_date = "2026-05-01"
+pages_build_output_dir = "./dist"
+
+# Shared KV namespace with the cron Worker. Paste the same id you put in
+# workers/ical-sync/wrangler.toml after running `wrangler kv namespace create AVAILABILITY`.
+[[kv_namespaces]]
+binding = "AVAILABILITY"
+id = "f727a6f6391a45e09807677908199470"
+
+# Inquiry submissions log — write-only from /api/inquiry, no TTL.
+# Create with: wrangler kv namespace create INQUIRIES
+[[kv_namespaces]]
+binding = "INQUIRIES"
+id = "d389e12e94764cff80f4480dac750226"
+
+# Public env vars (non-secret). Site key is fine to ship to the browser.
+# Webhook URL isn't secret either — it's already in the contact form on /contact.
+[vars]
+TURNSTILE_SITE_KEY = "0x4AAAAAADRI-lYPGehnPgYo"
+N8N_INQUIRY_WEBHOOK_URL = "https://zax76.app.n8n.cloud/webhook/pbc-inquiry"
+
+# Secrets are set via:
+#   wrangler pages secret put TURNSTILE_SECRET_KEY
+#   wrangler pages secret put REFRESH_SECRET

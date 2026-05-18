@@ -1,0 +1,3 @@
+PEARL_BEACH_ICAL_URL="https://www.vrbo.com/icalendar/REPLACE-WITH-LAKEHOUSE-TOKEN.ics"
+LAKEHURST_ICAL_URL="https://www.vrbo.com/icalendar/REPLACE-WITH-BUNGALOW-TOKEN.ics"
+REFRESH_SECRET="generate-with-openssl-rand-hex-32"

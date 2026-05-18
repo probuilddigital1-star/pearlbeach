@@ -6,11 +6,11 @@ export default {
       colors: {
         // Lakeside Warmth Color Palette - Cozy & Inviting
         'warm-cream': '#FBF8F4',      // Warm background
-        'honey-oak': '#C4956A',        // Primary CTA - warm gold
-        'honey-oak-dark': '#A67D52',   // Hover state
+        'gold': '#C4956A',             // Primary CTA - warm gold
+        'gold-dark': '#A67D52',        // Hover state
         'cabin-brown': '#8B7355',      // Secondary accent
-        'forest-sage': '#5D7566',      // Primary brand - earthy green
-        'forest-sage-dark': '#4A5F53', // Hover state
+        'sage': '#5D7566',             // Primary brand - earthy green
+        'sage-dark': '#4A5F53',        // Hover state
         'lake-mist': '#A8B5B0',        // Soft accent
         'hearth-ember': '#B85C38',     // Warm highlight accent
         'pine-dark': '#3D4F47',        // Dark text/headers
@@ -20,14 +20,14 @@ export default {
 
         // Legacy aliases (for gradual migration)
         'coastal-fog': '#FBF8F4',
-        'deep-ocean': '#5D7566',       // Now maps to forest-sage
-        'golden-hour': '#C4956A',      // Now maps to honey-oak
+        'deep-ocean': '#5D7566',       // Now maps to sage
+        'golden-hour': '#C4956A',      // Now maps to gold
         'charcoal': '#3D4F47',         // Now maps to pine-dark
 
         // Semantic aliases
-        primary: '#C4956A',            // honey-oak for CTAs
+        primary: '#C4956A',            // gold for CTAs
         'primary-dark': '#A67D52',     // hover state
-        secondary: '#5D7566',          // forest-sage
+        secondary: '#5D7566',          // sage
         'secondary-dark': '#4A5F53',   // hover state
         background: '#FBF8F4',         // warm-cream
         card: '#F5F0E8',               // seashell

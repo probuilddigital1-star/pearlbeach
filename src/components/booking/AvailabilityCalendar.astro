@@ -1,0 +1,465 @@
+---
+// AvailabilityCalendar — fetches /api/availability/{slug} client-side, paints
+// the booked dates as disabled in a multi-month calendar, and emits the
+// selected check-in/check-out range as a CustomEvent the future InquiryForm
+// component will listen for.
+
+export interface Props {
+  slug: string;
+  propertyName: string;
+  basePrice?: number;
+  maxGuests: number;
+  vrboUrl: string;
+}
+
+const { slug, propertyName, basePrice, maxGuests, vrboUrl } = Astro.props;
+---
+
+<section
+  id="availability"
+  class="section-padding bg-warm-cream"
+  aria-labelledby="availability-heading"
+>
+  <div class="container-custom max-w-5xl">
+    <header class="text-center mb-10">
+      <h2
+        id="availability-heading"
+        class="text-3xl md:text-4xl font-serif font-bold text-pine-dark mb-3"
+      >
+        Check Availability
+      </h2>
+      <p class="text-gray-600 max-w-2xl mx-auto">
+        Real-time availability synced from VRBO every 30 minutes. Pick your
+        check-in and check-out dates, then continue to the inquiry form for
+        direct-booking savings.
+      </p>
+    </header>
+
+    <div
+      class="pbc-calendar-root bg-white border border-driftwood/30 rounded-cozy-lg p-4 sm:p-6 shadow-sm"
+      data-slug={slug}
+      data-property-name={propertyName}
+      data-base-price={basePrice ?? ''}
+      data-max-guests={maxGuests}
+      data-vrbo-url={vrboUrl}
+    >
+      <div
+        class="pbc-calendar-status text-sm text-gray-500 mb-4"
+        role="status"
+        aria-live="polite"
+      >
+        Loading availability…
+      </div>
+
+      <div class="pbc-calendar-mount min-h-[420px]" aria-busy="true"></div>
+
+      <div class="pbc-calendar-summary mt-6" hidden>
+        <div
+          class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-5 bg-warm-cream rounded-cozy border border-driftwood/30"
+        >
+          <div>
+            <p class="text-sm text-gray-600">Your selected stay</p>
+            <p class="pbc-summary-dates text-lg font-semibold text-pine-dark"></p>
+            <p class="pbc-summary-price text-sm text-gray-600 mt-1"></p>
+          </div>
+          <a
+            href="#inquiry-form"
+            class="pbc-summary-cta btn-primary text-center whitespace-nowrap"
+          >
+            Continue to Inquiry →
+          </a>
+        </div>
+      </div>
+
+      <p class="text-xs text-gray-500 mt-6 leading-relaxed">
+        Dates shown in <span class="inline-block w-3 h-3 align-middle rounded-sm" style="background:#5D7566"></span>
+        <span class="font-medium text-pine-dark">sage</span> are already booked.
+        Selected dates appear in <span class="inline-block w-3 h-3 align-middle rounded-sm" style="background:#C4956A"></span>
+        <span class="font-medium text-pine-dark">gold</span>. A signed rental agreement and refundable damage deposit are
+        required for direct bookings.
+      </p>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { Calendar } from 'vanilla-calendar-pro';
+  import 'vanilla-calendar-pro/styles/index.css';
+
+  type AvailabilityRecord = {
+    slug: string;
+    updated_at: string | null;
+    last_success_at: string | null;
+    booked_ranges: Array<{ start: string; end: string }>;
+    warning?: string;
+  };
+
+  function expandRange(start: string, end: string): string[] {
+    // start inclusive, end exclusive — half-open per iCal DTEND
+    const out: string[] = [];
+    const cur = new Date(`${start}T00:00:00Z`);
+    const stop = new Date(`${end}T00:00:00Z`);
+    while (cur < stop) {
+      const y = cur.getUTCFullYear();
+      const m = String(cur.getUTCMonth() + 1).padStart(2, '0');
+      const d = String(cur.getUTCDate()).padStart(2, '0');
+      out.push(`${y}-${m}-${d}`);
+      cur.setUTCDate(cur.getUTCDate() + 1);
+    }
+    return out;
+  }
+
+  function formatLong(iso: string): string {
+    // 2026-06-12 -> "Fri, Jun 12, 2026"
+    const d = new Date(`${iso}T00:00:00Z`);
+    return d.toLocaleDateString('en-US', {
+      weekday: 'short',
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+      timeZone: 'UTC',
+    });
+  }
+
+  function nightsBetween(start: string, end: string): number {
+    return Math.round(
+      (Date.parse(`${end}T00:00:00Z`) - Date.parse(`${start}T00:00:00Z`)) /
+        86_400_000,
+    );
+  }
+
+  const MONTHS_LOOKUP: Record<string, number> = {
+    January: 0, February: 1, March: 2, April: 3, May: 4, June: 5,
+    July: 6, August: 7, September: 8, October: 9, November: 10, December: 11,
+  };
+
+  function initRoot(root: HTMLElement) {
+    const slug = root.dataset.slug!;
+    const propertyName = root.dataset.propertyName ?? 'this cottage';
+    const basePriceRaw = root.dataset.basePrice ?? '';
+    const basePrice = basePriceRaw ? Number(basePriceRaw) : null;
+    const vrboUrl = root.dataset.vrboUrl ?? '#';
+
+    const statusEl = root.querySelector<HTMLElement>('.pbc-calendar-status')!;
+    const mountEl = root.querySelector<HTMLElement>('.pbc-calendar-mount')!;
+    const summaryEl = root.querySelector<HTMLElement>('.pbc-calendar-summary')!;
+    const summaryDatesEl = root.querySelector<HTMLElement>('.pbc-summary-dates')!;
+    const summaryPriceEl = root.querySelector<HTMLElement>('.pbc-summary-price')!;
+    const summaryCta = root.querySelector<HTMLAnchorElement>('.pbc-summary-cta')!;
+
+    const isDesktop = window.matchMedia('(min-width: 1024px)').matches;
+    const monthsToShow = isDesktop ? 2 : 1;
+    const todayIso = new Date().toISOString().slice(0, 10);
+
+    fetch(`/api/availability/${slug}`)
+      .then((res) => {
+        // 503 means cold KV — Pages Function returns an empty record with a
+        // warning field. We render the calendar anyway, just with no bookings.
+        if (!res.ok && res.status !== 503) {
+          throw new Error(`HTTP ${res.status}`);
+        }
+        return res.json() as Promise<AvailabilityRecord>;
+      })
+      .then((data) => {
+        const disabled: string[] = [];
+        for (const range of data.booked_ranges ?? []) {
+          for (const d of expandRange(range.start, range.end)) {
+            disabled.push(d);
+          }
+        }
+
+        const updatedNote = data.last_success_at
+          ? `Last synced ${new Date(data.last_success_at).toLocaleString('en-US', {
+              month: 'short',
+              day: 'numeric',
+              hour: 'numeric',
+              minute: '2-digit',
+            })}`
+          : 'Availability not yet loaded — try VRBO direct if dates are urgent.';
+        statusEl.textContent = updatedNote;
+
+        mountEl.removeAttribute('aria-busy');
+
+        const calendar = new Calendar(mountEl, {
+          type: 'multiple',
+          displayMonthsCount: monthsToShow,
+          monthsToSwitch: 1,
+          firstWeekday: 0,
+          disableDates: disabled,
+          // disableDatesPast handles selection floor (can't pick past dates).
+          // We INTENTIONALLY do not set displayDateMin or dateMin — both bug
+          // out in v3.1.0 by applying style="visibility:hidden" inline to
+          // BOTH nav arrows, breaking forward navigation permanently.
+          disableDatesPast: true,
+          disableDatesGaps: true,
+          selectionDatesMode: 'multiple-ranged',
+          selectionMonthsMode: false,
+          selectionYearsMode: false,
+          // Distinguish past dates from booked dates visually (library uses
+          // one attribute, data-vc-date-disabled, for both).
+          onCreateDateEls: (_self, dateEl) => {
+            const d = dateEl.getAttribute('data-vc-date');
+            if (d && d < todayIso) dateEl.setAttribute('data-pbc-past', '');
+          },
+          onClickDate: (self) => {
+            const picked = self.context.selectedDates;
+            handleSelection(picked);
+          },
+        });
+        calendar.init();
+
+        // Initial floor sync, then re-sync whenever the calendar grid mutates
+        // (which is how the lib reflects arrow nav). A MutationObserver is
+        // more reliable than chaining setTimeout off click events, because
+        // the lib updates the title text asynchronously after its click
+        // handler returns.
+        syncNavFloor();
+        const vcEl = root.querySelector('.vc');
+        if (vcEl) {
+          new MutationObserver(syncNavFloor).observe(vcEl, {
+            childList: true,
+            subtree: true,
+            characterData: true,
+          });
+        }
+
+        // The InquiryForm fires this event on a 409 (dates just booked).
+        // Re-fetch KV and patch the calendar's disableDates in place.
+        document.addEventListener('pbc:refreshAvailability', async (e) => {
+          const detail = (e as CustomEvent<{ slug?: string }>).detail;
+          if (detail?.slug && detail.slug !== slug) return;
+          try {
+            const res = await fetch(`/api/availability/${slug}`, { cache: 'no-store' });
+            if (!res.ok && res.status !== 503) return;
+            const fresh = (await res.json()) as AvailabilityRecord;
+            const next: string[] = [];
+            for (const r of fresh.booked_ranges ?? []) {
+              for (const d of expandRange(r.start, r.end)) next.push(d);
+            }
+            calendar.set({ disableDates: next });
+            if (fresh.last_success_at) {
+              statusEl.textContent = `Last synced ${new Date(fresh.last_success_at).toLocaleString('en-US', {
+                month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit',
+              })}`;
+            }
+          } catch (err) {
+            console.warn('availability refresh failed', err);
+          }
+        });
+
+        function syncNavFloor() {
+          const v = root.querySelector('.vc');
+          if (!v) return;
+          const monthBtn = v.querySelector('.vc-month');
+          const yearBtn = v.querySelector('.vc-year');
+          if (!monthBtn || !yearBtn) return;
+          const monthName = monthBtn.textContent?.trim() || '';
+          const year = Number(yearBtn.textContent?.trim() || '0');
+          const monthNum = MONTHS_LOOKUP[monthName] ?? -1;
+          if (monthNum < 0) return;
+          const currentMonth = `${year}-${String(monthNum + 1).padStart(2, '0')}`;
+          const floorMonth = todayIso.slice(0, 7);
+          root.classList.toggle('pbc-cal-at-floor', currentMonth <= floorMonth);
+        }
+
+        function handleSelection(picked: string[]) {
+          if (!picked || picked.length < 2) {
+            summaryEl.hidden = true;
+            return;
+          }
+          const sorted = [...picked].sort();
+          const checkIn = sorted[0];
+          // multiple-ranged includes every day from start to end; "checkout"
+          // is the day AFTER the last selected night.
+          const lastNight = sorted[sorted.length - 1];
+          const checkOutDate = new Date(`${lastNight}T00:00:00Z`);
+          checkOutDate.setUTCDate(checkOutDate.getUTCDate() + 1);
+          const checkOut = checkOutDate.toISOString().slice(0, 10);
+
+          const nights = nightsBetween(checkIn, checkOut);
+          summaryDatesEl.textContent = `${formatLong(checkIn)} → ${formatLong(checkOut)} · ${nights} night${nights === 1 ? '' : 's'}`;
+
+          if (basePrice) {
+            const subtotal = basePrice * nights;
+            summaryPriceEl.textContent = `From $${subtotal.toLocaleString()} (${nights} × $${basePrice}/night) · plus lodging tax and refundable damage deposit`;
+          } else {
+            summaryPriceEl.textContent = `${nights} night${nights === 1 ? '' : 's'} at ${propertyName}`;
+          }
+
+          summaryCta.href = `#inquiry-form?checkIn=${checkIn}&checkOut=${checkOut}`;
+          summaryEl.hidden = false;
+
+          // Broadcast for the (future) InquiryForm component to pick up.
+          root.dispatchEvent(
+            new CustomEvent('pbc:rangeSelected', {
+              bubbles: true,
+              detail: { slug, checkIn, checkOut, nights },
+            }),
+          );
+        }
+      })
+      .catch((err) => {
+        console.error('availability fetch failed', err);
+        mountEl.innerHTML = '';
+        mountEl.removeAttribute('aria-busy');
+        statusEl.textContent = '';
+        const fallback = document.createElement('div');
+        fallback.className = 'text-center py-12';
+        fallback.innerHTML = `
+          <p class="text-pine-dark font-semibold mb-2">We couldn't load real-time availability.</p>
+          <p class="text-sm text-gray-600 mb-4">Check current dates directly on VRBO, or send us a note.</p>
+          <a href="${vrboUrl}" target="_blank" rel="noopener noreferrer" class="btn-primary inline-block">View on VRBO →</a>
+        `;
+        mountEl.appendChild(fallback);
+      });
+  }
+
+  function initAll() {
+    document.querySelectorAll<HTMLElement>('.pbc-calendar-root').forEach(initRoot);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAll);
+  } else {
+    initAll();
+  }
+</script>
+
+<style is:global>
+  /*
+   * vanilla-calendar-pro v3 uses data-attribute selectors scoped under
+   * [data-vc-theme=light]. We re-skin those exact selectors with the
+   * Lakeside Warmth palette. All overrides use !important because the
+   * library's rules are highly specific and ordering across split CSS
+   * chunks isn't guaranteed.
+   */
+
+  /* Calendar container — strip lib's default shadow/border, full width. */
+  .pbc-calendar-root [data-vc-theme=light] {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    width: 100% !important;
+    font-family: 'Source Sans 3', system-ui, sans-serif !important;
+  }
+
+  /* Day-of-week column headers: weekend headers default to red, normalize. */
+  .pbc-calendar-root [data-vc-theme=light] .vc-week__day,
+  .pbc-calendar-root [data-vc-theme=light] .vc-week__day[data-vc-week-day-off] {
+    color: #8B7355 !important;          /* cabin-brown */
+    font-weight: 600 !important;
+  }
+
+  /*
+   * Month + year title buttons. Library renders them as <button disabled>
+   * when selectionMonthsMode/YearsMode is false → lib paints them #cbd5e1
+   * via a `.vc-month:disabled` rule that beats a plain `.vc-month`. We must
+   * explicitly cover :disabled too, and override opacity/cursor.
+   */
+  .pbc-calendar-root [data-vc-theme=light] .vc-month,
+  .pbc-calendar-root [data-vc-theme=light] .vc-year,
+  .pbc-calendar-root [data-vc-theme=light] .vc-month:disabled,
+  .pbc-calendar-root [data-vc-theme=light] .vc-year:disabled {
+    color: #3D4F47 !important;          /* pine-dark */
+    opacity: 1 !important;
+    font-weight: 700 !important;
+    font-size: 1.05rem !important;
+    cursor: default !important;
+  }
+
+  /* Default date number color (overrides the weekend red). */
+  .pbc-calendar-root [data-vc-theme=light] .vc-date .vc-date__btn,
+  .pbc-calendar-root [data-vc-theme=light] .vc-date[data-vc-date-weekend] .vc-date__btn,
+  .pbc-calendar-root [data-vc-theme=light] .vc-date[data-vc-date-holiday] .vc-date__btn {
+    color: #3D4F47 !important;
+    background-color: transparent !important;
+    text-decoration: none !important;
+  }
+
+  /* Hover (available dates only). */
+  @media (hover: hover) and (pointer: fine) {
+    .pbc-calendar-root [data-vc-theme=light]
+      .vc-date:not([data-vc-date-disabled]):not([data-vc-date-selected])
+      .vc-date__btn:hover {
+      background-color: #F5F0E8 !important; /* seashell */
+      color: #3D4F47 !important;
+    }
+  }
+
+  /* Today: gold tinted background, no cyan. Must beat hover specificity. */
+  .pbc-calendar-root [data-vc-theme=light] .vc-date[data-vc-date-today] .vc-date__btn {
+    background-color: rgba(196, 149, 106, 0.14) !important;
+    color: #3D4F47 !important;
+    font-weight: 700 !important;
+  }
+
+  /* Disabled (booked) dates: solid sage with strikethrough. */
+  .pbc-calendar-root [data-vc-theme=light] .vc-date[data-vc-date-disabled] .vc-date__btn {
+    background-color: #5D7566 !important; /* sage */
+    color: #ffffff !important;
+    text-decoration: line-through !important;
+    cursor: not-allowed !important;
+    opacity: 1 !important;
+  }
+
+  /*
+   * Past dates — visible but visually muted, distinguished from booked.
+   * Tagged in JS via onCreateDateEls (data-pbc-past) since the lib uses one
+   * attribute for ALL disabled dates. This rule comes AFTER the booked rule
+   * so it wins for past-and-disabled cells.
+   */
+  .pbc-calendar-root [data-vc-theme=light] .vc-date[data-pbc-past] .vc-date__btn {
+    background-color: transparent !important;
+    color: #cbd5e1 !important;
+    text-decoration: none !important;
+  }
+
+  /* Selected range endpoints — gold. */
+  .pbc-calendar-root [data-vc-theme=light] .vc-date[data-vc-date-selected] .vc-date__btn {
+    background-color: #C4956A !important; /* gold */
+    color: #ffffff !important;
+    text-decoration: none !important;
+  }
+
+  /* In-range middle — light gold tint. */
+  .pbc-calendar-root [data-vc-theme=light] .vc-date[data-vc-date-selected=middle] .vc-date__btn {
+    background-color: rgba(196, 149, 106, 0.22) !important;
+    color: #3D4F47 !important;
+  }
+
+  /* Prev/next month spillover dates: faint. */
+  .pbc-calendar-root [data-vc-theme=light] .vc-date[data-vc-date-month=prev] .vc-date__btn,
+  .pbc-calendar-root [data-vc-theme=light] .vc-date[data-vc-date-month=next] .vc-date__btn {
+    color: #cbd5e1 !important;
+    background-color: transparent !important;
+  }
+
+  /* Arrows: enlarge tap target on mobile. */
+  @media (max-width: 640px) {
+    .pbc-calendar-root [data-vc-theme=light] .vc-arrow {
+      height: 2rem !important;
+      width: 2rem !important;
+    }
+  }
+
+  /*
+   * Nav arrow visibility — fix v3.1.0 lib quirk.
+   *
+   * The library applies an INLINE style="visibility:hidden" to one or both
+   * arrows in several config combinations (notably with disableDatesPast,
+   * displayDateMin, or dateMin), and never clears it on subsequent nav.
+   * Real mouse clicks get blocked by visibility:hidden even with our class
+   * toggle. So we force BOTH arrows visible by default with !important,
+   * which beats inline styles. We then selectively hide the prev arrow at
+   * the today-month floor via a wrapper class managed by our
+   * MutationObserver.
+   */
+  .pbc-calendar-root [data-vc-theme=light] .vc-arrow {
+    visibility: visible !important;
+    pointer-events: auto !important;
+  }
+  .pbc-calendar-root.pbc-cal-at-floor [data-vc-theme=light] .vc-arrow_prev {
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+</style>

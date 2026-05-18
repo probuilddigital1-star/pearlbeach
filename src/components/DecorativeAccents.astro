@@ -10,7 +10,7 @@ interface Props {
   type: 'wave' | 'pine-trees' | 'cottage' | 'ripples';
   /** Position: top-left, top-right, bottom-left, bottom-right, center */
   position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'center';
-  /** Color override (defaults to honey-oak) */
+  /** Color override (defaults to gold) */
   color?: string;
   /** Opacity (defaults to 0.08) */
   opacity?: number;
@@ -21,7 +21,7 @@ interface Props {
 const {
   type,
   position = 'bottom-right',
-  color = 'var(--honey-oak)',
+  color = 'var(--gold)',
   opacity = 0.08,
   class: className = ''
 } = Astro.props;

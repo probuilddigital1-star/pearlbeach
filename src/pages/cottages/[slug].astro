@@ -4,6 +4,8 @@ import SEOSchema from '../../components/SEOSchema.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import CottageHighlights from '../../components/CottageHighlights.astro';
 import LightboxGallery from '../../components/LightboxGallery.astro';
+import AvailabilityCalendar from '../../components/booking/AvailabilityCalendar.astro';
+import InquiryForm from '../../components/booking/InquiryForm.astro';
 import { getCollection } from 'astro:content';
 import type { GetStaticPaths } from 'astro';
 
@@ -72,7 +74,7 @@ const cottageSchemaData = {
       <div class="container-custom">
         <div class="max-w-4xl">
           <div class="inline-block bg-white px-4 py-2 mb-4" style="border-radius: 2px;">
-            <span class="font-semibold text-honey-oak">{cottage.data.rating}/10</span>
+            <span class="font-semibold text-gold">{cottage.data.rating}/10</span>
             <span class="text-sm text-gray-600 ml-2">Guest Rating</span>
           </div>
           <h1 class="text-4xl md:text-6xl font-serif font-bold text-white mb-4 text-shadow">
@@ -137,7 +139,7 @@ const cottageSchemaData = {
             <div class="grid sm:grid-cols-2 gap-4">
               {cottage.data.amenities.map((amenity) => (
                 <div class="flex items-start">
-                  <svg class="w-6 h-6 text-honey-oak mr-3 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                  <svg class="w-6 h-6 text-gold mr-3 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                   </svg>
                   <span class="text-gray-700">{amenity}</span>
@@ -169,7 +171,7 @@ const cottageSchemaData = {
 
               {cottage.data.basePrice && (
                 <div class="mb-6">
-                  <div class="text-3xl font-bold text-honey-oak">
+                  <div class="text-3xl font-bold text-gold">
                     ${cottage.data.basePrice}
                     <span class="text-lg font-normal text-gray-600">/ night</span>
                   </div>
@@ -179,18 +181,18 @@ const cottageSchemaData = {
 
               <div class="space-y-3">
                 <a
+                  href="#availability"
+                  class="btn-primary w-full text-center block"
+                >
+                  Check Availability ↓
+                </a>
+                <a
                   href={cottage.data.vrboUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="btn-primary w-full text-center block"
-                >
-                  Check Availability on VRBO
-                </a>
-                <a
-                  href="/contact"
                   class="btn-secondary w-full text-center block"
                 >
-                  Contact Owner
+                  Book on VRBO →
                 </a>
               </div>
 
@@ -212,7 +214,7 @@ const cottageSchemaData = {
               <p class="text-gray-600 mb-4 text-sm">
                 We're here to help! Contact us for special requests, group bookings, or any questions about your stay.
               </p>
-              <a href="/contact" class="text-honey-oak font-medium hover:underline">
+              <a href="/contact" class="text-gold font-medium hover:underline">
                 Contact Us →
               </a>
             </div>
@@ -243,8 +245,25 @@ const cottageSchemaData = {
     </div>
   </section>
 
+  <!-- Real-Time Availability -->
+  <AvailabilityCalendar
+    slug={cottage.slug}
+    propertyName={cottage.data.shortTitle}
+    basePrice={cottage.data.basePrice}
+    maxGuests={cottage.data.sleeps}
+    vrboUrl={cottage.data.vrboUrl}
+  />
+
+  <!-- Direct Booking Inquiry -->
+  <InquiryForm
+    slug={cottage.slug}
+    propertyName={cottage.data.shortTitle}
+    maxGuests={cottage.data.sleeps}
+    vrboId={cottage.data.vrboId}
+  />
+
   <!-- Other Cottage CTA -->
-  <section class="section-padding bg-warm-cream">
+  <section class="section-padding bg-white">
     <div class="container-custom text-center">
       <h2 class="text-3xl font-serif font-bold text-pine-dark mb-4">
         Explore Our Other Cottage

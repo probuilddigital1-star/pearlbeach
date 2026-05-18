@@ -20,8 +20,8 @@ const currentPath = Astro.url.pathname;
         <a
           href="/"
           class:list={[
-            "font-medium transition-colors duration-200 hover:text-forest-sage",
-            currentPath === '/' ? 'text-forest-sage' : 'text-pine-dark'
+            "font-medium transition-colors duration-200 hover:text-sage",
+            currentPath === '/' ? 'text-sage' : 'text-pine-dark'
           ]}
           style="font-size: 15px; font-weight: 500;"
           aria-current={currentPath === '/' ? 'page' : undefined}
@@ -31,8 +31,8 @@ const currentPath = Astro.url.pathname;
         <a
           href="/cottages"
           class:list={[
-            "font-medium transition-colors duration-200 hover:text-forest-sage",
-            currentPath.startsWith('/cottages') ? 'text-forest-sage' : 'text-pine-dark'
+            "font-medium transition-colors duration-200 hover:text-sage",
+            currentPath.startsWith('/cottages') ? 'text-sage' : 'text-pine-dark'
           ]}
           style="font-size: 15px; font-weight: 500;"
           aria-current={currentPath.startsWith('/cottages') ? 'page' : undefined}
@@ -42,8 +42,8 @@ const currentPath = Astro.url.pathname;
         <a
           href="/amenities"
           class:list={[
-            "font-medium transition-colors duration-200 hover:text-forest-sage",
-            currentPath === '/amenities' ? 'text-forest-sage' : 'text-pine-dark'
+            "font-medium transition-colors duration-200 hover:text-sage",
+            currentPath === '/amenities' ? 'text-sage' : 'text-pine-dark'
           ]}
           style="font-size: 15px; font-weight: 500;"
           aria-current={currentPath === '/amenities' ? 'page' : undefined}
@@ -53,8 +53,8 @@ const currentPath = Astro.url.pathname;
         <a
           href="/location"
           class:list={[
-            "font-medium transition-colors duration-200 hover:text-forest-sage",
-            currentPath === '/location' ? 'text-forest-sage' : 'text-pine-dark'
+            "font-medium transition-colors duration-200 hover:text-sage",
+            currentPath === '/location' ? 'text-sage' : 'text-pine-dark'
           ]}
           style="font-size: 15px; font-weight: 500;"
           aria-current={currentPath === '/location' ? 'page' : undefined}
@@ -64,8 +64,8 @@ const currentPath = Astro.url.pathname;
         <a
           href="/reviews"
           class:list={[
-            "font-medium transition-colors duration-200 hover:text-forest-sage",
-            currentPath === '/reviews' ? 'text-forest-sage' : 'text-pine-dark'
+            "font-medium transition-colors duration-200 hover:text-sage",
+            currentPath === '/reviews' ? 'text-sage' : 'text-pine-dark'
           ]}
           style="font-size: 15px; font-weight: 500;"
           aria-current={currentPath === '/reviews' ? 'page' : undefined}
@@ -75,8 +75,8 @@ const currentPath = Astro.url.pathname;
         <a
           href="/contact"
           class:list={[
-            "font-medium transition-colors duration-200 hover:text-forest-sage",
-            currentPath === '/contact' ? 'text-forest-sage' : 'text-pine-dark'
+            "font-medium transition-colors duration-200 hover:text-sage",
+            currentPath === '/contact' ? 'text-sage' : 'text-pine-dark'
           ]}
           style="font-size: 15px; font-weight: 500;"
           aria-current={currentPath === '/contact' ? 'page' : undefined}
@@ -91,7 +91,7 @@ const currentPath = Astro.url.pathname;
       <!-- Mobile Menu Button -->
       <button
         id="mobile-menu-button"
-        class="md:hidden p-2 text-pine-dark hover:text-forest-sage transition-colors duration-200"
+        class="md:hidden p-2 text-pine-dark hover:text-sage transition-colors duration-200"
         aria-label="Open navigation menu"
         aria-expanded="false"
         aria-controls="mobile-menu"
@@ -127,7 +127,7 @@ const currentPath = Astro.url.pathname;
         </a>
         <button
           id="mobile-menu-close"
-          class="p-2 text-pine-dark hover:text-forest-sage transition-colors duration-200"
+          class="p-2 text-pine-dark hover:text-sage transition-colors duration-200"
           aria-label="Close navigation menu"
         >
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -141,42 +141,42 @@ const currentPath = Astro.url.pathname;
         <div class="flex flex-col space-y-2">
           <a
             href="/"
-            class="px-4 py-3 font-medium text-pine-dark hover:text-forest-sage transition-colors duration-200"
+            class="px-4 py-3 font-medium text-pine-dark hover:text-sage transition-colors duration-200"
             aria-current={currentPath === '/' ? 'page' : undefined}
           >
             Home
           </a>
           <a
             href="/cottages"
-            class="px-4 py-3 font-medium text-pine-dark hover:text-forest-sage transition-colors duration-200"
+            class="px-4 py-3 font-medium text-pine-dark hover:text-sage transition-colors duration-200"
             aria-current={currentPath.startsWith('/cottages') ? 'page' : undefined}
           >
             Our Cottages
           </a>
           <a
             href="/amenities"
-            class="px-4 py-3 font-medium text-pine-dark hover:text-forest-sage transition-colors duration-200"
+            class="px-4 py-3 font-medium text-pine-dark hover:text-sage transition-colors duration-200"
             aria-current={currentPath === '/amenities' ? 'page' : undefined}
           >
             Amenities
           </a>
           <a
             href="/location"
-            class="px-4 py-3 font-medium text-pine-dark hover:text-forest-sage transition-colors duration-200"
+            class="px-4 py-3 font-medium text-pine-dark hover:text-sage transition-colors duration-200"
             aria-current={currentPath === '/location' ? 'page' : undefined}
           >
             Location
           </a>
           <a
             href="/reviews"
-            class="px-4 py-3 font-medium text-pine-dark hover:text-forest-sage transition-colors duration-200"
+            class="px-4 py-3 font-medium text-pine-dark hover:text-sage transition-colors duration-200"
             aria-current={currentPath === '/reviews' ? 'page' : undefined}
           >
             Reviews
           </a>
           <a
             href="/contact"
-            class="px-4 py-3 font-medium text-pine-dark hover:text-forest-sage transition-colors duration-200"
+            class="px-4 py-3 font-medium text-pine-dark hover:text-sage transition-colors duration-200"
             aria-current={currentPath === '/contact' ? 'page' : undefined}
           >
             Contact

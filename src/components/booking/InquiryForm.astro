@@ -1,0 +1,427 @@
+---
+// InquiryForm — mounts under the calendar at #inquiry-form. Pre-fills
+// check-in/out from the `pbc:rangeSelected` event the calendar dispatches.
+// Submits to /api/inquiry (Pages Function in prod, Vite mock in dev).
+
+export interface Props {
+  slug: string;
+  propertyName: string;
+  maxGuests: number;
+  vrboId: string;
+}
+
+const { slug, propertyName, maxGuests, vrboId } = Astro.props;
+
+// Cloudflare Turnstile site key (public — safe to ship to the browser).
+// Keep in sync with wrangler.toml [vars].TURNSTILE_SITE_KEY.
+const TURNSTILE_SITE_KEY = '0x4AAAAAADRI-lYPGehnPgYo';
+---
+
+<section
+  id="inquiry-form"
+  class="section-padding bg-white"
+  aria-labelledby="inquiry-heading"
+>
+  <div class="container-custom max-w-3xl">
+    <header class="text-center mb-10">
+      <h2
+        id="inquiry-heading"
+        class="text-3xl md:text-4xl font-serif font-bold text-pine-dark mb-3"
+      >
+        Send Your Inquiry
+      </h2>
+      <p class="text-gray-600 max-w-2xl mx-auto">
+        Direct bookings skip the VRBO service fee. We'll reply within 24 hours
+        with a rental agreement and refundable damage deposit details.
+      </p>
+    </header>
+
+    <div
+      class="pbc-inquiry-root bg-warm-cream border border-driftwood/30 rounded-cozy-lg p-6 sm:p-8 shadow-sm"
+      data-slug={slug}
+      data-property-name={propertyName}
+      data-vrbo-id={vrboId}
+      data-max-guests={maxGuests}
+    >
+      <form
+        class="pbc-inquiry-form space-y-6"
+        method="POST"
+        novalidate
+        aria-label="Direct booking inquiry"
+      >
+        <input type="hidden" name="property_slug" value={slug} />
+        <input type="hidden" name="property_name" value={propertyName} />
+        <input type="hidden" name="vrbo_id" value={vrboId} />
+
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div>
+            <label for="pbc-check-in" class="block text-sm font-medium text-gray-700 mb-2">
+              Check-in <span class="text-hearth-ember" aria-label="required">*</span>
+            </label>
+            <input
+              type="date"
+              id="pbc-check-in"
+              name="check_in"
+              required
+              aria-required="true"
+              class="input"
+            />
+          </div>
+          <div>
+            <label for="pbc-check-out" class="block text-sm font-medium text-gray-700 mb-2">
+              Check-out <span class="text-hearth-ember" aria-label="required">*</span>
+            </label>
+            <input
+              type="date"
+              id="pbc-check-out"
+              name="check_out"
+              required
+              aria-required="true"
+              class="input"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label for="pbc-guests" class="block text-sm font-medium text-gray-700 mb-2">
+            Number of guests <span class="text-hearth-ember" aria-label="required">*</span>
+            <span class="text-xs text-gray-500 font-normal ml-1">(max {maxGuests})</span>
+          </label>
+          <input
+            type="number"
+            id="pbc-guests"
+            name="guests"
+            required
+            aria-required="true"
+            min="1"
+            max={maxGuests}
+            class="input"
+            inputmode="numeric"
+          />
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div>
+            <label for="pbc-name" class="block text-sm font-medium text-gray-700 mb-2">
+              Full name <span class="text-hearth-ember" aria-label="required">*</span>
+            </label>
+            <input
+              type="text"
+              id="pbc-name"
+              name="name"
+              required
+              aria-required="true"
+              maxlength="100"
+              autocomplete="name"
+              class="input"
+            />
+          </div>
+          <div>
+            <label for="pbc-email" class="block text-sm font-medium text-gray-700 mb-2">
+              Email <span class="text-hearth-ember" aria-label="required">*</span>
+            </label>
+            <input
+              type="email"
+              id="pbc-email"
+              name="email"
+              required
+              aria-required="true"
+              maxlength="320"
+              autocomplete="email"
+              class="input"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label for="pbc-phone" class="block text-sm font-medium text-gray-700 mb-2">
+            Phone <span class="text-hearth-ember" aria-label="required">*</span>
+          </label>
+          <input
+            type="tel"
+            id="pbc-phone"
+            name="phone"
+            required
+            aria-required="true"
+            maxlength="50"
+            autocomplete="tel"
+            class="input"
+          />
+        </div>
+
+        <div>
+          <label for="pbc-message" class="block text-sm font-medium text-gray-700 mb-2">
+            Anything we should know?
+            <span class="text-xs text-gray-500 font-normal ml-1">(optional)</span>
+          </label>
+          <textarea
+            id="pbc-message"
+            name="message"
+            rows="4"
+            maxlength="2000"
+            class="input resize-none"
+            placeholder="Group of friends, anniversary trip, accessibility needs, anything that helps us host you well…"
+          ></textarea>
+          <p class="text-xs text-gray-500 mt-1 text-right">
+            <span class="pbc-char-count">0</span>/2000
+          </p>
+        </div>
+
+        <div class="flex items-start gap-3 p-4 bg-seashell rounded-cozy border border-driftwood/30">
+          <input
+            type="checkbox"
+            id="pbc-consent"
+            name="consent"
+            required
+            aria-required="true"
+            class="mt-1 h-4 w-4 text-gold border-driftwood focus:ring-gold rounded"
+          />
+          <label for="pbc-consent" class="text-sm text-gray-700 leading-relaxed">
+            I understand a signed rental agreement and refundable damage deposit
+            are required for direct bookings.
+            <span class="text-hearth-ember" aria-label="required">*</span>
+          </label>
+        </div>
+
+        <div class="cf-turnstile flex justify-center" data-sitekey={TURNSTILE_SITE_KEY}></div>
+
+        <div
+          class="pbc-inquiry-error hidden bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-cozy"
+          role="alert"
+          aria-live="polite"
+        ></div>
+
+        <button
+          type="submit"
+          class="pbc-inquiry-submit btn-primary w-full"
+          aria-label="Send inquiry"
+        >
+          Send Inquiry
+        </button>
+
+        <p class="text-xs text-gray-500 text-center">
+          We never share your information. Reply will come from
+          <a href="mailto:jjpea1@gmail.com" class="text-gold hover:underline">jjpea1@gmail.com</a>.
+        </p>
+      </form>
+
+      <div
+        class="pbc-inquiry-success hidden text-center py-8"
+        role="status"
+        aria-live="polite"
+      >
+        <div class="inline-flex items-center justify-center w-16 h-16 bg-sage/15 rounded-full mb-4">
+          <svg class="w-8 h-8 text-sage" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+          </svg>
+        </div>
+        <h3 class="text-2xl font-serif font-bold text-pine-dark mb-2">
+          Thanks, <span class="pbc-success-name"></span>.
+        </h3>
+        <p class="text-gray-700 max-w-md mx-auto mb-3">
+          We'll reply within 24 hours, usually faster. Check your spam folder
+          just in case our reply lands there.
+        </p>
+        <p class="text-xs text-gray-500">
+          Reply will come from <span class="font-medium">jjpea1@gmail.com</span> —
+          you can allowlist it so future messages skip the filter.
+        </p>
+        <p class="pbc-success-id text-[10px] text-gray-400 mt-6 font-mono"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Turnstile loader. Async so it doesn't block FCP. -->
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer is:inline></script>
+
+<script>
+  type SelectionDetail = { slug: string; checkIn: string; checkOut: string; nights: number };
+
+  function initRoot(root: HTMLElement) {
+    const slug = root.dataset.slug ?? '';
+    const form = root.querySelector<HTMLFormElement>('.pbc-inquiry-form')!;
+    const errorEl = root.querySelector<HTMLElement>('.pbc-inquiry-error')!;
+    const submitBtn = root.querySelector<HTMLButtonElement>('.pbc-inquiry-submit')!;
+    const successEl = root.querySelector<HTMLElement>('.pbc-inquiry-success')!;
+    const successName = root.querySelector<HTMLElement>('.pbc-success-name')!;
+    const successId = root.querySelector<HTMLElement>('.pbc-success-id')!;
+    const charCount = root.querySelector<HTMLElement>('.pbc-char-count')!;
+
+    const checkInInput = form.querySelector<HTMLInputElement>('input[name="check_in"]')!;
+    const checkOutInput = form.querySelector<HTMLInputElement>('input[name="check_out"]')!;
+    const messageInput = form.querySelector<HTMLTextAreaElement>('textarea[name="message"]')!;
+
+    // Listen for the calendar's range selection and pre-fill.
+    document.addEventListener('pbc:rangeSelected', (e) => {
+      const detail = (e as CustomEvent<SelectionDetail>).detail;
+      if (detail.slug !== slug) return;
+      checkInInput.value = detail.checkIn;
+      checkOutInput.value = detail.checkOut;
+    });
+
+    // Character counter.
+    messageInput.addEventListener('input', () => {
+      charCount.textContent = String(messageInput.value.length);
+    });
+
+    function showError(msg: string) {
+      errorEl.textContent = msg;
+      errorEl.classList.remove('hidden');
+      errorEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function clearError() {
+      errorEl.textContent = '';
+      errorEl.classList.add('hidden');
+    }
+
+    function setSubmitting(busy: boolean) {
+      submitBtn.disabled = busy;
+      submitBtn.textContent = busy ? 'Sending…' : 'Send Inquiry';
+    }
+
+    function resetTurnstile() {
+      const w = (window as any).turnstile;
+      if (w && typeof w.reset === 'function') w.reset();
+    }
+
+    function showSuccess(name: string, inquiryId: string) {
+      form.classList.add('hidden');
+      successName.textContent = name;
+      successId.textContent = `Inquiry reference: ${inquiryId}`;
+      successEl.classList.remove('hidden');
+      successEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function nightsBetween(start: string, end: string): number {
+      return Math.round(
+        (Date.parse(`${end}T00:00:00Z`) - Date.parse(`${start}T00:00:00Z`)) /
+          86_400_000,
+      );
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearError();
+
+      const formData = new FormData(form);
+      const turnstileToken = (formData.get('cf-turnstile-response') as string | null) ?? '';
+      const consent = formData.get('consent') === 'on';
+      const checkIn = String(formData.get('check_in') ?? '');
+      const checkOut = String(formData.get('check_out') ?? '');
+      const guests = Number(formData.get('guests') ?? 0);
+      const name = String(formData.get('name') ?? '').trim();
+      const email = String(formData.get('email') ?? '').trim().toLowerCase();
+      const phone = String(formData.get('phone') ?? '').trim();
+      const message = String(formData.get('message') ?? '').trim();
+
+      if (!checkIn || !checkOut) {
+        showError('Please choose check-in and check-out dates.');
+        return;
+      }
+      if (checkOut <= checkIn) {
+        showError('Check-out must be after check-in.');
+        return;
+      }
+      if (!guests || guests < 1) {
+        showError('Please enter the number of guests.');
+        return;
+      }
+      if (!name || !email || !phone) {
+        showError('Name, email, and phone are required.');
+        return;
+      }
+      if (!consent) {
+        showError('Please confirm you understand the rental agreement and damage deposit requirement.');
+        return;
+      }
+      if (!turnstileToken) {
+        showError('Please complete the verification challenge below.');
+        return;
+      }
+
+      const nights = nightsBetween(checkIn, checkOut);
+
+      const payload = {
+        property_slug: root.dataset.slug,
+        property_name: root.dataset.propertyName,
+        vrbo_id: root.dataset.vrboId,
+        check_in: checkIn,
+        check_out: checkOut,
+        nights,
+        guests,
+        name,
+        email,
+        phone,
+        message,
+        turnstile_token: turnstileToken,
+      };
+
+      setSubmitting(true);
+      try {
+        const res = await fetch('/api/inquiry', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+
+        if (res.status === 200) {
+          const data = (await res.json()) as { ok: boolean; inquiry_id?: string };
+          showSuccess(name, data.inquiry_id ?? '—');
+          return;
+        }
+
+        if (res.status === 400) {
+          // Surface the server's specific error (Invalid email, Phone is
+          // required, etc.). Only reset Turnstile when the failure was a
+          // verification problem — otherwise a fresh token would burn for
+          // an unrelated client-side typo.
+          let serverMsg = 'Please complete the verification challenge below.';
+          try {
+            const data = (await res.json()) as { error?: string };
+            if (data.error) serverMsg = data.error;
+          } catch {}
+          showError(serverMsg);
+          if (serverMsg.toLowerCase().includes('verification')) resetTurnstile();
+        } else if (res.status === 409) {
+          showError(
+            'These dates were just booked. The calendar has been refreshed — please pick new dates above.',
+          );
+          // Ask the calendar to re-fetch its KV data.
+          document.dispatchEvent(new CustomEvent('pbc:refreshAvailability', { detail: { slug } }));
+          resetTurnstile();
+        } else if (res.status >= 500) {
+          showError(
+            "Something went wrong on our end. Please try again, or email us directly at jjpea1@gmail.com.",
+          );
+          // Token may have been consumed by Cloudflare's siteverify even on
+          // a downstream failure — reset so retry gets a fresh one.
+          resetTurnstile();
+        } else {
+          // 4xx other than 400/409 — show generic + dump body for debugging.
+          let body = '';
+          try { body = await res.text(); } catch {}
+          showError(`Couldn't send the inquiry (HTTP ${res.status}). ${body.slice(0, 120)}`);
+        }
+      } catch (err) {
+        console.error('Inquiry network error', err);
+        showError(
+          'Network error. Please check your connection and try again, or email us directly at jjpea1@gmail.com.',
+        );
+      } finally {
+        setSubmitting(false);
+      }
+    });
+  }
+
+  function initAll() {
+    document.querySelectorAll<HTMLElement>('.pbc-inquiry-root').forEach(initRoot);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAll);
+  } else {
+    initAll();
+  }
+</script>

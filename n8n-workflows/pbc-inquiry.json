@@ -1,0 +1,157 @@
+{
+  "name": "PBC Inquiry",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "pbc-inquiry",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "f0e1d2c3-b4a5-46e7-8f90-1a2b3c4d5e6f",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300],
+      "webhookId": "pbc-inquiry-wh"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\"ok\":true,\"inquiry_id\":\"{{ $json.body?.inquiry_id ?? $json.inquiry_id ?? '' }}\"}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "e1d2c3b4-a5f6-47e8-9f0a-1b2c3d4e5f60",
+      "name": "Respond OK",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [460, 180]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Derive presentation-only fields for the email + sheet row.\n// Inputs (from the Pages Function payload):\n//   property_slug, property_name, vrbo_id,\n//   check_in (YYYY-MM-DD), check_out (YYYY-MM-DD),\n//   nights, guests,\n//   name, email, phone, message, message_html,\n//   submitted_at (ISO UTC), dates_verified_available, inquiry_id\n\nconst items = $input.all();\nconst out = [];\n\nfor (const it of items) {\n  // n8n webhook wraps the POST body in either `body` (newer) or at the top level.\n  const item = (it.json && it.json.body && typeof it.json.body === 'object') ? it.json.body : it.json;\n\n  const checkIn = DateTime.fromISO(item.check_in);\n  const checkOut = DateTime.fromISO(item.check_out);\n  const submittedAt = DateTime\n    .fromISO(item.submitted_at, { zone: 'utc' })\n    .setZone('America/New_York');\n\n  // tel: link — preserve a leading + if present, strip all other non-digits.\n  const rawPhone = String(item.phone || '');\n  const hasPlus = rawPhone.trim().startsWith('+');\n  const digits = rawPhone.replace(/\\D/g, '');\n  const telLink = `tel:${hasPlus ? '+' : ''}${digits}`;\n\n  // VRBO owner calendar deep link — best-guess pattern. Verify on first\n  // real inquiry; if it lands on the wrong page, edit this template.\n  const vrboCalendarUrl = `https://www.vrbo.com/spm/dashboard/listings/${item.vrbo_id}/calendar`;\n\n  out.push({\n    json: {\n      ...item,\n      subject: `Inquiry: ${item.property_name} · ${checkIn.toFormat('LLL d')}–${checkOut.toFormat('LLL d')} · ${item.name}`,\n      check_in_full: checkIn.toFormat('cccc, LLLL d, yyyy'),\n      check_out_full: checkOut.toFormat('cccc, LLLL d, yyyy'),\n      submitted_at_pretty: `${submittedAt.toFormat('M/d/yyyy, h:mm a')} ET`,\n      mailto_link: `mailto:${item.email}?subject=${encodeURIComponent('Re: Pearl Beach inquiry (' + item.inquiry_id + ')')}`,\n      tel_link: telLink,\n      vrbo_calendar_url: vrboCalendarUrl,\n    },\n  });\n}\n\nreturn out;\n"
+      },
+      "id": "d2c3b4a5-f6e7-48f9-9a0b-1c2d3e4f5061",
+      "name": "Derive Presentation Fields",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 420]
+    },
+    {
+      "parameters": {
+        "sendTo": "zckpearson@gmail.com",
+        "subject": "={{ $json.subject }}",
+        "emailType": "html",
+        "message": "=<div style=\"font-family:-apple-system,system-ui,sans-serif;max-width:560px;color:#222\">\n  <h2 style=\"color:#5D7566;margin:0 0 8px\">{{ $json.property_name }}</h2>\n  <p style=\"font-size:18px;margin:0 0 4px\"><strong>{{ $json.check_in_full }}</strong> → <strong>{{ $json.check_out_full }}</strong></p>\n  <p style=\"color:#666;margin:0 0 16px\">{{ $json.nights }} nights · {{ $json.guests }} guests</p>\n\n  <div style=\"background:#F5F0E8;padding:16px;border-radius:8px;margin:0 0 16px\">\n    <p style=\"margin:0 0 8px\"><strong>{{ $json.name }}</strong></p>\n    <p style=\"margin:0 0 4px\">📧 <a href=\"{{ $json.mailto_link }}\" style=\"color:#C4956A\">{{ $json.email }}</a></p>\n    <p style=\"margin:0\">📞 <a href=\"{{ $json.tel_link }}\" style=\"color:#C4956A\">{{ $json.phone }}</a></p>\n  </div>\n\n  <div style=\"margin:0 0 16px\">\n    <p style=\"font-size:13px;color:#666;margin:0 0 6px\">Their message:</p>\n    <div style=\"background:#FBF8F4;border-left:3px solid #5D7566;padding:12px 16px;font-size:14px;line-height:1.5\">{{ $json.message_html || '<em style=\"color:#999\">(no message)</em>' }}</div>\n  </div>\n\n  <p style=\"margin:0 0 20px\">\n    <a href=\"{{ $json.vrbo_calendar_url }}\" style=\"display:inline-block;background:#C4956A;color:#fff;padding:10px 18px;border-radius:6px;text-decoration:none;font-weight:600\">\n      Block these dates on VRBO →\n    </a>\n  </p>\n\n  <p style=\"font-size:12px;color:#888;margin:0\">\n    ✓ Dates verified available at submit ({{ $json.submitted_at_pretty }})<br>\n    Inquiry ID: <code style=\"font-family:monospace\">{{ $json.inquiry_id }}</code>\n  </p>\n</div>",
+        "options": {
+          "replyTo": "={{ $json.email }}"
+        }
+      },
+      "id": "c3b4a5f6-e7d8-4900-9a0b-1c2d3e4f5062",
+      "name": "Send Notification Email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [680, 320],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "REPLACE_WITH_GMAIL_CRED_ID",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1Z8Bu28jfr1w_Kiz5By-6jpZk_uyUVzLTqcCVt1udygk",
+          "mode": "list",
+          "cachedResultName": "Leads"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Inquiries",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{ $json.submitted_at }}",
+            "Property": "={{ $json.property_name }}",
+            "Check-in": "={{ $json.check_in }}",
+            "Check-out": "={{ $json.check_out }}",
+            "Nights": "={{ $json.nights }}",
+            "Guests": "={{ $json.guests }}",
+            "Name": "={{ $json.name }}",
+            "Email": "={{ $json.email }}",
+            "Phone": "={{ $json.phone }}",
+            "Message": "={{ $json.message }}",
+            "Status": "Open",
+            "Notes": "",
+            "Booking value": "",
+            "Inquiry ID": "={{ $json.inquiry_id }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            { "id": "Timestamp", "displayName": "Timestamp", "type": "string", "display": true, "required": false, "defaultMatch": false, "canBeUsedToMatch": true },
+            { "id": "Property", "displayName": "Property", "type": "string", "display": true, "required": false, "defaultMatch": false, "canBeUsedToMatch": true },
+            { "id": "Check-in", "displayName": "Check-in", "type": "string", "display": true, "required": false, "defaultMatch": false, "canBeUsedToMatch": true },
+            { "id": "Check-out", "displayName": "Check-out", "type": "string", "display": true, "required": false, "defaultMatch": false, "canBeUsedToMatch": true },
+            { "id": "Nights", "displayName": "Nights", "type": "number", "display": true, "required": false, "defaultMatch": false, "canBeUsedToMatch": true },
+            { "id": "Guests", "displayName": "Guests", "type": "number", "display": true, "required": false, "defaultMatch": false, "canBeUsedToMatch": true },
+            { "id": "Name", "displayName": "Name", "type": "string", "display": true, "required": false, "defaultMatch": false, "canBeUsedToMatch": true },
+            { "id": "Email", "displayName": "Email", "type": "string", "display": true, "required": false, "defaultMatch": false, "canBeUsedToMatch": true },
+            { "id": "Phone", "displayName": "Phone", "type": "string", "display": true, "required": false, "defaultMatch": false, "canBeUsedToMatch": true },
+            { "id": "Message", "displayName": "Message", "type": "string", "display": true, "required": false, "defaultMatch": false, "canBeUsedToMatch": true },
+            { "id": "Status", "displayName": "Status", "type": "string", "display": true, "required": false, "defaultMatch": false, "canBeUsedToMatch": true },
+            { "id": "Notes", "displayName": "Notes", "type": "string", "display": true, "required": false, "defaultMatch": false, "canBeUsedToMatch": true },
+            { "id": "Booking value", "displayName": "Booking value", "type": "string", "display": true, "required": false, "defaultMatch": false, "canBeUsedToMatch": true },
+            { "id": "Inquiry ID", "displayName": "Inquiry ID", "type": "string", "display": true, "required": false, "defaultMatch": false, "canBeUsedToMatch": true }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "b4a5f6e7-d8c9-4901-9a0b-1c2d3e4f5063",
+      "name": "Log to Inquiries Sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [680, 520],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_WITH_SHEETS_CRED_ID",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          { "node": "Respond OK", "type": "main", "index": 0 },
+          { "node": "Derive Presentation Fields", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Derive Presentation Fields": {
+      "main": [
+        [
+          { "node": "Send Notification Email", "type": "main", "index": 0 },
+          { "node": "Log to Inquiries Sheet", "type": "main", "index": 0 }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

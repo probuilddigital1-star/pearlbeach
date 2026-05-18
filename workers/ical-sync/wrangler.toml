@@ -1,0 +1,21 @@
+name = "pbc-ical-sync"
+main = "src/index.ts"
+compatibility_date = "2026-05-01"
+
+[triggers]
+crons = ["*/30 * * * *"]
+
+# KV namespace shared with Pages Functions (/api/availability, /api/inquiry).
+# Run `wrangler kv namespace create AVAILABILITY` once, paste the returned id here.
+[[kv_namespaces]]
+binding = "AVAILABILITY"
+id = "f727a6f6391a45e09807677908199470"
+
+# iCal URLs and refresh secret are set via:
+#   wrangler secret put PEARL_BEACH_ICAL_URL
+#   wrangler secret put LAKEHURST_ICAL_URL
+#   wrangler secret put REFRESH_SECRET
+# For local dev, copy .dev.vars.example to .dev.vars and fill in.
+
+[observability]
+enabled = true

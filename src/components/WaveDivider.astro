@@ -8,7 +8,7 @@
 interface Props {
   /** Flip the wave vertically (for bottom-to-top transitions) */
   flip?: boolean;
-  /** Color of the wave (defaults to honey-oak) */
+  /** Color of the wave (defaults to gold) */
   color?: string;
   /** Optional CSS class */
   class?: string;
@@ -16,7 +16,7 @@ interface Props {
 
 const {
   flip = false,
-  color = 'var(--honey-oak)',
+  color = 'var(--gold)',
   class: className = ''
 } = Astro.props;
 ---

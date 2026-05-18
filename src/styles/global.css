@@ -94,7 +94,7 @@
 
   /* Primary Button - Warm Honey Oak */
   .btn-primary {
-    @apply px-8 py-3 bg-honey-oak text-white font-semibold text-base inline-block;
+    @apply px-8 py-3 bg-gold text-white font-semibold text-base inline-block;
     border-radius: 8px;
     transition: all 0.25s ease;
     box-shadow: 0 2px 8px rgba(196, 149, 106, 0.3);
@@ -108,13 +108,13 @@
 
   /* Secondary Button - Forest Sage */
   .btn-secondary {
-    @apply px-8 py-4 bg-transparent text-forest-sage font-semibold text-base inline-block border-2 border-forest-sage;
+    @apply px-8 py-4 bg-transparent text-sage font-semibold text-base inline-block border-2 border-sage;
     border-radius: 8px;
     transition: all 0.25s ease;
   }
 
   .btn-secondary:hover {
-    @apply bg-forest-sage text-white;
+    @apply bg-sage text-white;
     box-shadow: 0 4px 12px rgba(93, 117, 102, 0.25);
   }
 
