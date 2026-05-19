@@ -433,6 +433,21 @@ const { slug, propertyName, basePrice, maxGuests, vrboUrl } = Astro.props;
     text-decoration: none !important;
   }
 
+  /*
+   * Library's transient disable from disableDatesGaps mid-selection.
+   * A cell is gap-blocked when the lib flagged it disabled but we
+   * didn't (no [data-pbc-booked], no [data-pbc-past]). Style as muted
+   * grey + not-allowed cursor so users see why their click is rejected.
+   * Comes AFTER the booked + past rules so it doesn't override them.
+   */
+  .pbc-calendar-root [data-vc-theme=light]
+    .vc-date[data-vc-date-disabled]:not([data-pbc-booked]):not([data-pbc-past])
+    .vc-date__btn {
+    color: #cbd5e1 !important;
+    cursor: not-allowed !important;
+    background-color: transparent !important;
+  }
+
   /* Selected range endpoints — gold. */
   .pbc-calendar-root [data-vc-theme=light] .vc-date[data-vc-date-selected] .vc-date__btn {
     background-color: #C4956A !important; /* gold */
