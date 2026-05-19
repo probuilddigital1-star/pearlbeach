@@ -63,10 +63,23 @@ export const onRequestGet: PagesFunction<Env, 'slug'> = async ({ params, env }) 
   });
 };
 
-// Other methods → 405
+// HEAD: return the same headers GET would, with no body. Standard HTTP
+// semantics, AND it sidesteps a real-world bug: some mobile carrier
+// proxies probe new URLs with HEAD before forwarding a GET, and treat a
+// 405 response as "this URL is unfetchable" — blacklisting the GET that
+// would have followed. The cottage page calendar was hitting the
+// fallback only on mobile because of this. POST endpoints were
+// unaffected because the carrier proxy only HEAD-probes GET-ish targets.
+export const onRequestHead: PagesFunction<Env, 'slug'> = async (ctx) => {
+  const r = await onRequestGet(ctx);
+  return new Response(null, { status: r.status, headers: r.headers });
+};
+
+// All other methods → 405. Allow now lists GET + HEAD so a polite proxy
+// reading the header knows both are acceptable.
 export const onRequest: PagesFunction<Env> = async ({ request }) => {
   return new Response(`Method ${request.method} not allowed`, {
     status: 405,
-    headers: { allow: 'GET' },
+    headers: { allow: 'GET, HEAD' },
   });
 };
