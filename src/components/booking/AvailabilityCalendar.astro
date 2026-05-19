@@ -184,6 +184,15 @@ const { slug, propertyName, basePrice, maxGuests, vrboUrl } = Astro.props;
         mountEl.removeAttribute('aria-busy');
 
         const calendar = new Calendar(mountEl, {
+          // Force light theme regardless of OS preference. Every brand
+          // CSS override in this component is scoped to
+          // [data-vc-theme=light], including the arrow visibility +
+          // pointer-events forced-show rules. Without this, mobile
+          // users on dark-mode OS got vanilla-calendar-pro's dark
+          // theme, none of our overrides matched, and the calendar
+          // appeared without nav arrows. Set explicitly here so the
+          // attribute is always 'light' and our CSS keeps applying.
+          selectedTheme: 'light',
           // vanilla-calendar-pro v3 validates type vs. displayMonthsCount:
           //   - type: 'multiple' requires displayMonthsCount in [2..12]
           //   - any other type (incl. 'default') requires displayMonthsCount === 1
