@@ -313,12 +313,40 @@ const { slug, propertyName, basePrice, maxGuests, vrboUrl } = Astro.props;
         mountEl.innerHTML = '';
         mountEl.removeAttribute('aria-busy');
         statusEl.textContent = '';
+
+        // Surface the actual failure so mobile users can screenshot it
+        // when console access isn't available. Distinguish three states
+        // so the diagnostic is actionable:
+        //   1. fetch network reject  → "Network error" + cause
+        //   2. fetch returned non-OK → "HTTP <code>" already in err.message
+        //   3. fetch OK but post-processing threw (JSON parse, Calendar
+        //      init, etc.) → name + message of the thrown error
+        const errName = err instanceof Error ? err.name : 'Error';
+        const errMessage = err instanceof Error ? err.message : String(err);
+        const errStack = err instanceof Error && err.stack
+          ? err.stack.split('\n').slice(0, 4).join('\n')
+          : '';
+        const escape = (s: string) =>
+          s.replace(/[<>&"']/g, (c) => (
+            { '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;', "'": '&#39;' }[c] as string
+          ));
+
         const fallback = document.createElement('div');
         fallback.className = 'text-center py-12';
         fallback.innerHTML = `
           <p class="text-pine-dark font-semibold mb-2">We couldn't load real-time availability.</p>
           <p class="text-sm text-gray-600 mb-4">Check current dates directly on VRBO, or send us a note.</p>
           <a href="${vrboUrl}" target="_blank" rel="noopener noreferrer" class="btn-primary inline-block">View on VRBO →</a>
+          <details class="mt-6 text-left max-w-md mx-auto">
+            <summary class="cursor-pointer text-xs text-gray-500 select-none">Technical details (for debugging)</summary>
+            <div class="mt-2 text-xs bg-warm-cream p-3 rounded-cozy text-gray-700">
+              <p><strong>Error:</strong> ${escape(errName)}</p>
+              <p class="mt-1"><strong>Message:</strong> ${escape(errMessage)}</p>
+              ${errStack ? `<pre class="mt-2 text-[10px] overflow-x-auto">${escape(errStack)}</pre>` : ''}
+              <p class="mt-3 text-[10px] text-gray-500">UA: ${escape(navigator.userAgent.slice(0, 120))}</p>
+              <p class="text-[10px] text-gray-500">Slug: ${escape(slug)}</p>
+            </div>
+          </details>
         `;
         mountEl.appendChild(fallback);
       });
