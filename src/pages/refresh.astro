@@ -1,0 +1,143 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Sync Calendar"
+  description="Owner tool: sync the Pearl Beach Cottages website calendar with VRBO."
+  noindex={true}
+>
+  <section class="section-padding bg-warm-cream min-h-[60vh]">
+    <div class="container-custom max-w-xl">
+      <header class="text-center mb-10">
+        <h1 class="text-3xl md:text-4xl font-serif font-bold text-pine-dark mb-3">
+          Sync calendar with VRBO
+        </h1>
+        <p class="text-gray-600 max-w-md mx-auto">
+          The website syncs automatically every 30 minutes. Tap below to
+          force an immediate sync after manually blocking dates on VRBO.
+        </p>
+      </header>
+
+      <div class="bg-white rounded-cozy-lg p-8 shadow-sm border border-driftwood/30 text-center">
+        <button
+          type="button"
+          id="pbc-refresh-btn"
+          class="btn-primary text-lg px-10 py-4 w-full sm:w-auto"
+        >
+          Sync now
+        </button>
+
+        <p
+          id="pbc-refresh-status"
+          class="mt-6 text-base text-gray-700 min-h-[1.5rem]"
+          role="status"
+          aria-live="polite"
+        ></p>
+
+        <div id="pbc-refresh-detail" class="mt-4 text-left" hidden>
+          <details>
+            <summary class="cursor-pointer text-xs text-gray-500 select-none">
+              Show technical details
+            </summary>
+            <pre
+              id="pbc-refresh-json"
+              class="mt-2 text-[11px] bg-warm-cream p-3 rounded-cozy overflow-x-auto text-gray-700"
+            ></pre>
+          </details>
+        </div>
+      </div>
+
+      <div class="mt-10 text-sm text-gray-600 space-y-3 max-w-md mx-auto">
+        <p>
+          <strong class="text-pine-dark">When to use this:</strong> after you
+          block dates manually on VRBO (owner use, maintenance, phone
+          bookings) and you want the website calendar to update right away
+          instead of waiting up to 30&nbsp;minutes.
+        </p>
+        <p>
+          <strong class="text-pine-dark">When you don't need it:</strong>
+          regular guest bookings on VRBO sync automatically — no action
+          needed on your end.
+        </p>
+        <p class="text-gray-500">
+          Tip: bookmark this page on your phone for one-tap access.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const btn = document.getElementById('pbc-refresh-btn') as HTMLButtonElement | null;
+      const status = document.getElementById('pbc-refresh-status');
+      const detail = document.getElementById('pbc-refresh-detail');
+      const json = document.getElementById('pbc-refresh-json');
+      if (!btn || !status || !detail || !json) return;
+
+      type RefreshResult = {
+        ok?: boolean;
+        ran_at?: string;
+        results?: Array<{ slug: string; ok: boolean; count?: number; error?: string }>;
+        error?: string;
+      };
+
+      function fmtTime(iso: string | undefined): string {
+        if (!iso) return '';
+        const d = new Date(iso);
+        if (isNaN(d.getTime())) return '';
+        return d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+      }
+
+      function fmtSlug(slug: string): string {
+        if (slug === 'pearl-beach-lakehouse') return 'Pearl Beach Lakehouse';
+        if (slug === 'lakehurst-bungalow') return 'Lakehurst Bungalow';
+        return slug;
+      }
+
+      btn.addEventListener('click', async () => {
+        btn.disabled = true;
+        btn.textContent = 'Syncing…';
+        status.textContent = '';
+        status.className = 'mt-6 text-base text-gray-700 min-h-[1.5rem]';
+        detail.hidden = true;
+
+        try {
+          const res = await fetch('/api/refresh', { method: 'POST' });
+          const data = (await res.json().catch(() => ({}))) as RefreshResult;
+          json.textContent = JSON.stringify(data, null, 2);
+          detail.hidden = false;
+
+          const results = data.results ?? [];
+          const allOk = res.ok && data.ok === true && results.every((r) => r.ok);
+
+          if (allOk) {
+            const time = fmtTime(data.ran_at);
+            const lines = results
+              .map((r) => `${fmtSlug(r.slug)}: ${r.count} bookings`)
+              .join(' &middot; ');
+            status.className = 'mt-6 text-base text-sage min-h-[1.5rem]';
+            status.innerHTML = `<span class="font-semibold">&check; Synced${time ? ' at ' + time : ''}</span><br><span class="text-sm text-gray-600">${lines}</span>`;
+          } else {
+            const errs = results
+              .filter((r) => !r.ok)
+              .map((r) => `${fmtSlug(r.slug)}: ${r.error || 'unknown'}`)
+              .join('; ');
+            const topErr = data.error ? data.error : '';
+            const summary = errs || topErr || `HTTP ${res.status}`;
+            status.className = 'mt-6 text-base text-hearth-ember min-h-[1.5rem]';
+            status.innerHTML = `<span class="font-semibold">Sync failed</span><br><span class="text-sm text-gray-700">${summary}</span><br><span class="text-xs text-gray-500 mt-1 inline-block">Try again, or text Zach if this keeps happening.</span>`;
+          }
+        } catch (err) {
+          json.textContent = String(err);
+          detail.hidden = false;
+          status.className = 'mt-6 text-base text-hearth-ember min-h-[1.5rem]';
+          status.innerHTML = `<span class="font-semibold">Network error</span><br><span class="text-sm text-gray-700">Check your connection and try again.</span>`;
+        } finally {
+          btn.disabled = false;
+          btn.textContent = 'Sync now';
+        }
+      });
+    });
+  </script>
+</BaseLayout>

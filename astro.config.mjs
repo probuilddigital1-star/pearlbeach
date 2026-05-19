@@ -187,6 +187,38 @@ function devApiMockPlugin() {
           return sendJson(res, 200, { ok: true, inquiry_id });
         }
 
+        // POST /api/refresh — owner manual sync. Mirrors prod Function:
+        // forwards to the same cron Worker (which is live remotely), so
+        // dev hits the actual /refresh endpoint with REFRESH_SECRET from
+        // workers/ical-sync/.dev.vars. This gives owners a fully working
+        // dev experience without mocking the success.
+        if (req.url?.startsWith('/api/refresh') && req.method === 'POST') {
+          const vars = loadDevVars();
+          const refreshSecret = vars.REFRESH_SECRET || process.env.REFRESH_SECRET;
+          if (!refreshSecret || refreshSecret.startsWith('generate-with')) {
+            return sendJson(res, 200, {
+              ok: true,
+              dev_mock: true,
+              ran_at: new Date().toISOString(),
+              results: [
+                { slug: 'pearl-beach-lakehouse', ok: true, count: 30 },
+                { slug: 'lakehurst-bungalow', ok: true, count: 30 },
+              ],
+              note: 'Dev mock — set REFRESH_SECRET in workers/ical-sync/.dev.vars to hit the real Worker.',
+            });
+          }
+          try {
+            const r = await fetch('https://pbc-ical-sync.probuilddigital1.workers.dev/refresh', {
+              method: 'POST',
+              headers: { Authorization: `Bearer ${refreshSecret}` },
+            });
+            const data = await r.json().catch(() => ({}));
+            return sendJson(res, r.status, data);
+          } catch (err) {
+            return sendJson(res, 502, { ok: false, error: String(err) });
+          }
+        }
+
         return next();
       });
     },
@@ -198,7 +230,11 @@ export default defineConfig({
   integrations: [
     tailwind(),
     sitemap({
-      filter: (page) => !page.includes('/concierge/'),
+      // /concierge/ is the AI chatbot endpoints (owner-internal),
+      // /refresh is the owner manual-sync utility — keep both out of
+      // the public sitemap. The /refresh page also sets <meta robots
+      // noindex,nofollow> directly via BaseLayout's noindex prop.
+      filter: (page) => !page.includes('/concierge/') && !page.endsWith('/refresh/'),
     }),
     icon()
   ],
