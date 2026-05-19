@@ -184,7 +184,13 @@ const { slug, propertyName, basePrice, maxGuests, vrboUrl } = Astro.props;
         mountEl.removeAttribute('aria-busy');
 
         const calendar = new Calendar(mountEl, {
-          type: 'multiple',
+          // vanilla-calendar-pro v3 validates type vs. displayMonthsCount:
+          //   - type: 'multiple' requires displayMonthsCount in [2..12]
+          //   - any other type (incl. 'default') requires displayMonthsCount === 1
+          // We want 1 month on mobile, 2 on desktop, so the type has to
+          // match the count. The selection mode (multiple-ranged) is
+          // independent of `type` and works in either configuration.
+          type: monthsToShow > 1 ? 'multiple' : 'default',
           displayMonthsCount: monthsToShow,
           monthsToSwitch: 1,
           firstWeekday: 0,
