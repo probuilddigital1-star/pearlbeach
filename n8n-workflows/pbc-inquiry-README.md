@@ -144,7 +144,8 @@ production URL only works when the workflow is **active**.
 
 #### (a) Email arrived
 
-Check `zckpearson@gmail.com` for an email with subject like:
+Notification email is sent to **both** `zckpearson@gmail.com` **and**
+`jjpea1@gmail.com`. Check either inbox for an email with subject like:
 
 ```
 Inquiry: Pearl Beach Lakehouse · Oct 15–Oct 18 · Your Name
@@ -168,39 +169,48 @@ with all 14 columns filled. Status should be `Open`. Notes and Booking
 value should be empty. The Inquiry ID should match the one shown in the
 confirmation card on the website.
 
-#### (c) "Block these dates on VRBO" link lands somewhere useful
+#### (c) "Block these dates on VRBO" link lands on the right calendar
 
-**This is the one thing most likely to need adjustment.** Click the
-button in the test email. Expected: it opens VRBO's owner calendar for
-the matching property, pre-scrolled to the inquired dates.
+Click the button in the test email. It should open VRBO's owner calendar
+for the matching property.
 
 What you might see instead:
 - Login screen — that's fine, log in once, the link should resolve correctly afterward
-- VRBO marketing homepage — the path pattern in the Code node is wrong; see "If the VRBO link is wrong" below
+- VRBO marketing homepage or 404 — the path pattern in the Code node is wrong; see "If the VRBO link is wrong" below
 
 The link is constructed in the **Derive Presentation Fields** node:
 
 ```js
 const vrboCalendarUrl =
-  `https://www.vrbo.com/spm/dashboard/listings/${item.vrbo_id}/calendar`;
+  `https://www.vrbo.com/p/calendar/321.${item.vrbo_id}.${item.vrbo_id}`;
 ```
 
 `item.vrbo_id` is `122526` for Pearl Beach Lakehouse and `238763` for
-Lakehurst Bungalow (from `src/config/constants.ts`).
+Lakehurst Bungalow (from `src/config/constants.ts`). The `321.` prefix is
+the VRBO account-level identifier for this owner — it's shared across
+both properties for this account. The listing id appears twice in the
+path (this is VRBO's actual pattern, not a typo).
+
+Final URLs:
+- Pearl Beach Lakehouse: `https://www.vrbo.com/p/calendar/321.122526.122526`
+- Lakehurst Bungalow:    `https://www.vrbo.com/p/calendar/321.238763.238763`
 
 #### If the VRBO link is wrong
+
+VRBO occasionally changes their owner-dashboard URL structure. If a
+future test inquiry lands on the wrong page:
 
 1. Manually navigate to your VRBO owner calendar for the property.
 2. Copy the URL from the address bar.
 3. In n8n, open **Derive Presentation Fields**.
 4. Edit the `vrboCalendarUrl` template to match VRBO's real pattern.
-   Substitute `${item.vrbo_id}` where the property id appears.
+   Substitute `${item.vrbo_id}` where the property id appears, and update
+   any account-level prefix if VRBO has rotated yours.
 5. **Save** the workflow, then send one more test inquiry and re-verify.
 
-Common alternatives VRBO has used:
-- `https://www.vrbo.com/p/{vrbo_id}/calendar` — older path
-- `https://www.vrbo.com/myaccount/listings/{vrbo_id}/calendar` — alt myaccount path
-- `https://www.vrbo.com/{vrbo_id}` followed by clicking "Calendar" — if there's no direct deep link, drop the `/calendar` suffix and accept one extra click
+Older patterns VRBO has used (kept here as a paper trail of breakage we've seen):
+- `https://www.vrbo.com/spm/dashboard/listings/{vrbo_id}/calendar` — never landed correctly for this account
+- `https://www.vrbo.com/{vrbo_id}` followed by clicking "Calendar" — works without a deep link, but adds a click
 
 Don't forget to commit any change here back to `pbc-inquiry.json` so a
 re-import doesn't undo it. Export the workflow from n8n
