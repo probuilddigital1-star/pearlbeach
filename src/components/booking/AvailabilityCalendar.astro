@@ -167,6 +167,9 @@ const { slug, propertyName, basePrice, maxGuests, vrboUrl } = Astro.props;
             disabled.push(d);
           }
         }
+        // Use a Set for O(1) lookup inside onCreateDateEls — the callback
+        // fires once per visible cell on every render (initial + every nav).
+        const bookedSet = new Set(disabled);
 
         const updatedNote = data.last_success_at
           ? `Last synced ${new Date(data.last_success_at).toLocaleString('en-US', {
@@ -195,11 +198,18 @@ const { slug, propertyName, basePrice, maxGuests, vrboUrl } = Astro.props;
           selectionDatesMode: 'multiple-ranged',
           selectionMonthsMode: false,
           selectionYearsMode: false,
-          // Distinguish past dates from booked dates visually (library uses
-          // one attribute, data-vc-date-disabled, for both).
+          // Distinguish past dates AND originally-booked dates from the
+          // lib's TEMPORARILY-disabled cells (those it flags during
+          // ranged selection when disableDatesGaps: true rules out a
+          // candidate range endpoint). All three states share the lib's
+          // single `data-vc-date-disabled` attribute, so CSS targeting
+          // that attribute alone paints them identically. We tag the
+          // permanent ones ourselves so CSS can style them distinctly.
           onCreateDateEls: (_self, dateEl) => {
             const d = dateEl.getAttribute('data-vc-date');
-            if (d && d < todayIso) dateEl.setAttribute('data-pbc-past', '');
+            if (!d) return;
+            if (d < todayIso) dateEl.setAttribute('data-pbc-past', '');
+            if (bookedSet.has(d)) dateEl.setAttribute('data-pbc-booked', '');
           },
           onClickDate: (self) => {
             const picked = self.context.selectedDates;
@@ -393,8 +403,17 @@ const { slug, propertyName, basePrice, maxGuests, vrboUrl } = Astro.props;
     font-weight: 700 !important;
   }
 
-  /* Disabled (booked) dates: solid sage with strikethrough. */
-  .pbc-calendar-root [data-vc-theme=light] .vc-date[data-vc-date-disabled] .vc-date__btn {
+  /*
+   * Booked dates: solid sage with strikethrough.
+   *
+   * Targets a CUSTOM attribute set by us in onCreateDateEls, NOT the
+   * library's generic [data-vc-date-disabled]. The library also flags
+   * cells `data-vc-date-disabled` mid-selection when disableDatesGaps
+   * rules out a candidate range endpoint — painting those sage would
+   * misrepresent in-flight UX state as bookings. data-pbc-booked is set
+   * only on dates that came from our /api/availability KV record.
+   */
+  .pbc-calendar-root [data-vc-theme=light] .vc-date[data-pbc-booked] .vc-date__btn {
     background-color: #5D7566 !important; /* sage */
     color: #ffffff !important;
     text-decoration: line-through !important;
