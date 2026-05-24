@@ -25,9 +25,9 @@ export const BUSINESS_INFO = {
   email: 'jjpea1@gmail.com',
   phone: '(440) 555-0123', // Update with actual phone number
   priceRange: '$$-$$$',
-  checkIn: '4:00 PM',
+  checkIn: '3:00 PM',
   checkOut: '10:00 AM',
-  checkInTime24: '16:00',
+  checkInTime24: '15:00',
   checkOutTime24: '10:00',
   numberOfProperties: 2,
 } as const;

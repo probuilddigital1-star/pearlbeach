@@ -151,7 +151,7 @@ Guests have full access to the bungalow and outdoor spaces. Access the beach via
 
 ### House Rules
 
-- Check-in: 4:00 PM
+- Check-in: 3:00 PM
 - Check-out: 10:00 AM
 - No smoking indoors
 - No pets allowed

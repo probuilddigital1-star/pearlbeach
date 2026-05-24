@@ -147,7 +147,7 @@ Located in beautiful Saybrook Township in Ashtabula County, Ohio, you're perfect
 
 ### House Rules & Check-in
 
-- Check-in: 4:00 PM
+- Check-in: 3:00 PM
 - Check-out: 10:00 AM
 - No smoking inside
 - No pets allowed
