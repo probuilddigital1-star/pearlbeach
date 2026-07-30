@@ -22,29 +22,36 @@ const { Content } = await cottage.render();
 
 // Enhanced SEO data
 const cottageKeywords = `${cottage.data.shortTitle}, Lake Erie vacation rental, Saybrook Township cottage ${cottage.data.bedrooms} bedroom, lakeview rental Ohio, ${cottage.data.sleeps} guest cottage, Lake Erie beach house, Ashtabula County, ohio lakehouse sleeps ${cottage.data.sleeps}, lake erie weekend getaway ohio, family reunion lake house ohio, lake erie sunset views rental, large group lake house ohio, romantic lake erie getaway, vrbo ashtabula ohio`;
-const enhancedDescription = `${cottage.data.description} | ${cottage.data.bedrooms} bedrooms, ${cottage.data.bathrooms} baths, sleeps ${cottage.data.sleeps}. Lakeview vacation rental in Saybrook Township, Ohio.`;
+const cottageSeo = cottage.slug === 'pearl-beach-lakehouse'
+  ? {
+      title: `${cottage.data.shortTitle}: Private Beach`,
+      description: 'Stay at Pearl Beach Lakehouse, a five-bedroom Lake Erie rental for 13 with sunset views, modern comforts, and shared private beach access.',
+    }
+  : {
+      title: `${cottage.data.shortTitle}: Sleeps ${cottage.data.sleeps}`,
+      description: 'Relax at Lakehurst Bungalow, a four-bedroom Lake Erie rental for 10 with water views, modern comforts, and shared private beach access.',
+    };
 
 // Schema data for VacationRental
 const cottageSchemaData = {
   cottage: {
     name: cottage.data.shortTitle,
     description: cottage.data.description,
-    url: `https://pearlbeachcottages.com/cottages/${cottage.slug}`,
+    url: `https://pearlbeachcottages.com/cottages/${cottage.slug}/`,
     images: cottage.data.images,
     bedrooms: cottage.data.bedrooms,
     bathrooms: cottage.data.bathrooms,
     sqft: cottage.data.sqft,
     sleeps: cottage.data.sleeps,
     amenities: cottage.data.amenities,
-    rating: cottage.data.rating,
     priceRange: "$$-$$$"
   }
 };
 ---
 
 <BaseLayout
-  title={`${cottage.data.shortTitle} | Lake Erie Vacation Rental Saybrook Township OH`}
-  description={enhancedDescription}
+  title={cottageSeo.title}
+  description={cottageSeo.description}
   keywords={cottageKeywords}
   ogType="product"
   ogImage={cottage.data.heroImage}
@@ -55,7 +62,7 @@ const cottageSchemaData = {
   <!-- Breadcrumbs -->
   <Breadcrumbs
     items={[
-      { name: 'Cottages', url: 'https://pearlbeachcottages.com/cottages' }
+      { name: 'Cottages', url: 'https://pearlbeachcottages.com/cottages/' }
     ]}
     currentPage={cottage.data.shortTitle}
   />
@@ -214,7 +221,7 @@ const cottageSchemaData = {
               <p class="text-gray-600 mb-4 text-sm">
                 We're here to help! Contact us for special requests, group bookings, or any questions about your stay.
               </p>
-              <a href="/contact" class="text-gold font-medium hover:underline">
+              <a href="/contact/" class="text-gold font-medium hover:underline">
                 Contact Us →
               </a>
             </div>
@@ -271,7 +278,7 @@ const cottageSchemaData = {
       <p class="text-lg text-gray-600 mb-8">
         We have another beautiful property that might be perfect for your group
       </p>
-      <a href="/cottages" class="btn-primary">
+      <a href="/cottages/" class="btn-primary">
         View All Cottages
       </a>
     </div>

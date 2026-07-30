@@ -23,7 +23,7 @@ export const BUSINESS_INFO = {
   name: SITE_CONFIG.name,
   legalName: 'Pearl Beach Cottages LLC',
   email: 'jjpea1@gmail.com',
-  phone: '(440) 555-0123', // Update with actual phone number
+  phone: '(440) 812-2938',
   priceRange: '$$-$$$',
   checkIn: '3:00 PM',
   checkOut: '10:00 AM',
@@ -42,8 +42,10 @@ export const LOCATION = {
   country: 'US',
   countryFullName: 'United States',
   region: 'Lake Erie',
-  latitude: 41.9,
-  longitude: -80.8,
+  // Intentionally approximate (area-level) coordinates for owner privacy.
+  // Do not replace with the exact property location.
+  latitude: '41.90000',
+  longitude: '-80.80000',
 } as const;
 
 // VRBO Listings
@@ -87,14 +89,6 @@ export const IMAGES = {
   ogImage: '/images/hero/lake-erie-sunset.jpg',
 } as const;
 
-// Ratings (aggregate)
-export const RATINGS = {
-  overall: 9.6,
-  reviewCount: 87,
-  bestRating: 10,
-  worstRating: 1,
-} as const;
-
 // Amenities (for schema and display)
 export const AMENITIES = {
   featured: [
@@ -125,31 +119,31 @@ export const AMENITIES = {
 // Navigation Links
 export const NAV_LINKS = [
   { label: 'Home', href: '/', order: 1 },
-  { label: 'Our Cottages', href: '/cottages', order: 2 },
-  { label: 'Amenities', href: '/amenities', order: 3 },
-  { label: 'Location', href: '/location', order: 4 },
-  { label: 'Reviews', href: '/reviews', order: 5 },
-  { label: 'Contact', href: '/contact', order: 6 },
+  { label: 'Our Cottages', href: '/cottages/', order: 2 },
+  { label: 'Amenities', href: '/amenities/', order: 3 },
+  { label: 'Location', href: '/location/', order: 4 },
+  { label: 'Reviews', href: '/reviews/', order: 5 },
+  { label: 'Contact', href: '/contact/', order: 6 },
 ] as const;
 
 // Footer Links
 export const FOOTER_LINKS = {
   quickLinks: [
     { label: 'Home', href: '/' },
-    { label: 'Our Cottages', href: '/cottages' },
-    { label: 'Amenities', href: '/amenities' },
-    { label: 'Location', href: '/location' },
+    { label: 'Our Cottages', href: '/cottages/' },
+    { label: 'Amenities', href: '/amenities/' },
+    { label: 'Location', href: '/location/' },
   ],
   cottages: [
-    { label: 'Pearl Beach Lakehouse', href: '/cottages/pearl-beach-lakehouse' },
-    { label: 'Lakehurst Bungalow', href: '/cottages/lakehurst-bungalow' },
-    { label: 'Guest Reviews', href: '/reviews' },
-    { label: 'Contact Us', href: '/contact' },
+    { label: 'Pearl Beach Lakehouse', href: '/cottages/pearl-beach-lakehouse/' },
+    { label: 'Lakehurst Bungalow', href: '/cottages/lakehurst-bungalow/' },
+    { label: 'Guest Reviews', href: '/reviews/' },
+    { label: 'Contact Us', href: '/contact/' },
   ],
   legal: [
-    { label: 'Privacy Policy', href: '/privacy' },
-    { label: 'Terms of Service', href: '/terms' },
-    { label: 'Security', href: '/security' },
+    { label: 'Privacy Policy', href: '/privacy/' },
+    { label: 'Terms of Service', href: '/terms/' },
+    { label: 'Security', href: '/security/' },
   ],
 } as const;
 
@@ -175,7 +169,6 @@ export default {
   location: LOCATION,
   vrbo: VRBO_CONFIG,
   images: IMAGES,
-  ratings: RATINGS,
   amenities: AMENITIES,
   navigation: NAV_LINKS,
   footer: FOOTER_LINKS,

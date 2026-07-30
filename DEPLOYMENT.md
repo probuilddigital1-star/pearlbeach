@@ -79,6 +79,20 @@ git push -u origin main
    - Add CNAME record to your DNS provider
    - Wait for DNS propagation (can take 24-48 hours)
 
+### Required: Redirect `www` to the Apex Domain
+
+Cloudflare Pages can serve both hosts unless a redirect rule is configured. Create this rule in **Cloudflare Dashboard → Rules → Redirect Rules → Create rule**:
+
+- **Rule name:** `Redirect www to apex`
+- **When incoming requests match:** Custom filter expression
+- **Expression:** `(http.host eq "www.pearlbeachcottages.com")`
+- **URL redirect type:** Dynamic
+- **Target URL expression:** `concat("https://pearlbeachcottages.com", http.request.uri.path)`
+- **Status code:** `301`
+- **Preserve query string:** Enabled
+
+Deploy the rule and verify that `https://www.pearlbeachcottages.com/any-path/` returns a `301` to `https://pearlbeachcottages.com/any-path/`.
+
 ### Step 4: Configure SSL
 
 - Cloudflare automatically provides free SSL

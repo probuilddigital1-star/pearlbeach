@@ -7,8 +7,8 @@ const cottages = await getCollection('cottages');
 ---
 
 <BaseLayout
-  title="Lake Erie Cottages | Vacation Rentals in Saybrook Township Ohio"
-  description="Choose from two beautiful lakeview vacation rental cottages on Lake Erie in Saybrook Township, Ashtabula County, OH. Pearl Beach Lakehouse (sleeps 13) and Lakehurst Bungalow (sleeps 10). Shared private beach access, modern amenities."
+  title="Ashtabula Lake Erie Cottage Rentals"
+  description="Compare two Lake Erie cottages in Ashtabula, Ohio, sleeping 10 or 13 guests with shared private beach access and modern amenities."
   keywords="Lake Erie cottages, Ashtabula vacation rentals, lakeview cottages Ohio, Pearl Beach Lakehouse, Lakehurst Bungalow, Lake Erie beach house, Ohio cottage rentals, large group lake house ohio, ohio lakehouse sleeps 10, ohio lakehouse sleeps 13, family reunion lake house ohio, lake erie weekend getaway ohio, ashtabula county vacation rentals"
 >
   <Breadcrumbs items={[]} currentPage="Cottages" />
@@ -95,7 +95,7 @@ const cottages = await getCollection('cottages');
               <!-- Buttons -->
               <div class="flex flex-col gap-3">
                 <a
-                  href={`/cottages/${cottage.slug}`}
+                  href={`/cottages/${cottage.slug}/`}
                   class="btn-primary text-center w-full"
                 >
                   View Full Details
@@ -186,7 +186,7 @@ const cottages = await getCollection('cottages');
       <p class="text-xl mb-8 opacity-90">
         We're here to help you choose the perfect cottage for your stay
       </p>
-      <a href="/contact" class="btn-primary">
+      <a href="/contact/" class="btn-primary">
         Contact Us
       </a>
     </div>

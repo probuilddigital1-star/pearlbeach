@@ -28,8 +28,8 @@ const reviewSchemaData = {
 ---
 
 <BaseLayout
-  title="Guest Reviews | Pearl Beach Cottages Lake Erie Vacation Rentals"
-  description="Read authentic guest reviews from Pearl Beach Cottages visitors. See what travelers say about our Lake Erie vacation rentals in Saybrook Township, Ohio. 9.6/10 average rating."
+  title="Lake Erie Cottage Guest Reviews"
+  description="Read guest experiences from stays at Pearl Beach Lakehouse and Lakehurst Bungalow, two Lake Erie vacation rentals in Ashtabula, Ohio."
   keywords="Pearl Beach Cottages reviews, Lake Erie vacation rental reviews, Ashtabula cottage reviews, guest testimonials, vacation rental ratings, Lake Erie cottage feedback, best lake erie vacation rentals, top rated ohio lake house, vrbo ashtabula reviews, family vacation lake erie reviews"
 >
   <!-- Review Schema -->
@@ -80,7 +80,7 @@ const reviewSchemaData = {
                 {cottage.data.rating}
               </div>
               <div class="text-gray-600 mb-4">out of 10</div>
-              <a href={`/cottages/${cottage.slug}`} class="text-golden-hour font-medium hover:underline">
+              <a href={`/cottages/${cottage.slug}/`} class="text-golden-hour font-medium hover:underline">
                 View Property →
               </a>
             </div>
@@ -144,7 +144,7 @@ const reviewSchemaData = {
       <p class="text-xl mb-8 opacity-90 max-w-2xl mx-auto">
         Experience the same exceptional hospitality that our guests rave about
       </p>
-      <a href="/cottages" class="btn-primary">
+      <a href="/cottages/" class="btn-primary">
         Book Your Stay
       </a>
     </div>

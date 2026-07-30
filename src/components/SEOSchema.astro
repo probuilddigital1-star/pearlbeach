@@ -10,7 +10,6 @@ import {
   BUSINESS_INFO,
   LOCATION,
   IMAGES,
-  RATINGS,
   AMENITIES,
   SCHEMA_IDS,
   getSiteUrl,
@@ -71,22 +70,6 @@ if (type === 'LocalBusiness') {
     "telephone": BUSINESS_INFO.phone,
     "email": BUSINESS_INFO.email,
     "priceRange": BUSINESS_INFO.priceRange,
-    "openingHoursSpecification": [
-      {
-        "@type": "OpeningHoursSpecification",
-        "dayOfWeek": [
-          "Monday",
-          "Tuesday",
-          "Wednesday",
-          "Thursday",
-          "Friday",
-          "Saturday",
-          "Sunday"
-        ],
-        "opens": "00:00",
-        "closes": "23:59"
-      }
-    ],
     "checkInTime": BUSINESS_INFO.checkInTime24,
     "checkOutTime": BUSINESS_INFO.checkOutTime24,
     "amenityFeature": AMENITIES.featured.map(amenity => ({
@@ -94,13 +77,6 @@ if (type === 'LocalBusiness') {
       "name": amenity,
       "value": true
     })),
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": String(RATINGS.overall),
-      "reviewCount": String(RATINGS.reviewCount),
-      "bestRating": String(RATINGS.bestRating),
-      "worstRating": String(RATINGS.worstRating)
-    },
     "numberOfRooms": BUSINESS_INFO.numberOfProperties,
     "knowsAbout": [
       "Lake Erie Vacation Rentals",
@@ -120,12 +96,13 @@ if (type === 'LocalBusiness') {
 } else if (type === 'VacationRental') {
   // Individual cottage schema
   const cottage = data.cottage || {};
+  const parsedBathrooms = Number.parseFloat(String(cottage.bathrooms ?? '2'));
   schema = {
     "@context": "https://schema.org",
     "@type": "VacationRental",
     "name": cottage.name || "Pearl Beach Cottage",
     "description": cottage.description || "Luxury lakeview cottage on Lake Erie",
-    "image": cottage.images || [],
+    "image": (cottage.images || []).map((image: string) => getSiteUrl(image)),
     "url": cottage.url || getSiteUrl(),
     "address": {
       "@type": "PostalAddress",
@@ -141,7 +118,7 @@ if (type === 'LocalBusiness') {
       "longitude": LOCATION.longitude
     },
     "numberOfRooms": cottage.bedrooms || 4,
-    "numberOfBathroomsTotal": cottage.bathrooms || 2,
+    "numberOfBathroomsTotal": Number.isFinite(parsedBathrooms) ? parsedBathrooms : 2,
     "floorSize": {
       "@type": "QuantitativeValue",
       "value": cottage.sqft || 2000,
@@ -156,12 +133,6 @@ if (type === 'LocalBusiness') {
       "name": amenity,
       "value": true
     })) || [],
-    "aggregateRating": cottage.rating ? {
-      "@type": "AggregateRating",
-      "ratingValue": cottage.rating,
-      "bestRating": String(RATINGS.bestRating),
-      "worstRating": String(RATINGS.worstRating)
-    } : undefined,
     "priceRange": cottage.priceRange || BUSINESS_INFO.priceRange
   };
 } else if (type === 'Review') {

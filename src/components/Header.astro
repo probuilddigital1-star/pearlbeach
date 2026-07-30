@@ -29,7 +29,7 @@ const currentPath = Astro.url.pathname;
           Home
         </a>
         <a
-          href="/cottages"
+          href="/cottages/"
           class:list={[
             "font-medium transition-colors duration-200 hover:text-sage",
             currentPath.startsWith('/cottages') ? 'text-sage' : 'text-pine-dark'
@@ -40,7 +40,7 @@ const currentPath = Astro.url.pathname;
           Our Cottages
         </a>
         <a
-          href="/amenities"
+          href="/amenities/"
           class:list={[
             "font-medium transition-colors duration-200 hover:text-sage",
             currentPath === '/amenities' ? 'text-sage' : 'text-pine-dark'
@@ -51,7 +51,7 @@ const currentPath = Astro.url.pathname;
           Amenities
         </a>
         <a
-          href="/location"
+          href="/location/"
           class:list={[
             "font-medium transition-colors duration-200 hover:text-sage",
             currentPath === '/location' ? 'text-sage' : 'text-pine-dark'
@@ -62,7 +62,7 @@ const currentPath = Astro.url.pathname;
           Location
         </a>
         <a
-          href="/reviews"
+          href="/reviews/"
           class:list={[
             "font-medium transition-colors duration-200 hover:text-sage",
             currentPath === '/reviews' ? 'text-sage' : 'text-pine-dark'
@@ -73,7 +73,7 @@ const currentPath = Astro.url.pathname;
           Reviews
         </a>
         <a
-          href="/contact"
+          href="/contact/"
           class:list={[
             "font-medium transition-colors duration-200 hover:text-sage",
             currentPath === '/contact' ? 'text-sage' : 'text-pine-dark'
@@ -83,7 +83,7 @@ const currentPath = Astro.url.pathname;
         >
           Contact
         </a>
-        <a href="/cottages" class="btn-primary">
+        <a href="/cottages/" class="btn-primary">
           Book Now
         </a>
       </div>
@@ -147,35 +147,35 @@ const currentPath = Astro.url.pathname;
             Home
           </a>
           <a
-            href="/cottages"
+            href="/cottages/"
             class="px-4 py-3 font-medium text-pine-dark hover:text-sage transition-colors duration-200"
             aria-current={currentPath.startsWith('/cottages') ? 'page' : undefined}
           >
             Our Cottages
           </a>
           <a
-            href="/amenities"
+            href="/amenities/"
             class="px-4 py-3 font-medium text-pine-dark hover:text-sage transition-colors duration-200"
             aria-current={currentPath === '/amenities' ? 'page' : undefined}
           >
             Amenities
           </a>
           <a
-            href="/location"
+            href="/location/"
             class="px-4 py-3 font-medium text-pine-dark hover:text-sage transition-colors duration-200"
             aria-current={currentPath === '/location' ? 'page' : undefined}
           >
             Location
           </a>
           <a
-            href="/reviews"
+            href="/reviews/"
             class="px-4 py-3 font-medium text-pine-dark hover:text-sage transition-colors duration-200"
             aria-current={currentPath === '/reviews' ? 'page' : undefined}
           >
             Reviews
           </a>
           <a
-            href="/contact"
+            href="/contact/"
             class="px-4 py-3 font-medium text-pine-dark hover:text-sage transition-colors duration-200"
             aria-current={currentPath === '/contact' ? 'page' : undefined}
           >
@@ -185,7 +185,7 @@ const currentPath = Astro.url.pathname;
 
         <!-- Mobile CTA Button -->
         <div class="mt-6">
-          <a href="/cottages" class="btn-primary w-full text-center">
+          <a href="/cottages/" class="btn-primary w-full text-center">
             Book Now
           </a>
         </div>

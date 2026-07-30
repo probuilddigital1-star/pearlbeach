@@ -1,5 +1,8 @@
 ---
+import { BUSINESS_INFO } from '../config/constants';
+
 const currentYear = new Date().getFullYear();
+const phoneHref = 'tel:+1' + BUSINESS_INFO.phone.replace(/\D/g, '');
 ---
 
 <footer class="bg-pine-dark text-white" role="contentinfo">
@@ -26,9 +29,9 @@ const currentYear = new Date().getFullYear();
         <h3 class="font-semibold text-lg mb-4">Quick Links</h3>
         <ul class="space-y-2" style="color: rgba(255,255,255,0.7);">
           <li><a href="/" class="hover:text-white transition-colors duration-200">Home</a></li>
-          <li><a href="/cottages" class="hover:text-white transition-colors duration-200">Our Cottages</a></li>
-          <li><a href="/amenities" class="hover:text-white transition-colors duration-200">Amenities</a></li>
-          <li><a href="/location" class="hover:text-white transition-colors duration-200">Location</a></li>
+          <li><a href="/cottages/" class="hover:text-white transition-colors duration-200">Our Cottages</a></li>
+          <li><a href="/amenities/" class="hover:text-white transition-colors duration-200">Amenities</a></li>
+          <li><a href="/location/" class="hover:text-white transition-colors duration-200">Location</a></li>
         </ul>
       </nav>
 
@@ -36,10 +39,10 @@ const currentYear = new Date().getFullYear();
       <nav aria-label="Our cottages">
         <h3 class="font-semibold text-lg mb-4">Our Cottages</h3>
         <ul class="space-y-2" style="color: rgba(255,255,255,0.7);">
-          <li><a href="/cottages/pearl-beach-lakehouse" class="hover:text-white transition-colors duration-200">Pearl Beach Lakehouse</a></li>
-          <li><a href="/cottages/lakehurst-bungalow" class="hover:text-white transition-colors duration-200">Lakehurst Bungalow</a></li>
-          <li><a href="/reviews" class="hover:text-white transition-colors duration-200">Guest Reviews</a></li>
-          <li><a href="/contact" class="hover:text-white transition-colors duration-200">Contact Us</a></li>
+          <li><a href="/cottages/pearl-beach-lakehouse/" class="hover:text-white transition-colors duration-200">Pearl Beach Lakehouse</a></li>
+          <li><a href="/cottages/lakehurst-bungalow/" class="hover:text-white transition-colors duration-200">Lakehurst Bungalow</a></li>
+          <li><a href="/reviews/" class="hover:text-white transition-colors duration-200">Guest Reviews</a></li>
+          <li><a href="/contact/" class="hover:text-white transition-colors duration-200">Contact Us</a></li>
         </ul>
       </nav>
 
@@ -56,9 +59,15 @@ const currentYear = new Date().getFullYear();
           </li>
           <li class="flex items-start">
             <svg class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 7V5z"></path>
+            </svg>
+            <a href={phoneHref} class="hover:text-white transition-colors duration-200">{BUSINESS_INFO.phone}</a>
+          </li>
+          <li class="flex items-start">
+            <svg class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
             </svg>
-            <a href="/contact" class="hover:text-white transition-colors duration-200">Contact Form</a>
+            <a href="/contact/" class="hover:text-white transition-colors duration-200">Contact Form</a>
           </li>
           <li class="flex items-start">
             <svg class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -74,11 +83,11 @@ const currentYear = new Date().getFullYear();
     <div class="mt-10 pt-8 text-center text-sm" style="border-top: 1px solid rgba(196, 149, 106, 0.2); color: rgba(255,255,255,0.65);">
       <p>&copy; {currentYear} Pearl Beach Cottages. All rights reserved.</p>
       <p class="mt-2">
-        <a href="/privacy" class="hover:text-gold transition-colors duration-200">Privacy Policy</a>
+        <a href="/privacy/" class="hover:text-gold transition-colors duration-200">Privacy Policy</a>
         <span class="mx-2" style="color: rgba(196, 149, 106, 0.4);">•</span>
-        <a href="/terms" class="hover:text-gold transition-colors duration-200">Terms of Service</a>
+        <a href="/terms/" class="hover:text-gold transition-colors duration-200">Terms of Service</a>
         <span class="mx-2" style="color: rgba(196, 149, 106, 0.4);">•</span>
-        <a href="/security" class="hover:text-gold transition-colors duration-200">Security</a>
+        <a href="/security/" class="hover:text-gold transition-colors duration-200">Security</a>
       </p>
     </div>
   </div>
