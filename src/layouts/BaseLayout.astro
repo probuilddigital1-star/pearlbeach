@@ -44,6 +44,15 @@ const fullOgImage = new URL(ogImage, Astro.site).toString();
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
 
+    <!-- Google Analytics 4 (gtag.js) -->
+    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-V29V8P7MCF"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-V29V8P7MCF');
+    </script>
+
     <!-- Primary Meta Tags -->
     <title>{fullTitle}</title>
     <meta name="title" content={fullTitle} />
@@ -129,6 +138,34 @@ const fullOgImage = new URL(ogImage, Astro.site).toString();
       <slot />
     </main>
     <Footer />
+
+    <!-- GA4 site events: outbound VRBO clicks + availability calendar use -->
+    <script is:inline>
+      (function () {
+        function track(name, params) {
+          if (typeof window.gtag === 'function') window.gtag('event', name, params || {});
+        }
+        // Outbound VRBO clicks (the real conversion - booking happens on VRBO)
+        document.addEventListener('click', function (e) {
+          var a = e.target && e.target.closest ? e.target.closest('a[href*="vrbo.com"]') : null;
+          if (a) {
+            track('vrbo_click', {
+              link_url: a.href,
+              page_path: location.pathname
+            });
+          }
+        }, true);
+        // Availability calendar date-range selection (event already broadcast by the calendar)
+        document.addEventListener('pbc:rangeSelected', function (e) {
+          var d = (e && e.detail) || {};
+          track('availability_select', {
+            cottage: d.slug || '',
+            check_in: d.checkIn || '',
+            nights: d.nights || 0
+          });
+        });
+      })();
+    </script>
 
     <!-- Fade-in animation observer -->
     <script>

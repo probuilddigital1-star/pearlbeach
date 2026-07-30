@@ -25,7 +25,7 @@ export const onRequest: MiddlewareHandler = async (context, next) => {
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com",
       "img-src 'self' data: https:",
-      "connect-src 'self' https://*.app.n8n.cloud",
+      "connect-src 'self' https://*.app.n8n.cloud https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com",
       "frame-src 'self' https://www.google.com",
       "object-src 'none'",
       "base-uri 'self'",

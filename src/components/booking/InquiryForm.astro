@@ -287,6 +287,7 @@ const TURNSTILE_SITE_KEY = '0x4AAAAAADRI-lYPGehnPgYo';
     }
 
     function showSuccess(name: string, inquiryId: string) {
+      (window as any).gtag?.('event', 'inquiry_submit', { cottage: slug });
       form.classList.add('hidden');
       successName.textContent = name;
       successId.textContent = `Inquiry reference: ${inquiryId}`;
